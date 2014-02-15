@@ -9,7 +9,15 @@ namespace WindowsFormsApplication1
 {
     class Mp3Player : IDisposable
     {
-        public bool Repeat { get; set; }
+
+        [DllImport("winmm.dll")]
+        private static extern long mciSendString(string strCommand, StringBuilder strReturn, int iReturnLenght, IntPtr hwndCallback);
+
+        public bool Repeat 
+        { 
+            get;
+            set;
+        }
 
         public Mp3Player(string fileName)
         {
@@ -30,10 +38,6 @@ namespace WindowsFormsApplication1
             string command = "stop MediaFile";
             mciSendString(command, null, 0, IntPtr.Zero);
         }
-
-        [DllImport("winmm.dll")]
-        private static extern long mciSendString(string strCommand,
-            StringBuilder strReturn, int iReturnLenght, IntPtr hwndCallback);
 
         public void Dispose()
         {
