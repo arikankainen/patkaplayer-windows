@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Runtime.InteropServices;
 
-namespace WindowsFormsApplication1
+namespace PatkaPlayer
 {
     class Mp3Player : IDisposable
     {
