@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -8,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
+//using Microsoft.VisualBasic.PowerPacks;
 using System.Configuration;
 using System.Windows;
 using System.Windows.Input;
@@ -18,24 +20,38 @@ namespace PatkaPlayer
     {
 
         private Mp3Player _mp3Player;
-        public string[] array1 = new string[] {};
-        public bool Minimized { get; set; }
-        public string mp3Dir, hotkey1, hotkey2, hotkey3, hotkey4, hotkey5, hotkey6, hotkey7, hotkey8, hotkey9, hotkey0;
-        public int FrmSize = 1;
+        private string[] array1 = new string[] {};
+        private bool minimized { get; set; }
+        private string mp3Dir, hotkey1, hotkey2, hotkey3, hotkey4, hotkey5, hotkey6, hotkey7, hotkey8, hotkey9, hotkey0;
+        private int frmSize = 1;
+        private int frmMaximized;
+        private string lastPlayed;
+        private string appName = "Pätkä Player";
+        private string filterFolder = "";
+        private string filterFile = "";
+        private int normalSizeX;
+        private int normalSizeY;
+        private int playerButtonX;
+        private int numOfButtons;
+        private int numOfCols;
+        private List<string> randomSound = new List<string>();
+        private int lastRandomNumber = 0;
 
         public frmPlayer()
         {
             InitializeComponent();
-            
+
             this.MouseWheel += new MouseEventHandler(Form1_MouseWheel);
             this.SizeChanged += new EventHandler(Form1_Layout);
             this.KeyPress += new KeyPressEventHandler(Form1_KeyPress);
+            txtFilterFolder.KeyDown += new KeyEventHandler(txtFilterFolder_KeyDown);
+            txtFilterFile.KeyDown += new KeyEventHandler(txtFilterFile_KeyDown);
 
             InsertPanelButtons();
         }
 
-        // get mp3dir from config file or display 'no folder selected' text
-        public void InsertPanelButtons()
+        // read application settings from config file
+        public void ReadSettings()
         {
             mp3Dir = hotkey1 = hotkey2 = hotkey3 = hotkey4 = hotkey5 = hotkey6 = hotkey7 = hotkey8 = hotkey9 = hotkey0 = "";
 
@@ -53,20 +69,42 @@ namespace PatkaPlayer
             if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["hotkey_8"])) hotkey8 = config.AppSettings.Settings["hotkey_8"].Value;
             if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["hotkey_9"])) hotkey9 = config.AppSettings.Settings["hotkey_9"].Value;
             if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["hotkey_0"])) hotkey0 = config.AppSettings.Settings["hotkey_0"].Value;
+        }
 
-            if (mp3Dir != "") AddPanel(mp3Dir);
-            
-            else
+        // error text to form, eg. "no clips", "no folder selected", etc...
+        public void ErrorText(string errorText)
+        {
+            panelButtons.Controls.Clear();
+
+            Label label = new Label();
+            label.Top = 12;
+            label.Left = 10;
+            label.Text = errorText;
+            label.Width = 900;
+            label.Height = 100;
+            label.Font = new Font("Segoe UI", 12);
+
+            panelButtons.Controls.Add(label);
+        }
+
+        public void InsertPanelButtons()
+        {
+            ReadSettings();
+
+            if (Directory.Exists(mp3Dir))
             {
-                panelButtons.Controls.Clear();
-                NoClips("No folder selected. Go to settings and select folder.");
+                array1 = Directory.GetFiles(@mp3Dir, "*.mp3", SearchOption.AllDirectories);
+                AddPanel(mp3Dir);
             }
+            else if (mp3Dir != "") ErrorText("Selected audio folder does not exist. Go to settings and reselect folder.");
+            else ErrorText("No audio folder selected. Go to settings and select folder.");
         }
 
         // add panel for soundbuttons
         public void AddPanel(string mp3Dir)
         {
             panelButtons.Controls.Clear();
+            panelButtons.Visible = false;
 
             int top = 5;
             int left = 10;
@@ -75,50 +113,60 @@ namespace PatkaPlayer
             string currentPath = "";
             string currentPathOnly = "";
             int cols = 0;
-            int even = 0;
             int numColor = 0;
-            int numOfButtons = 0;
+            numOfButtons = 0;
+            string fileName = "";
+            string folderName = "";
 
-            toolStripStatusLabel1.Text = "1.  " + Path.GetFileNameWithoutExtension(hotkey1);
-            toolStripStatusLabel2.Text = "2.  " + Path.GetFileNameWithoutExtension(hotkey2);
-            toolStripStatusLabel3.Text = "3.  " + Path.GetFileNameWithoutExtension(hotkey3);
-            toolStripStatusLabel4.Text = "4.  " + Path.GetFileNameWithoutExtension(hotkey4);
-            toolStripStatusLabel5.Text = "5.  " + Path.GetFileNameWithoutExtension(hotkey5);
-            toolStripStatusLabel6.Text = "6.  " + Path.GetFileNameWithoutExtension(hotkey6);
-            toolStripStatusLabel7.Text = "7.  " + Path.GetFileNameWithoutExtension(hotkey7);
-            toolStripStatusLabel8.Text = "8.  " + Path.GetFileNameWithoutExtension(hotkey8);
-            toolStripStatusLabel9.Text = "9.  " + Path.GetFileNameWithoutExtension(hotkey9);
-            toolStripStatusLabel10.Text = "0.  " + Path.GetFileNameWithoutExtension(hotkey0);
+            toolStripStatusLabel1.Text = " 1.  " + Path.GetFileNameWithoutExtension(hotkey1);
+            toolStripStatusLabel2.Text = " 2.  " + Path.GetFileNameWithoutExtension(hotkey2);
+            toolStripStatusLabel3.Text = " 3.  " + Path.GetFileNameWithoutExtension(hotkey3);
+            toolStripStatusLabel4.Text = " 4.  " + Path.GetFileNameWithoutExtension(hotkey4);
+            toolStripStatusLabel5.Text = " 5.  " + Path.GetFileNameWithoutExtension(hotkey5);
+            toolStripStatusLabel6.Text = " 6.  " + Path.GetFileNameWithoutExtension(hotkey6);
+            toolStripStatusLabel7.Text = " 7.  " + Path.GetFileNameWithoutExtension(hotkey7);
+            toolStripStatusLabel8.Text = " 8.  " + Path.GetFileNameWithoutExtension(hotkey8);
+            toolStripStatusLabel9.Text = " 9.  " + Path.GetFileNameWithoutExtension(hotkey9);
+            toolStripStatusLabel10.Text = " 0.  " + Path.GetFileNameWithoutExtension(hotkey0);
 
-            int numOfCols;
+            //int numOfCols;
             if (panelButtons.Width > 200) numOfCols = panelButtons.Width / 150;
             else numOfCols = 2;
 
-            if (Directory.Exists(mp3Dir)) array1 = Directory.GetFiles(@mp3Dir, "*.mp3", SearchOption.AllDirectories);
 
-            if (array1.Length == 0) NoClips("No clips found. Go to settings and select another folder.");
+            if (array1.Length == 0) ErrorText("No audio clips found. Go to settings and select another audio folder.");
+            randomSound.Clear();
 
             // loop for adding buttons
             for (int i = 0; i < array1.Length; i++)
             {
-                
+
+                if (filterFolder != "") folderName = Path.GetDirectoryName(array1[i]).Substring(Path.GetDirectoryName(array1[i]).LastIndexOf("\\") + 1);
+                if (filterFile != "") fileName = Path.GetFileNameWithoutExtension(array1[i]);
+
+                if (filterFile != "" && fileName.IndexOf(filterFile, StringComparison.OrdinalIgnoreCase) == -1) continue;
+                if (filterFolder != "" && folderName.IndexOf(filterFolder, StringComparison.OrdinalIgnoreCase) == -1) continue;
+
+                if (frmSize == 2) continue;
+
                 cols++;
                 numOfButtons++;
 
+                randomSound.Add(array1[i]);
+                
                 currentPath = Path.GetDirectoryName(array1[i]);
 
                 if (currentPath != lastPath)
                 {
 
-                    even++;
                     numColor++;
-                    if (i > 0 && cols > 1) top += 85;
-                    else if (i > 1 && cols == 1) top += 16;
+                    if (numOfButtons > 0 && cols > 1) top += 73;
+                    else if (numOfButtons > 1 && cols == 1) top += 16;
 
                     currentPathOnly = currentPath.Substring(currentPath.LastIndexOf("\\") + 1);
 
                     // add new separator line between folders, but not before first one
-                    if (i > 0)
+                    if (numOfButtons > 1)
                     {
                         Panel panel = new Panel();
                         panel.Top = top - 6;
@@ -130,7 +178,7 @@ namespace PatkaPlayer
                         panel.BackColor = Color.FromArgb(200, 200, 200);
                         panelButtons.Controls.Add(panel);
                     }
-                    
+
                     top += 6;
 
                     // label for folder name
@@ -141,38 +189,36 @@ namespace PatkaPlayer
                     folderLabel.Width = panelButtons.Width - 45;
                     folderLabel.Height = 30;
                     folderLabel.BorderStyle = BorderStyle.None;
-                    //folderLabel.Font = new Font("Candara", 18); //, FontStyle.Italic);
                     folderLabel.Font = new Font("Segoe UI", 13);
                     folderLabel.ForeColor = ColorTranslator.FromHtml("#222");
 
                     panelButtons.Controls.Add(folderLabel);
 
-                    
                     top += folderLabel.Height + 8;
                     left = 10;
                     cols = 1;
                 }
-                
+
                 Panel buttonPanel1 = new Panel();
                 buttonPanel1.Top = top - 1;
                 buttonPanel1.Left = left - 1;
                 buttonPanel1.AutoSize = false;
-                buttonPanel1.Height = 60 + 2;
+                buttonPanel1.Height = 50 + 2;
                 buttonPanel1.Width = (panelButtons.Width - ((numOfCols - 1) * 6 + 40)) / numOfCols + 2;
                 buttonPanel1.BorderStyle = BorderStyle.None;
-                
-                
-                // soundbutton
+                buttonPanel1.Name = "SoundPanel" + numOfButtons.ToString();
+
                 Button button = new Button();
                 button.Top = top;
                 button.Left = left;
                 button.Text = Path.GetFileNameWithoutExtension(array1[i]); // filename only
-                button.TextAlign = ContentAlignment.TopCenter;
+                button.TextAlign = ContentAlignment.MiddleCenter;
                 button.Tag = array1[i]; // filepath + filename + ext
                 button.Width = (panelButtons.Width - ((numOfCols - 1) * 6 + 40)) / numOfCols;
-                button.Height = 60;
-                button.Padding = new Padding(5);
-                button.Font = new Font("Segoe UI", 10); //, FontStyle.Normal);
+                button.Height = 50;
+                //button.Padding = new Padding(0);
+                button.Font = new Font("Segoe UI", 10);
+                button.Name = "SoundButton" + numOfButtons.ToString();
 
                 button.FlatStyle = FlatStyle.Flat;
                 button.FlatAppearance.BorderSize = 1;
@@ -201,7 +247,7 @@ namespace PatkaPlayer
                         button.FlatAppearance.MouseDownBackColor = ColorTranslator.FromHtml("#1dbe6f");
                         buttonPanel1.BackColor = ColorTranslator.FromHtml("#00944a");
                         break;
-                    
+
                     case 3:
                         // red
                         button.ForeColor = ColorTranslator.FromHtml("#ffffff");
@@ -261,6 +307,8 @@ namespace PatkaPlayer
             labelBottom.Width = panelButtons.Width - 45;
             labelBottom.BorderStyle = BorderStyle.Fixed3D;
             panelButtons.Controls.Add(labelBottom);
+
+            panelButtons.Visible = true;
         }
 
         // stop-button action
@@ -279,9 +327,10 @@ namespace PatkaPlayer
             string pathToPlay = Path.GetDirectoryName(fileToPlay);
 
             Button button = this.Controls.Find("btnReplay", true).FirstOrDefault() as Button;
-            button.Tag = fileToPlay;            
+            button.Tag = fileToPlay;
 
-            txtPlaying.Text = pathToPlay.Substring(pathToPlay.LastIndexOf("\\") + 1) + " - " + temp.Text;
+            lastPlayed = pathToPlay.Substring(pathToPlay.LastIndexOf("\\") + 1) + " - " + temp.Text;
+            this.Text = appName + " - " + lastPlayed;
 
             if (_mp3Player != null) _mp3Player.Dispose();
             _mp3Player = new Mp3Player(fileToPlay);
@@ -292,19 +341,6 @@ namespace PatkaPlayer
             _mp3Player.Play();
         }
 
-        // text to panelbuttons form, eg. no clips
-        public void NoClips(string clipText)
-        {
-            TextBox textboxNoDir = new TextBox();
-            textboxNoDir.Top = 10;
-            textboxNoDir.Left = 10;
-            textboxNoDir.Text = clipText;
-            textboxNoDir.Width = 500;
-            textboxNoDir.BorderStyle = BorderStyle.None;
-            textboxNoDir.ReadOnly = true;
-            textboxNoDir.BackColor = Color.FromName("ControlLightLight");
-            panelButtons.Controls.Add(textboxNoDir);
-        }
 
         // sets focus to panelButtons on mousescroll
         private void Form1_MouseWheel(object sender, MouseEventArgs e)
@@ -315,22 +351,39 @@ namespace PatkaPlayer
         // window size changes
         private void Form1_Layout(object sender, System.EventArgs e)
         {
-            //Button button = this.Controls.Find("btnSound1", true).FirstOrDefault() as Button;
-            //button.Width = (panelButtons.Width / 8) - 19;
+            if (frmSize == 2) return;
+            if (panelButtons.Width == 0) minimized = true;
+            
+            if (!minimized && panelButtons.Width > 0)
+            {
+                InsertPanelButtons();
+                
+                /*
+                int columns = 7;
 
-            //if ((Control.MouseButtons & MouseButtons.Left) == 0)
-            //{
-                if (panelButtons.Width == 0) Minimized = true;
-                if (!Minimized && panelButtons.Width > 0) InsertPanelButtons();
-                if (panelButtons.Width > 0) Minimized = false;
-            //}
+                for (int i = 1; i <= array1.Length; i++)
+                {
+                    string bName = "SoundButton" + i.ToString();
+                    Button b = this.Controls.Find(bName, true).FirstOrDefault() as Button;
 
+                    b.Width = (panelButtons.Width - ((columns - 1) * 6 + 40)) / columns;
+
+                }
+                */
+                
+            }
+            
+            if (panelButtons.Width > 0) minimized = false;
         }
 
         // keypress event
         private void Form1_KeyPress(object sender, KeyPressEventArgs e)
         {
-            if (e.KeyChar == 120 || e.KeyChar == 88) PlayRandom();
+            if (this.ActiveControl.Name == "txtFilterFolder" || this.ActiveControl.Name == "txtFilterFile") return;
+
+            if (e.KeyChar == 120 || e.KeyChar == 88 || e.KeyChar == (char)Keys.Back) PlayRandom();
+            if (e.KeyChar == 114 || e.KeyChar == 82 || e.KeyChar == (char)Keys.PageUp) btnReplay.PerformClick();
+
             if (e.KeyChar == 49 && File.Exists(hotkey1)) playFile(hotkey1);
             if (e.KeyChar == 50 && File.Exists(hotkey2)) playFile(hotkey2);
             if (e.KeyChar == 51 && File.Exists(hotkey3)) playFile(hotkey3);
@@ -361,8 +414,9 @@ namespace PatkaPlayer
             Button button = this.Controls.Find("btnReplay", true).FirstOrDefault() as Button;
             button.Tag = fileToPlay;
 
-            txtPlaying.Text = pathToPlay.Substring(pathToPlay.LastIndexOf("\\") + 1) + " - " + Path.GetFileNameWithoutExtension(fileToPlay);
-
+            lastPlayed = pathToPlay.Substring(pathToPlay.LastIndexOf("\\") + 1) + " - " + Path.GetFileNameWithoutExtension(fileToPlay);
+            this.Text = appName + " - " + lastPlayed;
+            
             if (_mp3Player != null) _mp3Player.Dispose();
             _mp3Player = new Mp3Player(fileToPlay);
 
@@ -402,15 +456,27 @@ namespace PatkaPlayer
         public void PlayRandom()
         {
             Random random = new Random();
-            int randomNumber = random.Next(0, array1.Length);
+            int clipCount = randomSound.Count;
+            int randomNumber = random.Next(0, clipCount);
 
-            string fileToPlay = array1[randomNumber].ToString();
+            if (clipCount > 1)
+            {
+                while (randomNumber == lastRandomNumber)
+                {
+                    randomNumber = random.Next(0, clipCount);
+                }
+            }
+
+            lastRandomNumber = randomNumber;
+
+            string fileToPlay = randomSound[randomNumber].ToString();
             string pathToPlay = Path.GetDirectoryName(fileToPlay);
 
             Button button = this.Controls.Find("btnReplay", true).FirstOrDefault() as Button;
             button.Tag = fileToPlay;
 
-            txtPlaying.Text = pathToPlay.Substring(pathToPlay.LastIndexOf("\\") + 1) + " - " + Path.GetFileNameWithoutExtension(fileToPlay);
+            lastPlayed = pathToPlay.Substring(pathToPlay.LastIndexOf("\\") + 1) + " - " + Path.GetFileNameWithoutExtension(fileToPlay);
+            this.Text = appName + " - " + lastPlayed;
 
             if (_mp3Player != null) _mp3Player.Dispose();
             _mp3Player = new Mp3Player(fileToPlay);
@@ -433,19 +499,146 @@ namespace PatkaPlayer
 
         private void btnToggle_Click(object sender, EventArgs e)
         {
-            if (FrmSize == 1)
+
+            if (this.WindowState == FormWindowState.Maximized) frmMaximized = 1;
+
+            if (frmSize == 1) // switch to mini player
             {
-                this.Size = new Size(1050, 113);
-                FrmSize = 2;
+                // hide window
+                fadeOut();
+                this.Opacity = 0;
+
+                frmSize = 2;
+
+                // restore window to normal if maximized, then save size to variables
+                this.WindowState = FormWindowState.Normal;
+                normalSizeX = this.Width;
+                normalSizeY = this.Height;
+                playerButtonX = btnToggle.Left;
+
+                this.MaximizeBox = false;
+                //this.FormBorderStyle = FormBorderStyle.FixedSingle;
+                this.FormBorderStyle = FormBorderStyle.FixedToolWindow;
+                this.MinimumSize = new Size(100, 106);
+                this.Size = new Size(800, 106);
+
+                Screen screen = Screen.FromPoint(Cursor.Position);
+                this.Left = screen.WorkingArea.Left + (screen.Bounds.Size.Width - (this.Width + 10));
+                this.Top = screen.WorkingArea.Top + (screen.Bounds.Size.Height - (this.Height + 50));
+
+                this.btnToggle.Text = "Switch To Normal";
+
+                panelButtons.Visible = false;
+                txtFilterFolder.Visible = false;
+                txtFilterFile.Visible = false;
+                btnFilterFolder.Visible = false;
+                btnFilterFile.Visible = false;
+                btnReload.Visible = false;
+                btnSettings.Visible = false;
+                btnToggle.Left = 670;
+
+                fadeIn();
+                this.Opacity = 1;
             }
 
-            else
+            else // switch to normal player
             {
-                this.Size = new Size(1271, 701);
-                FrmSize = 1;
+                // hide window
+                fadeOut();
+                this.Opacity = 0;
+
+                this.MaximizeBox = true;
+                this.FormBorderStyle = FormBorderStyle.Sizable;
+                this.MinimumSize = new Size(1050, 113);
+
+                // restore window size
+                this.Width = normalSizeX;
+                this.Height = normalSizeY;
+                btnToggle.Left = playerButtonX;
+
+                this.btnToggle.Text = "Switch To Mini";
+
+                Screen screen = Screen.FromPoint(Cursor.Position);
+                this.Left = screen.WorkingArea.Left + (screen.Bounds.Size.Width / 2 - this.Width / 2);
+                this.Top = screen.WorkingArea.Top + (screen.Bounds.Size.Height / 2 - this.Height / 2);
+
+                if (frmMaximized == 1) this.WindowState = FormWindowState.Maximized;
+                frmMaximized = 0;
+
+                panelButtons.Visible = true;
+                txtFilterFolder.Visible = true;
+                txtFilterFile.Visible = true;
+                btnFilterFolder.Visible = true;
+                btnFilterFile.Visible = true;
+                btnReload.Visible = true;
+                btnSettings.Visible = true;
+                
+                frmSize = 1;
+                fadeIn();
+                this.Opacity = 1;
             }
             
         }
 
+        private void fadeIn()
+        {
+            for (double i = 0.0; i <= 1.0; i += 0.1)
+            {
+                System.Threading.Thread.Sleep(10);
+                this.Opacity = i;
+            }
+        }
+
+        private void fadeOut()
+        {
+            for (double i = 1.0; i >= 0.0; i -= 0.1)
+            {
+                System.Threading.Thread.Sleep(10);
+                this.Opacity = i;
+            }
+        }
+
+        private void txtFilterFolder_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter) btnFilterFolder.PerformClick();
+            if (e.KeyCode == Keys.Escape)
+            {
+                txtFilterFile.Text = "";
+                filterFile = "";
+                txtFilterFolder.Text = "";
+                filterFolder = "";
+                AddPanel(mp3Dir);
+            }
+                
+        }
+
+        private void txtFilterFile_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter) btnFilterFile.PerformClick();
+            if (e.KeyCode == Keys.Escape)
+            {
+                txtFilterFile.Text = "";
+                filterFile = "";
+                txtFilterFolder.Text = "";
+                filterFolder = "";
+                AddPanel(mp3Dir);
+            }
+        }
+
+        private void btnFilterFolder_Click(object sender, EventArgs e)
+        {
+            filterFolder = txtFilterFolder.Text;
+            txtFilterFile.Text = "";
+            filterFile = "";
+            AddPanel(mp3Dir);
+        }
+
+        private void btnFilterFile_Click(object sender, EventArgs e)
+        {
+            filterFile = txtFilterFile.Text;
+            txtFilterFolder.Text = "";
+            filterFolder = "";
+            AddPanel(mp3Dir);
+        }
     }
 }

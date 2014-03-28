@@ -65,7 +65,7 @@
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.txtSetFolder = new System.Windows.Forms.TextBox();
             this.btnSetFolder = new System.Windows.Forms.Button();
-            this.label1 = new System.Windows.Forms.Label();
+            this.txtVersion = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.panel1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -503,23 +503,23 @@
             this.btnSetFolder.UseVisualStyleBackColor = true;
             this.btnSetFolder.Click += new System.EventHandler(this.btnSetFolder_Click);
             // 
-            // label1
+            // txtVersion
             // 
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.ForeColor = System.Drawing.Color.Silver;
-            this.label1.Location = new System.Drawing.Point(13, 446);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(248, 15);
-            this.label1.TabIndex = 24;
-            this.label1.Text = "Pätkä Player v0.14.03.09 © 2014 Ari Kankainen";
+            this.txtVersion.AutoSize = true;
+            this.txtVersion.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtVersion.ForeColor = System.Drawing.Color.Silver;
+            this.txtVersion.Location = new System.Drawing.Point(13, 446);
+            this.txtVersion.Name = "txtVersion";
+            this.txtVersion.Size = new System.Drawing.Size(71, 15);
+            this.txtVersion.TabIndex = 24;
+            this.txtVersion.Text = "Pätkä Player";
             // 
             // frmSettings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(676, 475);
-            this.Controls.Add(this.label1);
+            this.Controls.Add(this.txtVersion);
             this.Controls.Add(this.btnSetCancel);
             this.Controls.Add(this.btnSetOk);
             this.Controls.Add(this.panel1);
@@ -582,6 +582,6 @@
         private System.Windows.Forms.Button btnErase1;
         private System.Windows.Forms.TextBox txtSetFolder;
         private System.Windows.Forms.Button btnSetFolder;
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label txtVersion;
     }
 }

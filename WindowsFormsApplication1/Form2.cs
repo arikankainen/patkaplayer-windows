@@ -31,6 +31,7 @@ namespace PatkaPlayer
         {
             InitializeComponent();
             this._frmPlayer = temp;
+            txtVersion.Text = "Pätkä Player v0.14.03.28 © 2014 Ari Kankainen";
             ReadConfig();
         }
 

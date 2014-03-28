@@ -1,0 +1,13 @@
+﻿string controlName;
+
+for (int i = 1; i < numOfButtons + 1; i++)
+{
+    controlName = "SoundButton" + i.ToString();
+    Button button = ((Button)this.Controls.Find(controlName, true)[0]);
+    button.Width = (panelButtons.Width - ((numOfCols - 1) * 6 + 40)) / numOfCols;
+    button.Left = button.Left + (panelButtons.Width / 6);
+                    
+}
+
+
+http://msdn.microsoft.com/en-us/library/system.windows.forms.keys.aspx
