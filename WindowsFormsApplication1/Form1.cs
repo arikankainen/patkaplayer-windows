@@ -9,10 +9,10 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
-//using Microsoft.VisualBasic.PowerPacks;
 using System.Configuration;
 using System.Windows;
 using System.Windows.Input;
+
 
 namespace PatkaPlayer
 {
@@ -26,26 +26,48 @@ namespace PatkaPlayer
         private int frmSize = 1;
         private int frmMaximized;
         private string lastPlayed;
-        private string appName = "Pätkä Player";
         private string filterFolder = "";
         private string filterFile = "";
         private int normalSizeX;
         private int normalSizeY;
-        private int playerButtonX;
         private int numOfButtons;
         private int numOfCols;
         private List<string> randomSound = new List<string>();
         private int lastRandomNumber = 0;
+        private Image buttonBack = new Bitmap(patka.Properties.Resources.buttonback);
+        private Image buttonBackHover = new Bitmap(patka.Properties.Resources.buttonback_hover);
+        private FormWindowState LastWindowState;
+        private int lastWidth;
+        private int playCount = 0;
+        static System.Windows.Forms.Timer timer = new System.Windows.Forms.Timer();
 
         public frmPlayer()
         {
             InitializeComponent();
 
             this.MouseWheel += new MouseEventHandler(Form1_MouseWheel);
-            this.SizeChanged += new EventHandler(Form1_Layout);
+            this.ResizeEnd += new EventHandler(Form1_ResizeEnd);
+            this.SizeChanged += new EventHandler(Form1_SizeChanged);
             this.KeyPress += new KeyPressEventHandler(Form1_KeyPress);
             txtFilterFolder.KeyDown += new KeyEventHandler(txtFilterFolder_KeyDown);
             txtFilterFile.KeyDown += new KeyEventHandler(txtFilterFile_KeyDown);
+
+            timer.Tick += new System.EventHandler(timer_Tick);
+            timer.Interval = 1000;
+            timer.Start();
+            labelClock.Visible = false;
+            
+            lastWidth = this.Width;
+            LastWindowState = this.WindowState;
+
+            btnReplay.Enabled = false;
+            
+            // correcting a bug in the "system" renderer (white bottom line in toolstrip)
+            toolStripPlay.Renderer = new MySR();
+            toolStripSettings.Renderer = new MySR();
+            toolStripFilters.Renderer = new MySR();
+
+            ButtonLocations();
 
             InsertPanelButtons();
         }
@@ -87,6 +109,17 @@ namespace PatkaPlayer
             panelButtons.Controls.Add(label);
         }
 
+        public void ButtonLocations()
+        {
+            toolStripSettings.Left = toolStripContainer1.TopToolStripPanel.Width - toolStripSettings.Width;
+            toolStripFilters.Left = toolStripContainer1.TopToolStripPanel.Width / 2 - toolStripFilters.Width / 2;
+            toolStripPlay.Left = 3;
+
+            toolStripSettings.Top = 0;
+            toolStripFilters.Top = 0;
+            toolStripPlay.Top = 0;
+        }
+
         public void InsertPanelButtons()
         {
             ReadSettings();
@@ -103,6 +136,9 @@ namespace PatkaPlayer
         // add panel for soundbuttons
         public void AddPanel(string mp3Dir)
         {
+            if (filterFolder != "" || filterFile != "") btnClearFilters.Enabled = true;
+            else btnClearFilters.Enabled = false;
+
             panelButtons.Controls.Clear();
             panelButtons.Visible = false;
 
@@ -147,7 +183,7 @@ namespace PatkaPlayer
                 if (filterFile != "" && fileName.IndexOf(filterFile, StringComparison.OrdinalIgnoreCase) == -1) continue;
                 if (filterFolder != "" && folderName.IndexOf(filterFolder, StringComparison.OrdinalIgnoreCase) == -1) continue;
 
-                if (frmSize == 2) continue;
+                //if (frmSize == 2) continue;
 
                 cols++;
                 numOfButtons++;
@@ -175,7 +211,7 @@ namespace PatkaPlayer
                         panel.Height = 1;
                         panel.Width = panelButtons.Width - 45;
                         panel.BorderStyle = BorderStyle.None;
-                        panel.BackColor = Color.FromArgb(200, 200, 200);
+                        panel.BackColor = ColorTranslator.FromHtml("#d1dbe7");
                         panelButtons.Controls.Add(panel);
                     }
 
@@ -190,7 +226,9 @@ namespace PatkaPlayer
                     folderLabel.Height = 30;
                     folderLabel.BorderStyle = BorderStyle.None;
                     folderLabel.Font = new Font("Segoe UI", 13);
-                    folderLabel.ForeColor = ColorTranslator.FromHtml("#222");
+                    //folderLabel.ForeColor = ColorTranslator.FromHtml("#222");
+                    //folderLabel.ForeColor = ColorTranslator.FromHtml("#445769");
+                    folderLabel.ForeColor = ColorTranslator.FromHtml("#384b5d");
 
                     panelButtons.Controls.Add(folderLabel);
 
@@ -212,30 +250,41 @@ namespace PatkaPlayer
                 button.Top = top;
                 button.Left = left;
                 button.Text = Path.GetFileNameWithoutExtension(array1[i]); // filename only
-                button.TextAlign = ContentAlignment.MiddleCenter;
+                button.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
                 button.Tag = array1[i]; // filepath + filename + ext
                 button.Width = (panelButtons.Width - ((numOfCols - 1) * 6 + 40)) / numOfCols;
                 button.Height = 50;
                 //button.Padding = new Padding(0);
                 button.Font = new Font("Segoe UI", 10);
                 button.Name = "SoundButton" + numOfButtons.ToString();
+                button.MouseEnter += new EventHandler(SoundButton_MouseEnter);
+                button.MouseLeave += new EventHandler(SoundButton_MouseLeave);
+                button.MouseDown += new MouseEventHandler(SoundButton_MouseDown);
+                button.MouseUp += new MouseEventHandler(SoundButton_MouseUp);
 
                 button.FlatStyle = FlatStyle.Flat;
                 button.FlatAppearance.BorderSize = 1;
 
                 // different colors for even and odd folders
                 if (numColor > 5) numColor = 1;
+                
+                numColor = 1; // test
 
                 switch (numColor)
                 {
                     case 1:
                         // orange
+                        //button.ForeColor = ColorTranslator.FromHtml("#ffffff");
+                        //button.BackColor = ColorTranslator.FromHtml("#e27a25");
+                        //button.FlatAppearance.BorderColor = ColorTranslator.FromHtml("#ffbd65"); // +25 bg lightness
+                        //button.FlatAppearance.MouseOverBackColor = ColorTranslator.FromHtml("#ff963c");
+                        //button.FlatAppearance.MouseDownBackColor = ColorTranslator.FromHtml("#e27a25"); // bg
+                        //buttonPanel1.BackColor = ColorTranslator.FromHtml("#b25300"); // -15 bg lightness
+
                         button.ForeColor = ColorTranslator.FromHtml("#ffffff");
-                        button.BackColor = ColorTranslator.FromHtml("#e27a25");
-                        button.FlatAppearance.BorderColor = ColorTranslator.FromHtml("#ffbd65"); // +25 bg lightness
-                        button.FlatAppearance.MouseOverBackColor = ColorTranslator.FromHtml("#ff963c");
-                        button.FlatAppearance.MouseDownBackColor = ColorTranslator.FromHtml("#e27a25"); // bg
-                        buttonPanel1.BackColor = ColorTranslator.FromHtml("#b25300"); // -15 bg lightness
+                        button.BackgroundImage = buttonBack;
+                        button.FlatAppearance.BorderColor = ColorTranslator.FromHtml("#abc8e5"); // +25 bg lightness
+                        buttonPanel1.BackColor = ColorTranslator.FromHtml("#7a8ea2"); // -15 bg lightness
                         break;
 
                     case 2:
@@ -309,6 +358,10 @@ namespace PatkaPlayer
             panelButtons.Controls.Add(labelBottom);
 
             panelButtons.Visible = true;
+            labelTotalClips.Text = "Clips: " + numOfButtons.ToString() + " / " + array1.Length.ToString();
+            
+            ButtonLocations();
+
         }
 
         // stop-button action
@@ -321,26 +374,44 @@ namespace PatkaPlayer
         // generated play-buttons action
         private void btnSound_Click(object sender, EventArgs e)
         {
-
             Button temp = (Button)sender;
             string fileToPlay = temp.Tag.ToString();
-            string pathToPlay = Path.GetDirectoryName(fileToPlay);
-
-            Button button = this.Controls.Find("btnReplay", true).FirstOrDefault() as Button;
-            button.Tag = fileToPlay;
-
-            lastPlayed = pathToPlay.Substring(pathToPlay.LastIndexOf("\\") + 1) + " - " + temp.Text;
-            this.Text = appName + " - " + lastPlayed;
-
-            if (_mp3Player != null) _mp3Player.Dispose();
-            _mp3Player = new Mp3Player(fileToPlay);
-
-            if (checkRepeat.Checked) _mp3Player.Repeat = true;
-            else _mp3Player.Repeat = false;
-
-            _mp3Player.Play();
+            playFile(fileToPlay);
         }
 
+        private void timer_Tick(object sender, EventArgs e)
+        {
+            //labelClock.Text = DateTime.Now.ToString();
+            ButtonLocations();
+        }
+
+        private void SoundButton_MouseEnter(object sender, EventArgs e)
+        {
+            Button button = (Button)sender;
+            button.BackgroundImage = buttonBackHover;
+            button.FlatAppearance.BorderColor = ColorTranslator.FromHtml("#c7e0f7");
+        }
+
+        private void SoundButton_MouseLeave(object sender, EventArgs e)
+        {
+            Button button = (Button)sender;
+            button.BackgroundImage = buttonBack;
+            button.FlatAppearance.BorderColor = ColorTranslator.FromHtml("#abc8e5");
+        }
+
+        private void SoundButton_MouseDown(object sender, MouseEventArgs e)
+        {
+            Button button = (Button)sender;
+            button.BackgroundImage = buttonBack;
+            button.FlatAppearance.BorderColor = ColorTranslator.FromHtml("#abc8e5");
+        }
+
+        private void SoundButton_MouseUp(object sender, MouseEventArgs e)
+        {
+            Button button = (Button)sender;
+            button.BackgroundImage = buttonBackHover;
+            button.FlatAppearance.BorderColor = ColorTranslator.FromHtml("#c7e0f7");
+        }
 
         // sets focus to panelButtons on mousescroll
         private void Form1_MouseWheel(object sender, MouseEventArgs e)
@@ -349,40 +420,50 @@ namespace PatkaPlayer
         }
 
         // window size changes
-        private void Form1_Layout(object sender, System.EventArgs e)
+        private void Form1_SizeChanged(object sender, System.EventArgs e)
+        {
+            // refresh toolbars
+            ButtonLocations();
+
+            // if window state changes, reload buttons
+            if (WindowState != LastWindowState && LastWindowState != FormWindowState.Minimized)
+            {
+                LastWindowState = WindowState;
+
+                if (WindowState == FormWindowState.Maximized)
+                {
+                    InsertPanelButtons();
+                }
+
+                if (WindowState == FormWindowState.Normal)
+                {
+                    InsertPanelButtons();
+                }
+            }
+        }
+
+        private void Form1_ResizeEnd(object sender, System.EventArgs e)
         {
             if (frmSize == 2) return;
             if (panelButtons.Width == 0) minimized = true;
-            
+
             if (!minimized && panelButtons.Width > 0)
             {
-                InsertPanelButtons();
-                
-                /*
-                int columns = 7;
-
-                for (int i = 1; i <= array1.Length; i++)
-                {
-                    string bName = "SoundButton" + i.ToString();
-                    Button b = this.Controls.Find(bName, true).FirstOrDefault() as Button;
-
-                    b.Width = (panelButtons.Width - ((columns - 1) * 6 + 40)) / columns;
-
-                }
-                */
-                
+                if (lastWidth != this.Width) InsertPanelButtons();
+                lastWidth = this.Width;
             }
-            
+
             if (panelButtons.Width > 0) minimized = false;
         }
 
         // keypress event
         private void Form1_KeyPress(object sender, KeyPressEventArgs e)
         {
-            if (this.ActiveControl.Name == "txtFilterFolder" || this.ActiveControl.Name == "txtFilterFile") return;
+            if (txtFilterFolder.Selected == true || txtFilterFile.Selected == true) return;
 
-            if (e.KeyChar == 120 || e.KeyChar == 88 || e.KeyChar == (char)Keys.Back) PlayRandom();
+            if (e.KeyChar == 120 || e.KeyChar == 88 || e.KeyChar == (char)Keys.Back) btnRandom.PerformClick(); //PlayRandom();
             if (e.KeyChar == 114 || e.KeyChar == 82 || e.KeyChar == (char)Keys.PageUp) btnReplay.PerformClick();
+            if (e.KeyChar == 115 || e.KeyChar == 83 || e.KeyChar == (char)Keys.PageUp) btnStop.PerformClick();
 
             if (e.KeyChar == 49 && File.Exists(hotkey1)) playFile(hotkey1);
             if (e.KeyChar == 50 && File.Exists(hotkey2)) playFile(hotkey2);
@@ -411,11 +492,13 @@ namespace PatkaPlayer
         {
             string pathToPlay = Path.GetDirectoryName(fileToPlay);
 
-            Button button = this.Controls.Find("btnReplay", true).FirstOrDefault() as Button;
-            button.Tag = fileToPlay;
+            btnReplay.Tag = fileToPlay;
+            btnReplay.Enabled = true;
 
             lastPlayed = pathToPlay.Substring(pathToPlay.LastIndexOf("\\") + 1) + " - " + Path.GetFileNameWithoutExtension(fileToPlay);
-            this.Text = appName + " - " + lastPlayed;
+            labelLastPlayed.Text = lastPlayed;
+            playCount++;
+            labelClipsPlayed.Text = "Count: " + playCount.ToString();
             
             if (_mp3Player != null) _mp3Player.Dispose();
             _mp3Player = new Mp3Player(fileToPlay);
@@ -424,6 +507,15 @@ namespace PatkaPlayer
             else _mp3Player.Repeat = false;
 
             _mp3Player.Play();
+            
+            // save logfile
+            string logFolder = pathToPlay.Substring(pathToPlay.LastIndexOf("\\") + 1);
+            string logFile = Path.GetFileNameWithoutExtension(fileToPlay);
+            string log = DateTime.Now.ToString("dd.MM.yyyy|HH:mm:ss") + "|" + logFolder + "|" + logFile + "|" + lastPlayed;
+            using (System.IO.StreamWriter file = new System.IO.StreamWriter(@System.Windows.Forms.Application.ExecutablePath + ".log", true))
+            {
+                file.WriteLine(log);
+            }
         }
 
         private void btnReload_Click(object sender, EventArgs e)
@@ -434,17 +526,11 @@ namespace PatkaPlayer
         // replay button
         private void btnReplay_Click(object sender, EventArgs e)
         {
-            Button temp = (Button)sender;
-            string fileToPlay = temp.Tag.ToString();
+            string fileToPlay = btnReplay.Tag.ToString();
 
             if (fileToPlay != "nofile")
             {
-                if (_mp3Player != null) _mp3Player.Dispose();
-                _mp3Player = new Mp3Player(fileToPlay);
-
-                if (checkRepeat.Checked) _mp3Player.Repeat = true;
-                else _mp3Player.Repeat = false;
-                _mp3Player.Play();
+                playFile(fileToPlay);
             }
         }
 
@@ -459,6 +545,7 @@ namespace PatkaPlayer
             int clipCount = randomSound.Count;
             int randomNumber = random.Next(0, clipCount);
 
+            if (clipCount == 0) return;
             if (clipCount > 1)
             {
                 while (randomNumber == lastRandomNumber)
@@ -470,22 +557,7 @@ namespace PatkaPlayer
             lastRandomNumber = randomNumber;
 
             string fileToPlay = randomSound[randomNumber].ToString();
-            string pathToPlay = Path.GetDirectoryName(fileToPlay);
-
-            Button button = this.Controls.Find("btnReplay", true).FirstOrDefault() as Button;
-            button.Tag = fileToPlay;
-
-            lastPlayed = pathToPlay.Substring(pathToPlay.LastIndexOf("\\") + 1) + " - " + Path.GetFileNameWithoutExtension(fileToPlay);
-            this.Text = appName + " - " + lastPlayed;
-
-            if (_mp3Player != null) _mp3Player.Dispose();
-            _mp3Player = new Mp3Player(fileToPlay);
-
-            if (checkRepeat.Checked) _mp3Player.Repeat = true;
-            else _mp3Player.Repeat = false;
-
-            _mp3Player.Play();
-
+            playFile(fileToPlay);
         }
 
         // show settings dialog
@@ -497,6 +569,7 @@ namespace PatkaPlayer
             settingsForm.ShowDialog();
         }
 
+        // toggle miniplayer
         private void btnToggle_Click(object sender, EventArgs e)
         {
 
@@ -514,28 +587,16 @@ namespace PatkaPlayer
                 this.WindowState = FormWindowState.Normal;
                 normalSizeX = this.Width;
                 normalSizeY = this.Height;
-                playerButtonX = btnToggle.Left;
 
                 this.MaximizeBox = false;
-                //this.FormBorderStyle = FormBorderStyle.FixedSingle;
-                this.FormBorderStyle = FormBorderStyle.FixedToolWindow;
-                this.MinimumSize = new Size(100, 106);
-                this.Size = new Size(800, 106);
+                this.FormBorderStyle = FormBorderStyle.FixedSingle;
+                this.Size = new Size(900, 97);
 
                 Screen screen = Screen.FromPoint(Cursor.Position);
                 this.Left = screen.WorkingArea.Left + (screen.Bounds.Size.Width - (this.Width + 10));
                 this.Top = screen.WorkingArea.Top + (screen.Bounds.Size.Height - (this.Height + 50));
 
                 this.btnToggle.Text = "Switch To Normal";
-
-                panelButtons.Visible = false;
-                txtFilterFolder.Visible = false;
-                txtFilterFile.Visible = false;
-                btnFilterFolder.Visible = false;
-                btnFilterFile.Visible = false;
-                btnReload.Visible = false;
-                btnSettings.Visible = false;
-                btnToggle.Left = 670;
 
                 fadeIn();
                 this.Opacity = 1;
@@ -549,12 +610,10 @@ namespace PatkaPlayer
 
                 this.MaximizeBox = true;
                 this.FormBorderStyle = FormBorderStyle.Sizable;
-                this.MinimumSize = new Size(1050, 113);
 
                 // restore window size
                 this.Width = normalSizeX;
                 this.Height = normalSizeY;
-                btnToggle.Left = playerButtonX;
 
                 this.btnToggle.Text = "Switch To Mini";
 
@@ -565,17 +624,11 @@ namespace PatkaPlayer
                 if (frmMaximized == 1) this.WindowState = FormWindowState.Maximized;
                 frmMaximized = 0;
 
-                panelButtons.Visible = true;
-                txtFilterFolder.Visible = true;
-                txtFilterFile.Visible = true;
-                btnFilterFolder.Visible = true;
-                btnFilterFile.Visible = true;
-                btnReload.Visible = true;
-                btnSettings.Visible = true;
-                
                 frmSize = 1;
                 fadeIn();
                 this.Opacity = 1;
+                
+                InsertPanelButtons();
             }
             
         }
@@ -600,45 +653,88 @@ namespace PatkaPlayer
 
         private void txtFilterFolder_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.Enter) btnFilterFolder.PerformClick();
-            if (e.KeyCode == Keys.Escape)
+            if (e.KeyCode == Keys.Enter)
             {
+                filterFolder = txtFilterFolder.Text;
                 txtFilterFile.Text = "";
                 filterFile = "";
-                txtFilterFolder.Text = "";
-                filterFolder = "";
                 AddPanel(mp3Dir);
+                Button button = this.Controls.Find("SoundButton1", true).FirstOrDefault() as Button;
+                this.ActiveControl = button;
             }
-                
         }
 
         private void txtFilterFile_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.Enter) btnFilterFile.PerformClick();
-            if (e.KeyCode == Keys.Escape)
+            if (e.KeyCode == Keys.Enter)
             {
-                txtFilterFile.Text = "";
-                filterFile = "";
+                filterFile = txtFilterFile.Text;
                 txtFilterFolder.Text = "";
                 filterFolder = "";
                 AddPanel(mp3Dir);
+                Button button = this.Controls.Find("SoundButton1", true).FirstOrDefault() as Button;
+                this.ActiveControl = button;
             }
         }
 
-        private void btnFilterFolder_Click(object sender, EventArgs e)
+        private void btnClearFilters_Click(object sender, EventArgs e)
         {
-            filterFolder = txtFilterFolder.Text;
             txtFilterFile.Text = "";
             filterFile = "";
-            AddPanel(mp3Dir);
-        }
-
-        private void btnFilterFile_Click(object sender, EventArgs e)
-        {
-            filterFile = txtFilterFile.Text;
             txtFilterFolder.Text = "";
             filterFolder = "";
             AddPanel(mp3Dir);
         }
+
+        private void checkRepeat_Click(object sender, EventArgs e)
+        {
+            if (checkRepeat.Checked == true) checkRepeat.Checked = false;
+            else checkRepeat.Checked = true;
+        }
+
+        public class MySR : ToolStripSystemRenderer
+        {
+            public MySR() { }
+
+            protected override void OnRenderToolStripBorder(ToolStripRenderEventArgs e)
+            {
+                //base.OnRenderToolStripBorder(e);
+            }
+        }
+
+        private void btnClearFilters_Click_1(object sender, EventArgs e)
+        {
+
+        }
+
+        /*
+        // window maximized
+        protected override void WndProc(ref Message m)
+        {
+            if (m.Msg == 0x0112) // WM_SYSCOMMAND
+            {
+                // Check your window state here
+                if (m.WParam == new IntPtr(0xF030)) // Maximize event - SC_MAXIMIZE from Winuser.h
+                {
+                    //InsertPanelButtons();
+                }
+            }
+            base.WndProc(ref m);
+        }
+
+        // window restored
+        protected override void WndProc(ref Message m)
+        {
+            if (m.Msg == 0x0112) // WM_SYSCOMMAND
+            {
+                // Check your window state here
+                if (m.WParam == new IntPtr(0xF120)) // Restore event - SC_RESTORE from Winuser.h
+                {
+                    //InsertPanelButtons();
+                }
+            }
+            base.WndProc(ref m);
+        }
+        */
     }
 }

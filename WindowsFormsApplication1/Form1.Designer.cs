@@ -33,13 +33,8 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.btnStop = new System.Windows.Forms.Button();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmPlayer));
             this.panelButtons = new System.Windows.Forms.Panel();
-            this.checkRepeat = new System.Windows.Forms.CheckBox();
-            this.btnReload = new System.Windows.Forms.Button();
-            this.btnReplay = new System.Windows.Forms.Button();
-            this.btnRandom = new System.Windows.Forms.Button();
-            this.btnSettings = new System.Windows.Forms.Button();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
@@ -51,24 +46,44 @@
             this.toolStripStatusLabel8 = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel9 = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel10 = new System.Windows.Forms.ToolStripStatusLabel();
-            this.btnToggle = new System.Windows.Forms.Button();
-            this.txtFilterFolder = new System.Windows.Forms.TextBox();
-            this.btnFilterFolder = new System.Windows.Forms.Button();
-            this.txtFilterFile = new System.Windows.Forms.TextBox();
-            this.btnFilterFile = new System.Windows.Forms.Button();
+            this.toolStripContainer1 = new System.Windows.Forms.ToolStripContainer();
+            this.statusStrip2 = new System.Windows.Forms.StatusStrip();
+            this.labelTotalClips = new System.Windows.Forms.ToolStripStatusLabel();
+            this.labelLastPlayed = new System.Windows.Forms.ToolStripStatusLabel();
+            this.labelClock = new System.Windows.Forms.ToolStripStatusLabel();
+            this.panelToolStripLine = new System.Windows.Forms.Panel();
+            this.toolStripPlay = new System.Windows.Forms.ToolStrip();
+            this.btnRandom = new System.Windows.Forms.ToolStripButton();
+            this.btnStop = new System.Windows.Forms.ToolStripButton();
+            this.btnReplay = new System.Windows.Forms.ToolStripButton();
+            this.checkRepeat = new System.Windows.Forms.ToolStripButton();
+            this.toolStripFilters = new System.Windows.Forms.ToolStrip();
+            this.toolStripLabel1 = new System.Windows.Forms.ToolStripLabel();
+            this.txtFilterFolder = new System.Windows.Forms.ToolStripTextBox();
+            this.toolStripLabel2 = new System.Windows.Forms.ToolStripLabel();
+            this.txtFilterFile = new System.Windows.Forms.ToolStripTextBox();
+            this.btnClearFilters = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSettings = new System.Windows.Forms.ToolStrip();
+            this.btnToggle = new System.Windows.Forms.ToolStripButton();
+            this.btnSettings = new System.Windows.Forms.ToolStripButton();
+            this.btnReload = new System.Windows.Forms.ToolStripButton();
+            this.BottomToolStripPanel = new System.Windows.Forms.ToolStripPanel();
+            this.TopToolStripPanel = new System.Windows.Forms.ToolStripPanel();
+            this.RightToolStripPanel = new System.Windows.Forms.ToolStripPanel();
+            this.LeftToolStripPanel = new System.Windows.Forms.ToolStripPanel();
+            this.ContentPanel = new System.Windows.Forms.ToolStripContentPanel();
+            this.labelClipsPlayed = new System.Windows.Forms.ToolStripStatusLabel();
             this.panelButtons.SuspendLayout();
             this.statusStrip1.SuspendLayout();
+            this.toolStripContainer1.BottomToolStripPanel.SuspendLayout();
+            this.toolStripContainer1.ContentPanel.SuspendLayout();
+            this.toolStripContainer1.TopToolStripPanel.SuspendLayout();
+            this.toolStripContainer1.SuspendLayout();
+            this.statusStrip2.SuspendLayout();
+            this.toolStripPlay.SuspendLayout();
+            this.toolStripFilters.SuspendLayout();
+            this.toolStripSettings.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // btnStop
-            // 
-            this.btnStop.Location = new System.Drawing.Point(12, 12);
-            this.btnStop.Name = "btnStop";
-            this.btnStop.Size = new System.Drawing.Size(75, 23);
-            this.btnStop.TabIndex = 2;
-            this.btnStop.Text = "Stop";
-            this.btnStop.UseVisualStyleBackColor = true;
-            this.btnStop.Click += new System.EventHandler(this.btnStop_Click);
             // 
             // panelButtons
             // 
@@ -77,69 +92,19 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.panelButtons.AutoScroll = true;
             this.panelButtons.BackColor = System.Drawing.SystemColors.ControlLightLight;
-            this.panelButtons.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panelButtons.Controls.Add(this.checkRepeat);
+            this.panelButtons.Controls.Add(this.statusStrip1);
             this.panelButtons.ForeColor = System.Drawing.Color.Black;
-            this.panelButtons.Location = new System.Drawing.Point(0, 45);
+            this.panelButtons.Location = new System.Drawing.Point(0, 1);
             this.panelButtons.Name = "panelButtons";
-            this.panelButtons.Size = new System.Drawing.Size(1134, 593);
+            this.panelButtons.Size = new System.Drawing.Size(1133, 518);
             this.panelButtons.TabIndex = 9;
-            // 
-            // checkRepeat
-            // 
-            this.checkRepeat.Location = new System.Drawing.Point(21, 13);
-            this.checkRepeat.Name = "checkRepeat";
-            this.checkRepeat.Size = new System.Drawing.Size(65, 24);
-            this.checkRepeat.TabIndex = 0;
-            this.checkRepeat.Text = "Repeat";
-            this.checkRepeat.Visible = false;
-            // 
-            // btnReload
-            // 
-            this.btnReload.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnReload.Location = new System.Drawing.Point(1047, 12);
-            this.btnReload.Name = "btnReload";
-            this.btnReload.Size = new System.Drawing.Size(75, 23);
-            this.btnReload.TabIndex = 0;
-            this.btnReload.Text = "Reload";
-            this.btnReload.UseVisualStyleBackColor = true;
-            this.btnReload.Click += new System.EventHandler(this.btnReload_Click);
-            // 
-            // btnReplay
-            // 
-            this.btnReplay.Location = new System.Drawing.Point(93, 12);
-            this.btnReplay.Name = "btnReplay";
-            this.btnReplay.Size = new System.Drawing.Size(75, 23);
-            this.btnReplay.TabIndex = 0;
-            this.btnReplay.Tag = "nofile";
-            this.btnReplay.Text = "Replay";
-            this.btnReplay.UseVisualStyleBackColor = true;
-            this.btnReplay.Click += new System.EventHandler(this.btnReplay_Click);
-            // 
-            // btnRandom
-            // 
-            this.btnRandom.Location = new System.Drawing.Point(174, 12);
-            this.btnRandom.Name = "btnRandom";
-            this.btnRandom.Size = new System.Drawing.Size(75, 23);
-            this.btnRandom.TabIndex = 0;
-            this.btnRandom.Text = "Random";
-            this.btnRandom.UseVisualStyleBackColor = true;
-            this.btnRandom.Click += new System.EventHandler(this.btnRandom_Click);
-            // 
-            // btnSettings
-            // 
-            this.btnSettings.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnSettings.Location = new System.Drawing.Point(966, 12);
-            this.btnSettings.Name = "btnSettings";
-            this.btnSettings.Size = new System.Drawing.Size(75, 23);
-            this.btnSettings.TabIndex = 0;
-            this.btnSettings.Text = "Settings...";
-            this.btnSettings.UseVisualStyleBackColor = true;
-            this.btnSettings.Click += new System.EventHandler(this.btnSettings_Click);
             // 
             // statusStrip1
             // 
             this.statusStrip1.AutoSize = false;
+            this.statusStrip1.BackColor = System.Drawing.SystemColors.Control;
+            this.statusStrip1.Dock = System.Windows.Forms.DockStyle.None;
+            this.statusStrip1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Visible;
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripStatusLabel1,
             this.toolStripStatusLabel2,
@@ -151,11 +116,10 @@
             this.toolStripStatusLabel8,
             this.toolStripStatusLabel9,
             this.toolStripStatusLabel10});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 637);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 448);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Size = new System.Drawing.Size(1134, 25);
-            this.statusStrip1.SizingGrip = false;
-            this.statusStrip1.TabIndex = 13;
+            this.statusStrip1.TabIndex = 14;
             this.statusStrip1.Text = "statusStrip1";
             // 
             // toolStripStatusLabel1
@@ -298,96 +262,370 @@
             this.toolStripStatusLabel10.Text = " 0.";
             this.toolStripStatusLabel10.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // btnToggle
+            // toolStripContainer1
             // 
-            this.btnToggle.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnToggle.Location = new System.Drawing.Point(845, 12);
-            this.btnToggle.Name = "btnToggle";
-            this.btnToggle.Size = new System.Drawing.Size(100, 23);
-            this.btnToggle.TabIndex = 14;
-            this.btnToggle.Text = "Switch To Mini";
-            this.btnToggle.UseVisualStyleBackColor = true;
-            this.btnToggle.Click += new System.EventHandler(this.btnToggle_Click);
+            // 
+            // toolStripContainer1.BottomToolStripPanel
+            // 
+            this.toolStripContainer1.BottomToolStripPanel.Controls.Add(this.statusStrip2);
+            // 
+            // toolStripContainer1.ContentPanel
+            // 
+            this.toolStripContainer1.ContentPanel.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.toolStripContainer1.ContentPanel.Controls.Add(this.panelToolStripLine);
+            this.toolStripContainer1.ContentPanel.Controls.Add(this.panelButtons);
+            this.toolStripContainer1.ContentPanel.Size = new System.Drawing.Size(1134, 519);
+            this.toolStripContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.toolStripContainer1.Location = new System.Drawing.Point(0, 0);
+            this.toolStripContainer1.Name = "toolStripContainer1";
+            this.toolStripContainer1.Size = new System.Drawing.Size(1134, 645);
+            this.toolStripContainer1.TabIndex = 19;
+            this.toolStripContainer1.Text = "toolStripContainer1";
+            // 
+            // toolStripContainer1.TopToolStripPanel
+            // 
+            this.toolStripContainer1.TopToolStripPanel.BackColor = System.Drawing.SystemColors.Control;
+            this.toolStripContainer1.TopToolStripPanel.Controls.Add(this.toolStripPlay);
+            this.toolStripContainer1.TopToolStripPanel.Controls.Add(this.toolStripFilters);
+            this.toolStripContainer1.TopToolStripPanel.Controls.Add(this.toolStripSettings);
+            this.toolStripContainer1.TopToolStripPanel.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
+            // 
+            // statusStrip2
+            // 
+            this.statusStrip2.Dock = System.Windows.Forms.DockStyle.None;
+            this.statusStrip2.GripStyle = System.Windows.Forms.ToolStripGripStyle.Visible;
+            this.statusStrip2.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.labelTotalClips,
+            this.labelClipsPlayed,
+            this.labelLastPlayed,
+            this.labelClock});
+            this.statusStrip2.Location = new System.Drawing.Point(0, 0);
+            this.statusStrip2.Name = "statusStrip2";
+            this.statusStrip2.Size = new System.Drawing.Size(1134, 24);
+            this.statusStrip2.TabIndex = 0;
+            this.statusStrip2.Text = "dsadas";
+            // 
+            // labelTotalClips
+            // 
+            this.labelTotalClips.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.labelTotalClips.Name = "labelTotalClips";
+            this.labelTotalClips.Padding = new System.Windows.Forms.Padding(0, 0, 10, 0);
+            this.labelTotalClips.Size = new System.Drawing.Size(54, 19);
+            this.labelTotalClips.Text = "Clips: -";
+            // 
+            // labelLastPlayed
+            // 
+            this.labelLastPlayed.BorderSides = System.Windows.Forms.ToolStripStatusLabelBorderSides.Left;
+            this.labelLastPlayed.BorderStyle = System.Windows.Forms.Border3DStyle.Etched;
+            this.labelLastPlayed.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.labelLastPlayed.Name = "labelLastPlayed";
+            this.labelLastPlayed.Padding = new System.Windows.Forms.Padding(5, 0, 10, 0);
+            this.labelLastPlayed.Size = new System.Drawing.Size(31, 19);
+            this.labelLastPlayed.Text = "-";
+            // 
+            // labelClock
+            // 
+            this.labelClock.BorderSides = System.Windows.Forms.ToolStripStatusLabelBorderSides.Left;
+            this.labelClock.BorderStyle = System.Windows.Forms.Border3DStyle.Etched;
+            this.labelClock.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.labelClock.Name = "labelClock";
+            this.labelClock.Padding = new System.Windows.Forms.Padding(5, 0, 10, 0);
+            this.labelClock.Size = new System.Drawing.Size(45, 19);
+            this.labelClock.Text = "test";
+            // 
+            // panelToolStripLine
+            // 
+            this.panelToolStripLine.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.panelToolStripLine.BackColor = System.Drawing.SystemColors.AppWorkspace;
+            this.panelToolStripLine.ForeColor = System.Drawing.Color.Black;
+            this.panelToolStripLine.Location = new System.Drawing.Point(0, 1);
+            this.panelToolStripLine.Name = "panelToolStripLine";
+            this.panelToolStripLine.Size = new System.Drawing.Size(1151, 1);
+            this.panelToolStripLine.TabIndex = 10;
+            // 
+            // toolStripPlay
+            // 
+            this.toolStripPlay.BackColor = System.Drawing.SystemColors.Control;
+            this.toolStripPlay.Dock = System.Windows.Forms.DockStyle.None;
+            this.toolStripPlay.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
+            this.toolStripPlay.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.btnRandom,
+            this.btnStop,
+            this.btnReplay,
+            this.checkRepeat});
+            this.toolStripPlay.Location = new System.Drawing.Point(3, 68);
+            this.toolStripPlay.Name = "toolStripPlay";
+            this.toolStripPlay.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
+            this.toolStripPlay.Size = new System.Drawing.Size(211, 34);
+            this.toolStripPlay.TabIndex = 1;
+            // 
+            // btnRandom
+            // 
+            this.btnRandom.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.btnRandom.Image = ((System.Drawing.Image)(resources.GetObject("btnRandom.Image")));
+            this.btnRandom.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnRandom.Margin = new System.Windows.Forms.Padding(0, 3, 0, 2);
+            this.btnRandom.Name = "btnRandom";
+            this.btnRandom.Padding = new System.Windows.Forms.Padding(3, 5, 3, 5);
+            this.btnRandom.Size = new System.Drawing.Size(62, 29);
+            this.btnRandom.Text = "Random";
+            this.btnRandom.Click += new System.EventHandler(this.btnRandom_Click);
+            // 
+            // btnStop
+            // 
+            this.btnStop.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.btnStop.Image = ((System.Drawing.Image)(resources.GetObject("btnStop.Image")));
+            this.btnStop.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnStop.Margin = new System.Windows.Forms.Padding(0, 3, 0, 2);
+            this.btnStop.Name = "btnStop";
+            this.btnStop.Padding = new System.Windows.Forms.Padding(3, 5, 3, 5);
+            this.btnStop.Size = new System.Drawing.Size(41, 29);
+            this.btnStop.Text = "Stop";
+            this.btnStop.Click += new System.EventHandler(this.btnStop_Click);
+            // 
+            // btnReplay
+            // 
+            this.btnReplay.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.btnReplay.Image = ((System.Drawing.Image)(resources.GetObject("btnReplay.Image")));
+            this.btnReplay.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnReplay.Margin = new System.Windows.Forms.Padding(0, 3, 0, 2);
+            this.btnReplay.Name = "btnReplay";
+            this.btnReplay.Padding = new System.Windows.Forms.Padding(3, 5, 3, 5);
+            this.btnReplay.Size = new System.Drawing.Size(52, 29);
+            this.btnReplay.Tag = "";
+            this.btnReplay.Text = "Replay";
+            this.btnReplay.Click += new System.EventHandler(this.btnReplay_Click);
+            // 
+            // checkRepeat
+            // 
+            this.checkRepeat.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.checkRepeat.Image = ((System.Drawing.Image)(resources.GetObject("checkRepeat.Image")));
+            this.checkRepeat.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.checkRepeat.Margin = new System.Windows.Forms.Padding(0, 3, 0, 2);
+            this.checkRepeat.Name = "checkRepeat";
+            this.checkRepeat.Padding = new System.Windows.Forms.Padding(3, 5, 3, 5);
+            this.checkRepeat.Size = new System.Drawing.Size(53, 29);
+            this.checkRepeat.Text = "Repeat";
+            this.checkRepeat.Click += new System.EventHandler(this.checkRepeat_Click);
+            // 
+            // toolStripFilters
+            // 
+            this.toolStripFilters.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.toolStripFilters.Dock = System.Windows.Forms.DockStyle.None;
+            this.toolStripFilters.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
+            this.toolStripFilters.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripLabel1,
+            this.txtFilterFolder,
+            this.toolStripLabel2,
+            this.txtFilterFile,
+            this.btnClearFilters});
+            this.toolStripFilters.Location = new System.Drawing.Point(3, 34);
+            this.toolStripFilters.Name = "toolStripFilters";
+            this.toolStripFilters.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
+            this.toolStripFilters.Size = new System.Drawing.Size(464, 34);
+            this.toolStripFilters.TabIndex = 3;
+            // 
+            // toolStripLabel1
+            // 
+            this.toolStripLabel1.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.toolStripLabel1.ForeColor = System.Drawing.SystemColors.GrayText;
+            this.toolStripLabel1.Margin = new System.Windows.Forms.Padding(0, 3, 0, 2);
+            this.toolStripLabel1.Name = "toolStripLabel1";
+            this.toolStripLabel1.Padding = new System.Windows.Forms.Padding(3, 7, 3, 7);
+            this.toolStripLabel1.Size = new System.Drawing.Size(74, 29);
+            this.toolStripLabel1.Text = "Folder Filter";
             // 
             // txtFilterFolder
             // 
-            this.txtFilterFolder.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.txtFilterFolder.BackColor = System.Drawing.Color.White;
-            this.txtFilterFolder.Location = new System.Drawing.Point(332, 14);
+            this.txtFilterFolder.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(82)))), ((int)(((byte)(110)))), ((int)(((byte)(136)))));
+            this.txtFilterFolder.Margin = new System.Windows.Forms.Padding(1, 3, 1, 0);
             this.txtFilterFolder.Name = "txtFilterFolder";
-            this.txtFilterFolder.Size = new System.Drawing.Size(112, 20);
-            this.txtFilterFolder.TabIndex = 15;
+            this.txtFilterFolder.Padding = new System.Windows.Forms.Padding(3, 7, 3, 7);
+            this.txtFilterFolder.Size = new System.Drawing.Size(94, 31);
             // 
-            // btnFilterFolder
+            // toolStripLabel2
             // 
-            this.btnFilterFolder.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.btnFilterFolder.Location = new System.Drawing.Point(450, 12);
-            this.btnFilterFolder.Name = "btnFilterFolder";
-            this.btnFilterFolder.Size = new System.Drawing.Size(75, 23);
-            this.btnFilterFolder.TabIndex = 16;
-            this.btnFilterFolder.Text = "Folder Filter";
-            this.btnFilterFolder.UseVisualStyleBackColor = true;
-            this.btnFilterFolder.Click += new System.EventHandler(this.btnFilterFolder_Click);
+            this.toolStripLabel2.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.toolStripLabel2.ForeColor = System.Drawing.SystemColors.GrayText;
+            this.toolStripLabel2.Margin = new System.Windows.Forms.Padding(10, 3, 0, 2);
+            this.toolStripLabel2.Name = "toolStripLabel2";
+            this.toolStripLabel2.Padding = new System.Windows.Forms.Padding(3, 7, 3, 7);
+            this.toolStripLabel2.Size = new System.Drawing.Size(60, 29);
+            this.toolStripLabel2.Text = "File Filter";
             // 
             // txtFilterFile
             // 
-            this.txtFilterFile.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.txtFilterFile.BackColor = System.Drawing.Color.White;
-            this.txtFilterFile.Location = new System.Drawing.Point(567, 14);
+            this.txtFilterFile.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(82)))), ((int)(((byte)(110)))), ((int)(((byte)(136)))));
+            this.txtFilterFile.Margin = new System.Windows.Forms.Padding(1, 3, 1, 0);
             this.txtFilterFile.Name = "txtFilterFile";
-            this.txtFilterFile.Size = new System.Drawing.Size(112, 20);
-            this.txtFilterFile.TabIndex = 17;
+            this.txtFilterFile.Padding = new System.Windows.Forms.Padding(3, 7, 3, 7);
+            this.txtFilterFile.Size = new System.Drawing.Size(100, 31);
             // 
-            // btnFilterFile
+            // btnClearFilters
             // 
-            this.btnFilterFile.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.btnFilterFile.Location = new System.Drawing.Point(685, 12);
-            this.btnFilterFile.Name = "btnFilterFile";
-            this.btnFilterFile.Size = new System.Drawing.Size(75, 23);
-            this.btnFilterFile.TabIndex = 18;
-            this.btnFilterFile.Text = "File Filter";
-            this.btnFilterFile.UseVisualStyleBackColor = true;
-            this.btnFilterFile.Click += new System.EventHandler(this.btnFilterFile_Click);
+            this.btnClearFilters.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.btnClearFilters.Enabled = false;
+            this.btnClearFilters.Image = ((System.Drawing.Image)(resources.GetObject("btnClearFilters.Image")));
+            this.btnClearFilters.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnClearFilters.Margin = new System.Windows.Forms.Padding(10, 3, 0, 2);
+            this.btnClearFilters.Name = "btnClearFilters";
+            this.btnClearFilters.Padding = new System.Windows.Forms.Padding(3, 5, 3, 5);
+            this.btnClearFilters.Size = new System.Drawing.Size(78, 29);
+            this.btnClearFilters.Text = "Clear Filters";
+            this.btnClearFilters.Click += new System.EventHandler(this.btnClearFilters_Click);
+            // 
+            // toolStripSettings
+            // 
+            this.toolStripSettings.Dock = System.Windows.Forms.DockStyle.None;
+            this.toolStripSettings.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
+            this.toolStripSettings.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.btnToggle,
+            this.btnSettings,
+            this.btnReload});
+            this.toolStripSettings.Location = new System.Drawing.Point(3, 0);
+            this.toolStripSettings.Name = "toolStripSettings";
+            this.toolStripSettings.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
+            this.toolStripSettings.Size = new System.Drawing.Size(220, 34);
+            this.toolStripSettings.TabIndex = 2;
+            // 
+            // btnToggle
+            // 
+            this.btnToggle.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.btnToggle.Image = ((System.Drawing.Image)(resources.GetObject("btnToggle.Image")));
+            this.btnToggle.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnToggle.Margin = new System.Windows.Forms.Padding(0, 3, 0, 2);
+            this.btnToggle.Name = "btnToggle";
+            this.btnToggle.Padding = new System.Windows.Forms.Padding(3, 5, 3, 5);
+            this.btnToggle.Size = new System.Drawing.Size(96, 29);
+            this.btnToggle.Text = "Switch To Mini";
+            this.btnToggle.Click += new System.EventHandler(this.btnToggle_Click);
+            // 
+            // btnSettings
+            // 
+            this.btnSettings.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.btnSettings.Image = ((System.Drawing.Image)(resources.GetObject("btnSettings.Image")));
+            this.btnSettings.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnSettings.Margin = new System.Windows.Forms.Padding(0, 3, 0, 2);
+            this.btnSettings.Name = "btnSettings";
+            this.btnSettings.Padding = new System.Windows.Forms.Padding(3, 5, 3, 5);
+            this.btnSettings.Size = new System.Drawing.Size(68, 29);
+            this.btnSettings.Text = "Settings...";
+            this.btnSettings.Click += new System.EventHandler(this.btnSettings_Click);
+            // 
+            // btnReload
+            // 
+            this.btnReload.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.btnReload.Image = ((System.Drawing.Image)(resources.GetObject("btnReload.Image")));
+            this.btnReload.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnReload.Margin = new System.Windows.Forms.Padding(0, 3, 0, 2);
+            this.btnReload.Name = "btnReload";
+            this.btnReload.Padding = new System.Windows.Forms.Padding(3, 5, 3, 5);
+            this.btnReload.Size = new System.Drawing.Size(53, 29);
+            this.btnReload.Text = "Reload";
+            this.btnReload.Click += new System.EventHandler(this.btnReload_Click);
+            // 
+            // BottomToolStripPanel
+            // 
+            this.BottomToolStripPanel.Location = new System.Drawing.Point(0, 0);
+            this.BottomToolStripPanel.Name = "BottomToolStripPanel";
+            this.BottomToolStripPanel.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            this.BottomToolStripPanel.RowMargin = new System.Windows.Forms.Padding(3, 0, 0, 0);
+            this.BottomToolStripPanel.Size = new System.Drawing.Size(0, 0);
+            // 
+            // TopToolStripPanel
+            // 
+            this.TopToolStripPanel.Location = new System.Drawing.Point(0, 0);
+            this.TopToolStripPanel.Name = "TopToolStripPanel";
+            this.TopToolStripPanel.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            this.TopToolStripPanel.RowMargin = new System.Windows.Forms.Padding(3, 0, 0, 0);
+            this.TopToolStripPanel.Size = new System.Drawing.Size(0, 0);
+            // 
+            // RightToolStripPanel
+            // 
+            this.RightToolStripPanel.Location = new System.Drawing.Point(0, 0);
+            this.RightToolStripPanel.Name = "RightToolStripPanel";
+            this.RightToolStripPanel.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            this.RightToolStripPanel.RowMargin = new System.Windows.Forms.Padding(3, 0, 0, 0);
+            this.RightToolStripPanel.Size = new System.Drawing.Size(0, 0);
+            // 
+            // LeftToolStripPanel
+            // 
+            this.LeftToolStripPanel.Location = new System.Drawing.Point(0, 0);
+            this.LeftToolStripPanel.Name = "LeftToolStripPanel";
+            this.LeftToolStripPanel.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            this.LeftToolStripPanel.RowMargin = new System.Windows.Forms.Padding(3, 0, 0, 0);
+            this.LeftToolStripPanel.Size = new System.Drawing.Size(0, 0);
+            // 
+            // ContentPanel
+            // 
+            this.ContentPanel.Size = new System.Drawing.Size(150, 175);
+            // 
+            // labelClipsPlayed
+            // 
+            this.labelClipsPlayed.BorderSides = System.Windows.Forms.ToolStripStatusLabelBorderSides.Left;
+            this.labelClipsPlayed.BorderStyle = System.Windows.Forms.Border3DStyle.Etched;
+            this.labelClipsPlayed.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.labelClipsPlayed.Name = "labelClipsPlayed";
+            this.labelClipsPlayed.Padding = new System.Windows.Forms.Padding(0, 0, 10, 0);
+            this.labelClipsPlayed.Size = new System.Drawing.Size(66, 19);
+            this.labelClipsPlayed.Text = "Count: 0";
             // 
             // frmPlayer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
-            this.ClientSize = new System.Drawing.Size(1134, 662);
-            this.Controls.Add(this.btnFilterFile);
-            this.Controls.Add(this.txtFilterFile);
-            this.Controls.Add(this.btnFilterFolder);
-            this.Controls.Add(this.txtFilterFolder);
-            this.Controls.Add(this.btnToggle);
-            this.Controls.Add(this.statusStrip1);
-            this.Controls.Add(this.btnSettings);
-            this.Controls.Add(this.btnRandom);
-            this.Controls.Add(this.btnReplay);
-            this.Controls.Add(this.btnReload);
-            this.Controls.Add(this.btnStop);
-            this.Controls.Add(this.panelButtons);
+            this.ClientSize = new System.Drawing.Size(1134, 645);
+            this.Controls.Add(this.toolStripContainer1);
             this.KeyPreview = true;
-            this.MinimumSize = new System.Drawing.Size(1050, 223);
+            this.MinimumSize = new System.Drawing.Size(900, 97);
             this.Name = "frmPlayer";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Pätkä Player";
             this.panelButtons.ResumeLayout(false);
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
+            this.toolStripContainer1.BottomToolStripPanel.ResumeLayout(false);
+            this.toolStripContainer1.BottomToolStripPanel.PerformLayout();
+            this.toolStripContainer1.ContentPanel.ResumeLayout(false);
+            this.toolStripContainer1.TopToolStripPanel.ResumeLayout(false);
+            this.toolStripContainer1.TopToolStripPanel.PerformLayout();
+            this.toolStripContainer1.ResumeLayout(false);
+            this.toolStripContainer1.PerformLayout();
+            this.statusStrip2.ResumeLayout(false);
+            this.statusStrip2.PerformLayout();
+            this.toolStripPlay.ResumeLayout(false);
+            this.toolStripPlay.PerformLayout();
+            this.toolStripFilters.ResumeLayout(false);
+            this.toolStripFilters.PerformLayout();
+            this.toolStripSettings.ResumeLayout(false);
+            this.toolStripSettings.PerformLayout();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
         #endregion
 
-        private System.Windows.Forms.Button btnStop;
         private System.Windows.Forms.Panel panelButtons;
-        private System.Windows.Forms.Button btnReload;
-        private System.Windows.Forms.Button btnReplay;
-        private System.Windows.Forms.Button btnRandom;
-        private System.Windows.Forms.Button btnSettings;
+        private System.Windows.Forms.ToolStripContainer toolStripContainer1;
+        private System.Windows.Forms.ToolStrip toolStripPlay;
+        private System.Windows.Forms.ToolStripButton btnRandom;
+        private System.Windows.Forms.ToolStripButton btnStop;
+        private System.Windows.Forms.ToolStripButton btnReplay;
+        private System.Windows.Forms.ToolStrip toolStripSettings;
+        private System.Windows.Forms.ToolStripButton btnReload;
+        private System.Windows.Forms.ToolStripButton btnSettings;
+        private System.Windows.Forms.ToolStrip toolStripFilters;
+        private System.Windows.Forms.ToolStripTextBox txtFilterFolder;
+        private System.Windows.Forms.ToolStripLabel toolStripLabel1;
+        private System.Windows.Forms.ToolStripLabel toolStripLabel2;
+        private System.Windows.Forms.ToolStripTextBox txtFilterFile;
+        private System.Windows.Forms.ToolStripButton checkRepeat;
+        private System.Windows.Forms.Panel panelToolStripLine;
+        private System.Windows.Forms.StatusStrip statusStrip2;
+        private System.Windows.Forms.ToolStripStatusLabel labelLastPlayed;
+        private System.Windows.Forms.ToolStripStatusLabel labelTotalClips;
         private System.Windows.Forms.StatusStrip statusStrip1;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel2;
@@ -399,12 +637,15 @@
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel8;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel9;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel10;
-        private System.Windows.Forms.Button btnToggle;
-        private System.Windows.Forms.TextBox txtFilterFolder;
-        private System.Windows.Forms.Button btnFilterFolder;
-        private System.Windows.Forms.TextBox txtFilterFile;
-        private System.Windows.Forms.Button btnFilterFile;
-        private System.Windows.Forms.CheckBox checkRepeat;
+        private System.Windows.Forms.ToolStripPanel BottomToolStripPanel;
+        private System.Windows.Forms.ToolStripPanel TopToolStripPanel;
+        private System.Windows.Forms.ToolStripPanel RightToolStripPanel;
+        private System.Windows.Forms.ToolStripPanel LeftToolStripPanel;
+        private System.Windows.Forms.ToolStripContentPanel ContentPanel;
+        private System.Windows.Forms.ToolStripButton btnToggle;
+        private System.Windows.Forms.ToolStripStatusLabel labelClock;
+        private System.Windows.Forms.ToolStripButton btnClearFilters;
+        private System.Windows.Forms.ToolStripStatusLabel labelClipsPlayed;
     }
 }
 

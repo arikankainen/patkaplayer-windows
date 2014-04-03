@@ -19,6 +19,7 @@ namespace PatkaPlayer
 
         // storage for frmPlayer instance
         private readonly frmPlayer _frmPlayer;
+        private string oldMp3Dir;
 
         // default constructor
         public frmSettings()
@@ -31,8 +32,9 @@ namespace PatkaPlayer
         {
             InitializeComponent();
             this._frmPlayer = temp;
-            txtVersion.Text = "Pätkä Player v0.14.03.28 © 2014 Ari Kankainen";
+            txtVersion.Text = "Pätkä Player v0.14.04.03 © 2014 Ari Kankainen";
             ReadConfig();
+            this.oldMp3Dir = txtSetFolder.Text;
         }
 
         // read values from config
@@ -97,7 +99,7 @@ namespace PatkaPlayer
         private void btnSetOk_Click(object sender, EventArgs e)
         {
             SaveConfig();
-            this._frmPlayer.InsertPanelButtons();
+            if (this.oldMp3Dir != txtSetFolder.Text) this._frmPlayer.InsertPanelButtons();
             this.Close();
         }
 
