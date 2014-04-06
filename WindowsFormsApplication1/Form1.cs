@@ -23,6 +23,14 @@ namespace PatkaPlayer
         private string[] array1 = new string[] {};
         private bool minimized { get; set; }
         private string mp3Dir, hotkey1, hotkey2, hotkey3, hotkey4, hotkey5, hotkey6, hotkey7, hotkey8, hotkey9, hotkey0;
+        private int timer1MinHour, timer1MinMin, timer1MinSec, timer1MaxHour, timer1MaxMin, timer1MaxSec, timer2MinHour, timer2MinMin, timer2MinSec, timer2MaxHour, timer2MaxMin, timer2MaxSec;
+        private bool timer1ClipsAll = true;
+        private bool timer2ClipsAll = true;
+        private bool logging, rememberDaily;
+        private string dailyDate;
+        private int dailyCount;
+        private bool timer1Started = false;
+        private bool timer2Started = false;
         private int frmSize = 1;
         private int frmMaximized;
         private string lastPlayed;
@@ -34,13 +42,17 @@ namespace PatkaPlayer
         private int numOfCols;
         private List<string> randomSound = new List<string>();
         private int lastRandomNumber = 0;
+        private int lastRandomNumberAll = 0;
         private Image buttonBack = new Bitmap(patka.Properties.Resources.buttonback);
         private Image buttonBackHover = new Bitmap(patka.Properties.Resources.buttonback_hover);
         private FormWindowState LastWindowState;
         private int lastWidth;
         private int playCount = 0;
+        public int settingsPage;
         static System.Windows.Forms.Timer timer = new System.Windows.Forms.Timer();
-
+        static System.Windows.Forms.Timer timer1 = new System.Windows.Forms.Timer();
+        static System.Windows.Forms.Timer timer2 = new System.Windows.Forms.Timer();
+        
         public frmPlayer()
         {
             InitializeComponent();
@@ -55,17 +67,22 @@ namespace PatkaPlayer
             timer.Tick += new System.EventHandler(timer_Tick);
             timer.Interval = 1000;
             timer.Start();
-            labelClock.Visible = false;
-            
+
+            timer1.Tick += new System.EventHandler(timer1_Tick);
+            timer2.Tick += new System.EventHandler(timer2_Tick);
+
             lastWidth = this.Width;
             LastWindowState = this.WindowState;
 
             btnReplay.Enabled = false;
-            
+
             // correcting a bug in the "system" renderer (white bottom line in toolstrip)
             toolStripPlay.Renderer = new MySR();
             toolStripSettings.Renderer = new MySR();
             toolStripFilters.Renderer = new MySR();
+
+            txtFilterFolder.Size = new Size(100, 31);
+            txtFilterFile.Size = new Size(100, 31);
 
             ButtonLocations();
 
@@ -76,10 +93,13 @@ namespace PatkaPlayer
         public void ReadSettings()
         {
             mp3Dir = hotkey1 = hotkey2 = hotkey3 = hotkey4 = hotkey5 = hotkey6 = hotkey7 = hotkey8 = hotkey9 = hotkey0 = "";
+            timer1MinHour = timer1MinMin = timer1MinSec = timer1MaxHour = timer1MaxMin = timer1MaxSec = 0;
+            timer2MinHour = timer2MinMin = timer2MinSec = timer2MaxHour = timer2MaxMin = timer2MaxSec = 0;
 
             Configuration config = ConfigurationManager.OpenExeConfiguration(Application.ExecutablePath);
             ConfigurationManager.RefreshSection("appSettings");
 
+            // folders
             if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["mp3dir"])) mp3Dir = config.AppSettings.Settings["mp3dir"].Value;
             if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["hotkey_1"])) hotkey1 = config.AppSettings.Settings["hotkey_1"].Value;
             if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["hotkey_2"])) hotkey2 = config.AppSettings.Settings["hotkey_2"].Value;
@@ -91,6 +111,36 @@ namespace PatkaPlayer
             if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["hotkey_8"])) hotkey8 = config.AppSettings.Settings["hotkey_8"].Value;
             if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["hotkey_9"])) hotkey9 = config.AppSettings.Settings["hotkey_9"].Value;
             if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["hotkey_0"])) hotkey0 = config.AppSettings.Settings["hotkey_0"].Value;
+
+            // timer 1 settings
+            if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["timer1minhour"])) timer1MinHour = Convert.ToInt32(config.AppSettings.Settings["timer1minhour"].Value);
+            if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["timer1minmin"])) timer1MinMin = Convert.ToInt32(config.AppSettings.Settings["timer1minmin"].Value);
+            if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["timer1minsec"])) timer1MinSec = Convert.ToInt32(config.AppSettings.Settings["timer1minsec"].Value);
+            if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["timer1maxhour"])) timer1MaxHour = Convert.ToInt32(config.AppSettings.Settings["timer1maxhour"].Value);
+            if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["timer1maxmin"])) timer1MaxMin = Convert.ToInt32(config.AppSettings.Settings["timer1maxmin"].Value);
+            if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["timer1maxsec"])) timer1MaxSec = Convert.ToInt32(config.AppSettings.Settings["timer1maxsec"].Value);
+            if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["timer1playall"])) timer1ClipsAll = true;
+            else timer1ClipsAll = false;
+
+            // timer 2 settings
+            if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["timer2minhour"])) timer2MinHour = Convert.ToInt32(config.AppSettings.Settings["timer2minhour"].Value);
+            if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["timer2minmin"])) timer2MinMin = Convert.ToInt32(config.AppSettings.Settings["timer2minmin"].Value);
+            if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["timer2minsec"])) timer2MinSec = Convert.ToInt32(config.AppSettings.Settings["timer2minsec"].Value);
+            if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["timer2maxhour"])) timer2MaxHour = Convert.ToInt32(config.AppSettings.Settings["timer2maxhour"].Value);
+            if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["timer2maxmin"])) timer2MaxMin = Convert.ToInt32(config.AppSettings.Settings["timer2maxmin"].Value);
+            if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["timer2maxsec"])) timer2MaxSec = Convert.ToInt32(config.AppSettings.Settings["timer2maxsec"].Value);
+            if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["timer2playall"])) timer2ClipsAll = true;
+            else timer2ClipsAll = false;
+
+            // misc settings
+            if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["log"])) logging = true;
+            else logging = false;
+
+            if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["daily"])) rememberDaily = true;
+            else rememberDaily = false;
+
+            if (rememberDaily) saveDailyDate();
+            labelClipsPlayed.Text = "Play count: " + playCount.ToString();
         }
 
         // error text to form, eg. "no clips", "no folder selected", etc...
@@ -99,13 +149,24 @@ namespace PatkaPlayer
             panelButtons.Controls.Clear();
 
             Label label = new Label();
-            label.Top = 12;
+            label.Top = 250;
             label.Left = 10;
             label.Text = errorText;
-            label.Width = 900;
-            label.Height = 100;
+            label.Width = panelButtons.Width - 20;
+            label.TextAlign = ContentAlignment.MiddleCenter;
             label.Font = new Font("Segoe UI", 12);
 
+            Button button = new Button();
+            button.Top = 290;
+            button.Left = panelButtons.Width / 2 - 40;
+            button.Text = "Settings...";
+            button.Width = 80;
+            button.Height = 23;
+            button.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            button.Name = "btnSettingsPage1";
+            button.Click += new System.EventHandler(menuFolders_Click);
+
+            panelButtons.Controls.Add(button);
             panelButtons.Controls.Add(label);
         }
 
@@ -153,17 +214,6 @@ namespace PatkaPlayer
             numOfButtons = 0;
             string fileName = "";
             string folderName = "";
-
-            toolStripStatusLabel1.Text = " 1.  " + Path.GetFileNameWithoutExtension(hotkey1);
-            toolStripStatusLabel2.Text = " 2.  " + Path.GetFileNameWithoutExtension(hotkey2);
-            toolStripStatusLabel3.Text = " 3.  " + Path.GetFileNameWithoutExtension(hotkey3);
-            toolStripStatusLabel4.Text = " 4.  " + Path.GetFileNameWithoutExtension(hotkey4);
-            toolStripStatusLabel5.Text = " 5.  " + Path.GetFileNameWithoutExtension(hotkey5);
-            toolStripStatusLabel6.Text = " 6.  " + Path.GetFileNameWithoutExtension(hotkey6);
-            toolStripStatusLabel7.Text = " 7.  " + Path.GetFileNameWithoutExtension(hotkey7);
-            toolStripStatusLabel8.Text = " 8.  " + Path.GetFileNameWithoutExtension(hotkey8);
-            toolStripStatusLabel9.Text = " 9.  " + Path.GetFileNameWithoutExtension(hotkey9);
-            toolStripStatusLabel10.Text = " 0.  " + Path.GetFileNameWithoutExtension(hotkey0);
 
             //int numOfCols;
             if (panelButtons.Width > 200) numOfCols = panelButtons.Width / 150;
@@ -379,12 +429,6 @@ namespace PatkaPlayer
             playFile(fileToPlay);
         }
 
-        private void timer_Tick(object sender, EventArgs e)
-        {
-            //labelClock.Text = DateTime.Now.ToString();
-            ButtonLocations();
-        }
-
         private void SoundButton_MouseEnter(object sender, EventArgs e)
         {
             Button button = (Button)sender;
@@ -497,8 +541,6 @@ namespace PatkaPlayer
 
             lastPlayed = pathToPlay.Substring(pathToPlay.LastIndexOf("\\") + 1) + " - " + Path.GetFileNameWithoutExtension(fileToPlay);
             labelLastPlayed.Text = lastPlayed;
-            playCount++;
-            labelClipsPlayed.Text = "Count: " + playCount.ToString();
             
             if (_mp3Player != null) _mp3Player.Dispose();
             _mp3Player = new Mp3Player(fileToPlay);
@@ -507,20 +549,48 @@ namespace PatkaPlayer
             else _mp3Player.Repeat = false;
 
             _mp3Player.Play();
-            
+
             // save logfile
-            string logFolder = pathToPlay.Substring(pathToPlay.LastIndexOf("\\") + 1);
-            string logFile = Path.GetFileNameWithoutExtension(fileToPlay);
-            string log = DateTime.Now.ToString("dd.MM.yyyy|HH:mm:ss") + "|" + logFolder + "|" + logFile + "|" + lastPlayed;
-            using (System.IO.StreamWriter file = new System.IO.StreamWriter(@System.Windows.Forms.Application.ExecutablePath + ".log", true))
+            if (logging)
             {
-                file.WriteLine(log);
+                string logFolder = pathToPlay.Substring(pathToPlay.LastIndexOf("\\") + 1);
+                string logFile = Path.GetFileNameWithoutExtension(fileToPlay);
+                string log = DateTime.Now.ToString("dd.MM.yyyy|HH:mm:ss") + "|" + logFolder + "|" + logFile + "|" + lastPlayed;
+                using (System.IO.StreamWriter file = new System.IO.StreamWriter(@System.Windows.Forms.Application.ExecutablePath + ".log", true, System.Text.Encoding.Default))
+                {
+                    file.WriteLine(log);
+                }
             }
+
+            playCount++;
+            if (rememberDaily) saveDailyDate();
+            labelClipsPlayed.Text = "Play count: " + playCount.ToString();
         }
 
-        private void btnReload_Click(object sender, EventArgs e)
+        private void saveDailyDate()
         {
-            InsertPanelButtons();
+            Configuration config = ConfigurationManager.OpenExeConfiguration(Application.ExecutablePath);
+            ConfigurationManager.RefreshSection("appSettings");
+
+            if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["dailydate"])) dailyDate = config.AppSettings.Settings["dailydate"].Value;
+            if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["dailycount"])) dailyCount = Convert.ToInt32(config.AppSettings.Settings["dailycount"].Value);
+
+            if (dailyCount > playCount) playCount = dailyCount;
+            
+            if (dailyDate != DateTime.Now.ToString("yyyyMMdd"))
+            {
+                dailyDate = DateTime.Now.ToString("yyyyMMdd");
+                playCount = 0;
+            }
+
+            config.AppSettings.Settings.Remove("dailydate");
+            config.AppSettings.Settings.Remove("dailycount");
+
+            config.AppSettings.Settings.Add("dailydate", dailyDate);
+            config.AppSettings.Settings.Add("dailycount", playCount.ToString());
+
+            config.AppSettings.SectionInformation.ForceSave = true;
+            config.Save(ConfigurationSaveMode.Full);
         }
 
         // replay button
@@ -560,77 +630,25 @@ namespace PatkaPlayer
             playFile(fileToPlay);
         }
 
-        // show settings dialog
-        private void btnSettings_Click(object sender, EventArgs e)
+        public void PlayRandomAll()
         {
-            frmSettings settingsForm = new frmSettings(this);
+            Random random = new Random();
+            int clipCount = array1.Length;
+            int randomNumber = random.Next(0, clipCount);
 
-            // Show the settings form
-            settingsForm.ShowDialog();
-        }
-
-        // toggle miniplayer
-        private void btnToggle_Click(object sender, EventArgs e)
-        {
-
-            if (this.WindowState == FormWindowState.Maximized) frmMaximized = 1;
-
-            if (frmSize == 1) // switch to mini player
+            if (clipCount == 0) return;
+            if (clipCount > 1)
             {
-                // hide window
-                fadeOut();
-                this.Opacity = 0;
-
-                frmSize = 2;
-
-                // restore window to normal if maximized, then save size to variables
-                this.WindowState = FormWindowState.Normal;
-                normalSizeX = this.Width;
-                normalSizeY = this.Height;
-
-                this.MaximizeBox = false;
-                this.FormBorderStyle = FormBorderStyle.FixedSingle;
-                this.Size = new Size(900, 97);
-
-                Screen screen = Screen.FromPoint(Cursor.Position);
-                this.Left = screen.WorkingArea.Left + (screen.Bounds.Size.Width - (this.Width + 10));
-                this.Top = screen.WorkingArea.Top + (screen.Bounds.Size.Height - (this.Height + 50));
-
-                this.btnToggle.Text = "Switch To Normal";
-
-                fadeIn();
-                this.Opacity = 1;
+                while (randomNumber == lastRandomNumberAll)
+                {
+                    randomNumber = random.Next(0, clipCount);
+                }
             }
 
-            else // switch to normal player
-            {
-                // hide window
-                fadeOut();
-                this.Opacity = 0;
+            lastRandomNumberAll = randomNumber;
 
-                this.MaximizeBox = true;
-                this.FormBorderStyle = FormBorderStyle.Sizable;
-
-                // restore window size
-                this.Width = normalSizeX;
-                this.Height = normalSizeY;
-
-                this.btnToggle.Text = "Switch To Mini";
-
-                Screen screen = Screen.FromPoint(Cursor.Position);
-                this.Left = screen.WorkingArea.Left + (screen.Bounds.Size.Width / 2 - this.Width / 2);
-                this.Top = screen.WorkingArea.Top + (screen.Bounds.Size.Height / 2 - this.Height / 2);
-
-                if (frmMaximized == 1) this.WindowState = FormWindowState.Maximized;
-                frmMaximized = 0;
-
-                frmSize = 1;
-                fadeIn();
-                this.Opacity = 1;
-                
-                InsertPanelButtons();
-            }
-            
+            string fileToPlay = array1[randomNumber].ToString();
+            playFile(fileToPlay);
         }
 
         private void fadeIn()
@@ -702,39 +720,248 @@ namespace PatkaPlayer
             }
         }
 
-        private void btnClearFilters_Click_1(object sender, EventArgs e)
+        private void btnDropdown_Click(object sender, EventArgs e)
         {
+            /* // same menu with contextMenuStrip
+            Rectangle rect = this.btnDropdown.Bounds;
+            Point pt = this.PointToScreen(Point.Empty);
+
+            pt.X += rect.Left;
+            pt.Y += rect.Bottom;
+
+            contextMenuStrip1.Show(pt);
+            */
+
+            Rectangle rect = this.btnDropdown.Bounds;
+            Point pt = new Point(rect.Left, rect.Bottom);
+            contextMenu1.Show(toolStripSettings, pt);
 
         }
 
-        /*
-        // window maximized
-        protected override void WndProc(ref Message m)
+        // show settings dialog
+        private void menuFolders_Click(object sender, EventArgs e)
         {
-            if (m.Msg == 0x0112) // WM_SYSCOMMAND
+            settingsPage = 1;
+            frmSettings settingsForm = new frmSettings(this);
+            settingsForm.ShowDialog();
+            settingsForm.Dispose();
+        }
+
+        private void menuSettings_Click(object sender, EventArgs e)
+        {
+            settingsPage = 2;
+            frmSettings settingsForm = new frmSettings(this);
+            settingsForm.ShowDialog();
+            settingsForm.Dispose();
+        }
+
+        private void menuReload_Click(object sender, EventArgs e)
+        {
+            InsertPanelButtons();
+        }
+
+        // show settings dialog
+        private void btnSettingsPage1_Click(object sender, EventArgs e)
+        {
+            settingsPage = 1;
+            frmSettings settingsForm = new frmSettings(this);
+            settingsForm.ShowDialog();
+            settingsForm.Dispose();
+        }
+
+        // toggle miniplayer
+        private void menuToggle_Click(object sender, EventArgs e)
+        {
+            if (this.WindowState == FormWindowState.Maximized) frmMaximized = 1;
+
+            if (frmSize == 1) // switch to mini player
             {
-                // Check your window state here
-                if (m.WParam == new IntPtr(0xF030)) // Maximize event - SC_MAXIMIZE from Winuser.h
+                // hide window
+                fadeOut();
+                this.Opacity = 0;
+
+                frmSize = 2;
+
+                // restore window to normal if maximized, then save size to variables
+                this.WindowState = FormWindowState.Normal;
+                normalSizeX = this.Width;
+                normalSizeY = this.Height;
+
+                this.MaximizeBox = false;
+                this.FormBorderStyle = FormBorderStyle.FixedSingle;
+                this.Size = new Size(900, 97);
+
+                Screen screen = Screen.FromPoint(Cursor.Position);
+                this.Left = screen.WorkingArea.Left + (screen.Bounds.Size.Width - (this.Width + 10));
+                this.Top = screen.WorkingArea.Top + (screen.Bounds.Size.Height - (this.Height + 50));
+
+                this.menuToggle.Text = "Switch to Normal";
+
+                fadeIn();
+                this.Opacity = 1;
+            }
+
+            else // switch to normal player
+            {
+                // hide window
+                fadeOut();
+                this.Opacity = 0;
+
+                this.MaximizeBox = true;
+                this.FormBorderStyle = FormBorderStyle.Sizable;
+
+                // restore window size
+                this.Width = normalSizeX;
+                this.Height = normalSizeY;
+
+                this.menuToggle.Text = "Switch to MiniPlayer";
+
+                Screen screen = Screen.FromPoint(Cursor.Position);
+                this.Left = screen.WorkingArea.Left + (screen.Bounds.Size.Width / 2 - this.Width / 2);
+                this.Top = screen.WorkingArea.Top + (screen.Bounds.Size.Height / 2 - this.Height / 2);
+
+                if (frmMaximized == 1) this.WindowState = FormWindowState.Maximized;
+                frmMaximized = 0;
+
+                frmSize = 1;
+                fadeIn();
+                this.Opacity = 1;
+
+                InsertPanelButtons();
+            }
+        }
+
+        private void menuTimer1_Click(object sender, EventArgs e)
+        {
+            if (timer1MinHour == 0 && timer1MinMin == 0 && timer1MinSec == 0)
+            {
+                var result = MessageBox.Show("Delays for timer must be larger than 00:00:00.\nDo you wan't to set timer now?", "Timer 1 not set", MessageBoxButtons.YesNo, MessageBoxIcon.Asterisk);
+                if (result == DialogResult.Yes)
                 {
-                    //InsertPanelButtons();
+                    menuSettings.PerformClick();
                 }
             }
-            base.WndProc(ref m);
-        }
-
-        // window restored
-        protected override void WndProc(ref Message m)
-        {
-            if (m.Msg == 0x0112) // WM_SYSCOMMAND
+            else
             {
-                // Check your window state here
-                if (m.WParam == new IntPtr(0xF120)) // Restore event - SC_RESTORE from Winuser.h
+                if (!timer1Started)
                 {
-                    //InsertPanelButtons();
+                    timer1.Interval = randomTime(timer1MinHour, timer1MinMin, timer1MinSec, timer1MaxHour, timer1MaxMin, timer1MaxSec);
+                    timer1.Start();
+                    timer2.Stop();
+
+                    labelTimer1.Text = "Timer 1: On";
+                    labelTimer1.ForeColor = ColorTranslator.FromHtml("#dd0000");
+                    menuTimer1.Text = "Stop Timer 1";
+                    timer1Started = true;
+                    timer2Started = false;
+
+                    labelTimer2.Text = "Timer 2: Off";
+                    labelTimer2.ForeColor = ColorTranslator.FromHtml("#404040");
+                    menuTimer2.Text = "Start Timer 2";
+                    timer2Started = false;
+                }
+                else
+                {
+                    timer1.Stop();
+
+                    labelTimer1.Text = "Timer 1: Off";
+                    labelTimer1.ForeColor = ColorTranslator.FromHtml("#404040");
+                    menuTimer1.Text = "Start Timer 1";
+                    timer1Started = false;
                 }
             }
-            base.WndProc(ref m);
         }
-        */
+
+        private void menuTimer2_Click(object sender, EventArgs e)
+        {
+            if (timer2MinHour == 0 && timer2MinMin == 0 && timer2MinSec == 0)
+            {
+                var result = MessageBox.Show("Delays for timer must be larger than 00:00:00.\nDo you wan't to set timer now?", "Timer 2 not set", MessageBoxButtons.YesNo, MessageBoxIcon.Asterisk);
+                if (result == DialogResult.Yes)
+                {
+                    menuSettings.PerformClick();
+                }
+            }
+            else
+            {
+                if (!timer2Started)
+                {
+                    timer2.Interval = randomTime(timer2MinHour, timer2MinMin, timer2MinSec, timer2MaxHour, timer2MaxMin, timer2MaxSec);
+                    timer2.Start();
+                    timer1.Stop();
+
+                    labelTimer2.Text = "Timer 2: On";
+                    labelTimer2.ForeColor = ColorTranslator.FromHtml("#dd0000");
+                    menuTimer2.Text = "Stop Timer 2";
+                    timer2Started = true;
+
+                    labelTimer1.Text = "Timer 1: Off";
+                    labelTimer1.ForeColor = ColorTranslator.FromHtml("#404040");
+                    menuTimer1.Text = "Start Timer 1";
+                    timer1Started = false;
+                }
+                else
+                {
+                    timer2.Stop();
+
+                    labelTimer2.Text = "Timer 2: Off";
+                    labelTimer2.ForeColor = ColorTranslator.FromHtml("#404040");
+                    menuTimer2.Text = "Start Timer 2";
+                    timer2Started = false;
+                }
+            }
+        }
+
+        private void timer_Tick(object sender, EventArgs e)
+        {
+            //labelTest.Text = DateTime.Now.ToString("HH:mm:ss");
+            //if (txtFilterFolder.Focused == false && txtFilterFile.Focused == false) panelButtons.Focus();
+            ButtonLocations();
+        }
+
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            timer1.Interval = randomTime(timer1MinHour, timer1MinMin, timer1MinSec, timer1MaxHour, timer1MaxMin, timer1MaxSec);
+            if (timer1ClipsAll) PlayRandomAll();
+            else PlayRandom();
+        }
+
+        private void timer2_Tick(object sender, EventArgs e)
+        {
+            timer2.Interval = randomTime(timer2MinHour, timer2MinMin, timer2MinSec, timer2MaxHour, timer2MaxMin, timer2MaxSec);
+            if (timer2ClipsAll) PlayRandomAll();
+            else PlayRandom();
+        }
+        
+        public int randomTime(int minHour, int minMin, int minSec, int maxHour, int maxMin, int maxSec)
+        {
+            int minTime = (minHour * 60 * 60) + (minMin * 60) + minSec;
+            int maxTime = (maxHour * 60 * 60) + (maxMin * 60) + maxSec;
+            
+            Random random = new Random();
+            int rnd = random.Next(minTime, maxTime);
+            if (rnd == 0) rnd = 1;
+            //labelTest.Text = rnd.ToString();
+            return rnd * 1000;
+        }
+
+        private void labelTimer1_Click(object sender, EventArgs e)
+        {
+            menuTimer1.PerformClick();
+        }
+
+        private void labelTimer2_Click(object sender, EventArgs e)
+        {
+            menuTimer2.PerformClick();
+        }
+
+        private void labelLastPlayed_Click(object sender, EventArgs e)
+        {
+            labelLastPlayed.Text = "-";
+            btnReplay.Tag = "";
+            btnReplay.Enabled = false;
+        }
+
     }
+
 }
