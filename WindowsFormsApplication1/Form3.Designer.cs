@@ -1,6 +1,6 @@
-﻿namespace patka
+﻿namespace PatkaPlayer
 {
-    partial class frmMiniPlayer
+    partial class frmHelp
     {
         /// <summary>
         /// Required designer variable.
@@ -30,14 +30,19 @@
         {
             this.SuspendLayout();
             // 
-            // frmMiniPlayer
+            // frmHelp
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(507, 184);
+            this.ClientSize = new System.Drawing.Size(620, 441);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
-            this.Name = "frmMiniPlayer";
-            this.Text = "Form3";
+            this.MinimizeBox = false;
+            this.Name = "frmHelp";
+            this.ShowIcon = false;
+            this.ShowInTaskbar = false;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.Text = "Instructions";
             this.ResumeLayout(false);
 
         }

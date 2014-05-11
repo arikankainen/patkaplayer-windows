@@ -14,9 +14,6 @@ namespace PatkaPlayer
 {
     public partial class frmSettings : Form
     {
-
-
-
         // storage for frmPlayer instance
         private readonly frmPlayer _frmPlayer;
         private string oldMp3Dir;
@@ -32,18 +29,16 @@ namespace PatkaPlayer
         {
             InitializeComponent();
             this._frmPlayer = temp;
-            txtVersion.Text = "Pätkä Player v0.14.04.06 © 2014 Ari Kankainen";
-            ReadConfig();
+            readConfig();
             this.oldMp3Dir = txtSetFolder.Text;
-            if (temp.settingsPage == 1) this.tabControl1.SelectedTab = tabPage1;
-            else if (temp.settingsPage == 2) this.tabControl1.SelectedTab = tabPage2;
-            
-            //string exePath = System.Windows.Forms.Application.ExecutablePath;
-            //labelSaveLog.Text = "Save play history to CSV file\n\"" + Path.GetFileName(exePath) + ".log\".";
+            if (temp.settingsPage == 1) this.tabControl1.SelectedTab = tabFolders;
+            else if (temp.settingsPage == 2) this.tabControl1.SelectedTab = tabSettings;
+            else if (temp.settingsPage == 3) this.tabControl1.SelectedTab = tabTimers;
+            btnApply.Enabled = false;
         }
 
         // read values from config
-        public void ReadConfig()
+        private void readConfig()
         {
             Configuration config = ConfigurationManager.OpenExeConfiguration(Application.ExecutablePath);
             ConfigurationManager.RefreshSection("appSettings");
@@ -59,7 +54,9 @@ namespace PatkaPlayer
             if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["hotkey_7"])) txtSet7.Text = config.AppSettings.Settings["hotkey_7"].Value;
             if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["hotkey_8"])) txtSet8.Text = config.AppSettings.Settings["hotkey_8"].Value;
             if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["hotkey_9"])) txtSet9.Text = config.AppSettings.Settings["hotkey_9"].Value;
-            if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["hotkey_0"])) txtSet0.Text = config.AppSettings.Settings["hotkey_0"].Value;
+            if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["hotkey_10"])) txtSet10.Text = config.AppSettings.Settings["hotkey_10"].Value;
+            if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["hotkey_11"])) txtSet11.Text = config.AppSettings.Settings["hotkey_11"].Value;
+            if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["hotkey_12"])) txtSet12.Text = config.AppSettings.Settings["hotkey_12"].Value;
 
             // timer 2 settings
             if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["timer2minhour"])) numericMinHour2.Value = Convert.ToInt32(config.AppSettings.Settings["timer2minhour"].Value);
@@ -86,10 +83,64 @@ namespace PatkaPlayer
             else checkLog.Checked = false;
             if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["daily"])) checkDaily.Checked = true;
             else checkDaily.Checked = false;
+
+            if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["transparencynormal"])) transparencyNormal.Value = Convert.ToDecimal(config.AppSettings.Settings["transparencynormal"].Value);
+            if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["transparencymini"])) transparencyMini.Value = Convert.ToDecimal(config.AppSettings.Settings["transparencymini"].Value);
+
+            //miniplayer location
+            if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["numtop"])) numericTop.Value = Convert.ToInt32(config.AppSettings.Settings["numtop"].Value);
+            if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["numbottom"])) numericBottom.Value = Convert.ToInt32(config.AppSettings.Settings["numbottom"].Value);
+            if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["numleft"])) numericLeft.Value = Convert.ToInt32(config.AppSettings.Settings["numleft"].Value);
+            if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["numright"])) numericRight.Value = Convert.ToInt32(config.AppSettings.Settings["numright"].Value);
+
+            if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["checkbottom"]))
+            {
+                checkBottom.Checked = true;
+                numericBottom.Enabled = true;
+            }
+            else
+            {
+                checkBottom.Checked = false;
+                numericBottom.Enabled = false;
+            }
+
+            if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["checktop"]))
+            {
+                checkTop.Checked = true;
+                numericTop.Enabled = true;
+            }
+            else
+            {
+                checkTop.Checked = false;
+                numericTop.Enabled = false;
+            }
+
+            if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["checkright"]))
+            {
+                checkRight.Checked = true;
+                numericRight.Enabled = true;
+            }
+            else
+            {
+                checkRight.Checked = false;
+                numericRight.Enabled = false;
+            }
+
+            if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["checkleft"]))
+            {
+                checkLeft.Checked = true;
+                numericLeft.Enabled = true;
+            }
+            else
+            {
+                checkLeft.Checked = false;
+                numericLeft.Enabled = false;
+            }
+        
         }
 
         // save config file
-        public void SaveConfig()
+        private void saveConfig()
         {
             Configuration config = ConfigurationManager.OpenExeConfiguration(Application.ExecutablePath);
             ConfigurationManager.RefreshSection("appSettings");
@@ -104,7 +155,9 @@ namespace PatkaPlayer
             config.AppSettings.Settings.Remove("hotkey_7");
             config.AppSettings.Settings.Remove("hotkey_8");
             config.AppSettings.Settings.Remove("hotkey_9");
-            config.AppSettings.Settings.Remove("hotkey_0");
+            config.AppSettings.Settings.Remove("hotkey_10");
+            config.AppSettings.Settings.Remove("hotkey_11");
+            config.AppSettings.Settings.Remove("hotkey_12");
             config.AppSettings.Settings.Remove("timer1minhour");
             config.AppSettings.Settings.Remove("timer1minmin");
             config.AppSettings.Settings.Remove("timer1minsec");
@@ -121,6 +174,16 @@ namespace PatkaPlayer
             config.AppSettings.Settings.Remove("timer2playall");
             config.AppSettings.Settings.Remove("log");
             config.AppSettings.Settings.Remove("daily");
+            config.AppSettings.Settings.Remove("transparencynormal");
+            config.AppSettings.Settings.Remove("transparencymini");
+            config.AppSettings.Settings.Remove("numtop");
+            config.AppSettings.Settings.Remove("numbottom");
+            config.AppSettings.Settings.Remove("numleft");
+            config.AppSettings.Settings.Remove("numright");
+            config.AppSettings.Settings.Remove("checktop");
+            config.AppSettings.Settings.Remove("checkbottom");
+            config.AppSettings.Settings.Remove("checkleft");
+            config.AppSettings.Settings.Remove("checkright");
 
             // folders
             if (txtSetFolder.Text != "") config.AppSettings.Settings.Add("mp3dir", txtSetFolder.Text);
@@ -133,7 +196,9 @@ namespace PatkaPlayer
             if (txtSet7.Text != "") config.AppSettings.Settings.Add("hotkey_7", txtSet7.Text);
             if (txtSet8.Text != "") config.AppSettings.Settings.Add("hotkey_8", txtSet8.Text);
             if (txtSet9.Text != "") config.AppSettings.Settings.Add("hotkey_9", txtSet9.Text);
-            if (txtSet0.Text != "") config.AppSettings.Settings.Add("hotkey_0", txtSet0.Text);
+            if (txtSet10.Text != "") config.AppSettings.Settings.Add("hotkey_10", txtSet10.Text);
+            if (txtSet11.Text != "") config.AppSettings.Settings.Add("hotkey_11", txtSet11.Text);
+            if (txtSet12.Text != "") config.AppSettings.Settings.Add("hotkey_12", txtSet12.Text);
 
             // timer 1 settings
             if (numericMinHour1.Value > 0) config.AppSettings.Settings.Add("timer1minhour", numericMinHour1.Value.ToString());
@@ -156,11 +221,32 @@ namespace PatkaPlayer
             // misc Settings
             if (checkLog.Checked == true) config.AppSettings.Settings.Add("log", "true");
             if (checkDaily.Checked == true) config.AppSettings.Settings.Add("daily", "true");
+            if (transparencyNormal.Value < 1) config.AppSettings.Settings.Add("transparencynormal", transparencyNormal.Value.ToString());
+            if (transparencyMini.Value < 1) config.AppSettings.Settings.Add("transparencymini", transparencyMini.Value.ToString());
 
-            config.AppSettings.SectionInformation.ForceSave = true;
-            config.Save(ConfigurationSaveMode.Full);
+            // miniplayer location
+            if (numericTop.Value > 0) config.AppSettings.Settings.Add("numtop", numericTop.Value.ToString());
+            if (numericBottom.Value != 50) config.AppSettings.Settings.Add("numbottom", numericBottom.Value.ToString());
+            if (numericLeft.Value > 0) config.AppSettings.Settings.Add("numleft", numericLeft.Value.ToString());
+            if (numericRight.Value != 10) config.AppSettings.Settings.Add("numright", numericRight.Value.ToString());
+
+            if (checkTop.Checked == true) config.AppSettings.Settings.Add("checktop", "true");
+            if (checkBottom.Checked == true) config.AppSettings.Settings.Add("checkbottom", "true");
+            if (checkLeft.Checked == true) config.AppSettings.Settings.Add("checkleft", "true");
+            if (checkRight.Checked == true) config.AppSettings.Settings.Add("checkright", "true");
+
+            try
+            {
+                config.AppSettings.SectionInformation.ForceSave = true;
+                config.Save(ConfigurationSaveMode.Full);
+            }
+            catch
+            {
+                MessageBox.Show("Cannot save config, write access denied.", "Error saving configuration", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
+        // ********** TURHA??????????
         private void frmHotkeys_Load(object sender, EventArgs e)
         {
 
@@ -178,10 +264,28 @@ namespace PatkaPlayer
             if (minTime1 > maxTime1 || minTime2 > maxTime2) MessageBox.Show("Minimum delays for timer cannot be larger than maximum delays.", "Timer error", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
             else
             {
-                SaveConfig();
+                saveConfig();
                 if (this.oldMp3Dir != txtSetFolder.Text) this._frmPlayer.InsertPanelButtons();
                 else this._frmPlayer.ReadSettings();
                 this.Close();
+            }
+        }
+
+        private void btnApply_Click(object sender, EventArgs e)
+        {
+            int minTime1 = Convert.ToInt32((numericMinHour1.Value * 60 * 60) + (numericMinMin1.Value * 60) + numericMinSec1.Value);
+            int maxTime1 = Convert.ToInt32((numericMaxHour1.Value * 60 * 60) + (numericMaxMin1.Value * 60) + numericMaxSec1.Value);
+
+            int minTime2 = Convert.ToInt32((numericMinHour2.Value * 60 * 60) + (numericMinMin2.Value * 60) + numericMinSec2.Value);
+            int maxTime2 = Convert.ToInt32((numericMaxHour2.Value * 60 * 60) + (numericMaxMin2.Value * 60) + numericMaxSec2.Value);
+
+            if (minTime1 > maxTime1 || minTime2 > maxTime2) MessageBox.Show("Minimum delays for timer cannot be larger than maximum delays.", "Timer error", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+            else
+            {
+                saveConfig();
+                if (this.oldMp3Dir != txtSetFolder.Text) this._frmPlayer.InsertPanelButtons();
+                else this._frmPlayer.ReadSettings();
+                btnApply.Enabled = false;
             }
         }
 
@@ -199,7 +303,7 @@ namespace PatkaPlayer
             if (Directory.Exists(txtSetFolder.Text)) folder.SelectedPath = txtSetFolder.Text;
             folder.Description = "\nSelect root folder for MP3 files";
             folder.ShowNewFolderButton = false;
-            folder.RootFolder = Environment.SpecialFolder.MyComputer;
+            //folder.RootFolder = Environment.SpecialFolder.MyComputer;
 
             DialogResult result = folder.ShowDialog();
             if (folder.SelectedPath != "") txtSetFolder.Text = folder.SelectedPath;
@@ -208,14 +312,31 @@ namespace PatkaPlayer
         // dialog for choosing mp3 to hotkey
         private string setHotkeyFile()
         {
-            OpenFileDialog file = new OpenFileDialog();
+            if (Directory.Exists(txtSetFolder.Text))
+            {
+                OpenFileDialog file = new OpenFileDialog();
+                file.InitialDirectory = txtSetFolder.Text;
+                file.Filter = "MP3 files|*.mp3";
 
-            if (Directory.Exists(txtSetFolder.Text)) file.InitialDirectory = txtSetFolder.Text;
-            else file.InitialDirectory = "c:\\";
-            file.Filter = "MP3 files|*.mp3";
+                DialogResult result = file.ShowDialog();
 
-            DialogResult result = file.ShowDialog();
-            return file.FileName;
+                if (file.FileName.Replace("/", "\\").IndexOf(txtSetFolder.Text.Replace("/", "\\") + "\\") != -1)
+                {
+                    return file.FileName.Replace(txtSetFolder.Text + "\\", "");
+                }
+                else if (file.FileName != "")
+                {
+                    MessageBox.Show("Clip must be selected inside audio folder.\n\nAudio Folder:\n" + txtSetFolder.Text + "\n\nFile you tried to select:\n" + file.FileName, "Selection error", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+                    return "";
+                }
+                else return "";
+            }
+            else return "";
+        }
+
+        private void valueChanged(object sender, EventArgs e)
+        {
+            btnApply.Enabled = true;
         }
 
         private void btnSet1_Click(object sender, EventArgs e)
@@ -272,10 +393,22 @@ namespace PatkaPlayer
             if (file != "") txtSet9.Text = file;
         }
 
-        private void btnSet0_Click(object sender, EventArgs e)
+        private void btnSet10_Click(object sender, EventArgs e)
         {
             string file = setHotkeyFile();
-            if (file != "") txtSet0.Text = file;
+            if (file != "") txtSet10.Text = file;
+        }
+
+        private void btnSet11_Click(object sender, EventArgs e)
+        {
+            string file = setHotkeyFile();
+            if (file != "") txtSet11.Text = file;
+        }
+        
+        private void btnSet12_Click(object sender, EventArgs e)
+        {
+            string file = setHotkeyFile();
+            if (file != "") txtSet12.Text = file;
         }
 
         private void btnErase1_Click(object sender, EventArgs e)
@@ -325,68 +458,123 @@ namespace PatkaPlayer
 
         private void btnErase0_Click(object sender, EventArgs e)
         {
-            txtSet0.Text = "";
+            txtSet10.Text = "";
         }
 
-        private void numericMinHour1_ValueChanged(object sender, EventArgs e)
+        private void btnErase10_Click(object sender, EventArgs e)
         {
-
+            txtSet10.Text = "";
         }
 
-        private void numericMinMin1_ValueChanged(object sender, EventArgs e)
+        private void btnErase11_Click(object sender, EventArgs e)
         {
-
+            txtSet11.Text = "";
         }
 
-        private void numericMinSec1_ValueChanged(object sender, EventArgs e)
+        private void btnErase12_Click(object sender, EventArgs e)
         {
-            
+            txtSet12.Text = "";
         }
 
-        private void numericMaxHour1_ValueChanged(object sender, EventArgs e)
+        private void checkTop_CheckedChanged(object sender, EventArgs e)
         {
-            
+            if (checkTop.Checked == true)
+            {
+                checkBottom.Checked = false;
+                numericBottom.Enabled = false;
+                numericTop.Enabled = true;
+            }
+            else
+            {
+                checkBottom.Checked = true;
+                numericBottom.Enabled = true;
+                numericTop.Enabled = false;
+            }
+            btnApply.Enabled = true;
         }
 
-        private void numericMaxMin1_ValueChanged(object sender, EventArgs e)
+        private void checkBottom_CheckedChanged(object sender, EventArgs e)
         {
-            
+            if (checkBottom.Checked == true)
+            {
+                checkTop.Checked = false;
+                numericTop.Enabled = false;
+                numericBottom.Enabled = true;
+            }
+            else
+            {
+                checkTop.Checked = true;
+                numericTop.Enabled = true;
+                numericBottom.Enabled = false;
+            }
+            btnApply.Enabled = true;
         }
 
-        private void numericMaxSec1_ValueChanged(object sender, EventArgs e)
+        private void checkLeft_CheckedChanged(object sender, EventArgs e)
         {
-            
+            if (checkLeft.Checked == true)
+            {
+                checkRight.Checked = false;
+                numericRight.Enabled = false;
+                numericLeft.Enabled = true;
+            }
+            else
+            {
+                checkRight.Checked = true;
+                numericRight.Enabled = true;
+                numericLeft.Enabled = false;
+            }
+            btnApply.Enabled = true;
         }
 
-        private void numericMinHour2_ValueChanged(object sender, EventArgs e)
+        private void checkRight_CheckedChanged(object sender, EventArgs e)
         {
-            
+            if (checkRight.Checked == true)
+            {
+                checkLeft.Checked = false;
+                numericLeft.Enabled = false;
+                numericRight.Enabled = true;
+            }
+            else
+            {
+                checkLeft.Checked = true;
+                numericLeft.Enabled = true;
+                numericRight.Enabled = false;
+            }
+            btnApply.Enabled = true;
         }
 
-        private void numericMinMin2_ValueChanged(object sender, EventArgs e)
+        private void btnMiniPlayer_Click(object sender, EventArgs e)
         {
-            
+            this._frmPlayer.MiniPlayer();
         }
 
-        private void numericMinSec2_ValueChanged(object sender, EventArgs e)
+        private void linkResetPosition_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            
+            numericTop.Enabled = false;
+            numericBottom.Enabled = true;
+            numericLeft.Enabled = false;
+            numericRight.Enabled = true;
+
+            numericTop.Value = 0;
+            numericBottom.Value = 50;
+            numericLeft.Value = 0;
+            numericRight.Value = 10;
+
+            checkTop.Checked = false;
+            checkBottom.Checked = true;
+            checkLeft.Checked = false;
+            checkRight.Checked = true;
+
+            btnApply.Enabled = true;
         }
 
-        private void numericMaxHour2_ValueChanged(object sender, EventArgs e)
+        private void numericLocation_KeyPress(object sender, KeyPressEventArgs e)
         {
-            
+            btnApply.Enabled = true;
         }
 
-        private void numericMaxMin2_ValueChanged(object sender, EventArgs e)
-        {
-            
-        }
 
-        private void numericMaxSec2_ValueChanged(object sender, EventArgs e)
-        {
-            
-        }
 
-    }
-}
+    } // class end
+} // namespace end

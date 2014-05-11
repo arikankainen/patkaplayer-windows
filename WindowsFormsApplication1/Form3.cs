@@ -8,11 +8,11 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace patka
+namespace PatkaPlayer
 {
-    public partial class frmMiniPlayer : Form
+    public partial class frmHelp : Form
     {
-        public frmMiniPlayer()
+        public frmHelp()
         {
             InitializeComponent();
         }

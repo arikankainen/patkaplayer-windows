@@ -117,4 +117,10 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="label16.Text" xml:space="preserve">
+    <value>Timer plays random clips automatically, and randomizes the delay between clips to what you have entered to minimum and maximum delay boxes. You can choose to play from all or from filtered audio clips. If there's no folder filter or file filter active, all clips will be used regardless of what is selected in options.
+
+Timer can be activated by left-clicking timer in status bar. With right-click you can open timer settings.
+</value>
+  </data>
 </root>
