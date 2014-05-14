@@ -48,6 +48,7 @@ namespace PatkaPlayer
         private int lastWidth;
         private int playCount = 0;
         public int settingsPage;
+        private bool tray = false;
 
         private ContextMenu contextButton;
         private MenuItem menuItemF1, menuItemF2, menuItemF3, menuItemF4, menuItemF5, menuItemF6, menuItemF7, menuItemF8, menuItemF9, menuItemF10, menuItemF11, menuItemF12;
@@ -97,16 +98,48 @@ namespace PatkaPlayer
         private string buttonColorBackGradientLowerTopP = "#6e9dcc";
         private string buttonColorBackGradientLowerBottomP = "#80acdd";
 
+        KeyboardHook hook = new KeyboardHook();
+
         // default constructor
         public frmPlayer()
         {
             InitializeComponent();
-            this.Text = "Pätkä Player v1.1";
+            this.Text = "Pätkä Player v1.21";
+
+            notifyIcon1.Visible = false;
+            notifyIcon1.MouseUp += new MouseEventHandler(NotifyIcon1_Click);
+
+            // register the event that is fired after the key press.
+            hook.KeyPressed += new EventHandler<KeyPressedEventArgs>(hook_KeyPressed);
+            // register the control + alt + F12 combination as hot key.
+            //hook.RegisterHotKey(ModifierKeys.Control | ModifierKeys.Alt, Keys.F12); // not working
+            try
+            {
+                hook.RegisterHotKey((ModifierKeys)1, Keys.Space);
+                hook.RegisterHotKey((ModifierKeys)1, Keys.R);
+                hook.RegisterHotKey((ModifierKeys)1, Keys.S);
+                hook.RegisterHotKey((ModifierKeys)1, Keys.F1);
+                hook.RegisterHotKey((ModifierKeys)1, Keys.F2);
+                hook.RegisterHotKey((ModifierKeys)1, Keys.F3);
+                hook.RegisterHotKey((ModifierKeys)1, Keys.F4);
+                hook.RegisterHotKey((ModifierKeys)1, Keys.F5);
+                hook.RegisterHotKey((ModifierKeys)1, Keys.F6);
+                hook.RegisterHotKey((ModifierKeys)1, Keys.F7);
+                hook.RegisterHotKey((ModifierKeys)1, Keys.F8);
+                hook.RegisterHotKey((ModifierKeys)1, Keys.F9);
+                hook.RegisterHotKey((ModifierKeys)1, Keys.F10);
+                hook.RegisterHotKey((ModifierKeys)1, Keys.F11);
+                hook.RegisterHotKey((ModifierKeys)1, Keys.F12);
+            }
+            catch
+            {
+                MessageBox.Show("Some of the global hotkeys are currently registered to another application, so they do not work with this instance of Pätkä Player.", "Global Hotkey Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
 
             this.MouseWheel += new MouseEventHandler(Form1_MouseWheel);
             this.ResizeEnd += new EventHandler(Form1_ResizeEnd);
             this.SizeChanged += new EventHandler(Form1_SizeChanged);
-            //this.KeyPress += new KeyPressEventHandler(Form1_KeyPress);
+            this.Layout += new LayoutEventHandler(Form1_Layout);
             this.KeyUp += new KeyEventHandler(Form1_KeyEvent);
             txtFilterFolder.KeyDown += new KeyEventHandler(txtFilterFolder_KeyDown);
             txtFilterFile.KeyDown += new KeyEventHandler(txtFilterFile_KeyDown);
@@ -131,8 +164,8 @@ namespace PatkaPlayer
             toolStripSettings.Renderer = new MySR();
             toolStripFilters.Renderer = new MySR();
 
-            txtFilterFolder.Size = new Size(120, 31);
-            txtFilterFile.Size = new Size(120, 31);
+            txtFilterFolder.Size = new Size(130, 31);
+            txtFilterFile.Size = new Size(130, 31);
 
             contextButton = new ContextMenu();
 
@@ -171,7 +204,6 @@ namespace PatkaPlayer
         private void buttonLocations()
         {
             toolStripSettings.Left = toolStripContainer1.TopToolStripPanel.Width - toolStripSettings.Width;
-            //toolStripFilters.Left = (toolStripContainer1.TopToolStripPanel.Width / 2 - toolStripFilters.Width / 2) - (toolStripSettings.Width - toolStripPlay.Width);
             toolStripFilters.Left = (toolStripContainer1.TopToolStripPanel.Width / 2 - toolStripFilters.Width / 2);
             toolStripPlay.Left = 3;
 
@@ -237,16 +269,6 @@ namespace PatkaPlayer
                         // break flow with previous button
                         Button lastButton = this.Controls.Find("SoundButton" + (numOfButtons - 1).ToString(), true).FirstOrDefault() as Button;
                         panelButtons.SetFlowBreak(lastButton, true);
-
-                        /* // bugs!
-                        Panel folderLine = new Panel();
-                        folderLine.Width = panelButtons.ClientSize.Width - 18;
-                        folderLine.Height = 1;
-                        folderLine.BackColor = ColorTranslator.FromHtml("#cfdae6");
-                        folderLine.Margin = new Padding(7, 5, 0, 0);
-                        
-                        panelButtons.Controls.Add(folderLine);
-                        */
                     }
 
                     Label folderLabel = new Label();
@@ -271,20 +293,6 @@ namespace PatkaPlayer
                     
                 }
 
-                /*
-                Bitmap xxx = buttonBack;
-                Graphics g = Graphics.FromImage(xxx);
-                string s = Path.GetFileNameWithoutExtension(array1[i]);
-                Font f = new Font("Arial", 16);
-                SolidBrush b = new SolidBrush(Color.Black);
-                float x = 0.0f;
-                float y = 0.0f;
-                g.DrawString(s, f, b, x, y);
-                f.Dispose();
-                b.Dispose();
-                g.Dispose();
-                */
-
                 Button button = new Button();
                 button.Text = Path.GetFileNameWithoutExtension(array1[i]); // filename only
                 button.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -303,7 +311,6 @@ namespace PatkaPlayer
                 button.MouseLeave += new EventHandler(SoundButton_MouseLeave);
                 button.MouseDown += new MouseEventHandler(SoundButton_MouseDown);
                 button.MouseUp += new MouseEventHandler(SoundButton_MouseUp);
-                //button.Click += new System.EventHandler(SoundButton_Click);
 
                 panelButtons.Controls.Add(button);
 
@@ -356,6 +363,14 @@ namespace PatkaPlayer
                 {
                     file.WriteLine(log);
                 }
+            }
+
+            if (tray)
+            {
+                string balloonFolder = pathToPlay.Substring(pathToPlay.LastIndexOf("\\") + 1);
+                string balloonFile = Path.GetFileNameWithoutExtension(fileToPlay);
+                notifyIcon1.BalloonTipText = balloonFolder + " - " + balloonFile;
+                notifyIcon1.ShowBalloonTip(100);
             }
 
             playCount++;
@@ -845,6 +860,8 @@ namespace PatkaPlayer
             gP.FillRectangle(brushCornerShadowP, 149, 49, 1, 1);
 
         }
+
+
 
 
 

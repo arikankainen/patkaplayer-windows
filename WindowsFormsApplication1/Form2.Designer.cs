@@ -93,6 +93,9 @@
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabFolders = new System.Windows.Forms.TabPage();
             this.tabSettings = new System.Windows.Forms.TabPage();
+            this.groupBox13 = new System.Windows.Forms.GroupBox();
+            this.label18 = new System.Windows.Forms.Label();
+            this.label17 = new System.Windows.Forms.Label();
             this.btnMiniPlayer = new System.Windows.Forms.Button();
             this.groupBox14 = new System.Windows.Forms.GroupBox();
             this.label15 = new System.Windows.Forms.Label();
@@ -136,6 +139,7 @@
             this.label12 = new System.Windows.Forms.Label();
             this.numericMinHour2 = new System.Windows.Forms.NumericUpDown();
             this.btnApply = new System.Windows.Forms.Button();
+            this.label19 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.groupBox5.SuspendLayout();
             this.groupBox4.SuspendLayout();
@@ -151,6 +155,7 @@
             this.tabControl1.SuspendLayout();
             this.tabFolders.SuspendLayout();
             this.tabSettings.SuspendLayout();
+            this.groupBox13.SuspendLayout();
             this.groupBox14.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericTop)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericBottom)).BeginInit();
@@ -930,6 +935,7 @@
             // 
             // tabSettings
             // 
+            this.tabSettings.Controls.Add(this.groupBox13);
             this.tabSettings.Controls.Add(this.btnMiniPlayer);
             this.tabSettings.Controls.Add(this.groupBox14);
             this.tabSettings.Controls.Add(this.groupBox12);
@@ -941,6 +947,35 @@
             this.tabSettings.TabIndex = 2;
             this.tabSettings.Text = "Settings";
             this.tabSettings.UseVisualStyleBackColor = true;
+            // 
+            // groupBox13
+            // 
+            this.groupBox13.Controls.Add(this.label19);
+            this.groupBox13.Controls.Add(this.label18);
+            this.groupBox13.Controls.Add(this.label17);
+            this.groupBox13.Location = new System.Drawing.Point(10, 94);
+            this.groupBox13.Name = "groupBox13";
+            this.groupBox13.Size = new System.Drawing.Size(316, 189);
+            this.groupBox13.TabIndex = 46;
+            this.groupBox13.TabStop = false;
+            this.groupBox13.Text = "Hotkeys";
+            // 
+            // label18
+            // 
+            this.label18.Location = new System.Drawing.Point(75, 25);
+            this.label18.Name = "label18";
+            this.label18.Size = new System.Drawing.Size(115, 74);
+            this.label18.TabIndex = 1;
+            this.label18.Text = "Play preselected clip\r\n\r\nPlay random\r\nStop\r\nReplay";
+            // 
+            // label17
+            // 
+            this.label17.Location = new System.Drawing.Point(9, 25);
+            this.label17.Name = "label17";
+            this.label17.Size = new System.Drawing.Size(60, 74);
+            this.label17.TabIndex = 0;
+            this.label17.Text = "F1 - F12:\r\n\r\nSpace:\r\nS:\r\nR:";
+            this.label17.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
             // btnMiniPlayer
             // 
@@ -1507,6 +1542,15 @@
             this.btnApply.UseVisualStyleBackColor = true;
             this.btnApply.Click += new System.EventHandler(this.btnApply_Click);
             // 
+            // label19
+            // 
+            this.label19.Location = new System.Drawing.Point(12, 147);
+            this.label19.Name = "label19";
+            this.label19.Size = new System.Drawing.Size(292, 49);
+            this.label19.TabIndex = 2;
+            this.label19.Text = "When Pätkä Player is not the active window, same hotkeys can be used in combinati" +
+    "on with Alt-key.";
+            // 
             // frmSettings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1548,6 +1592,7 @@
             this.tabControl1.ResumeLayout(false);
             this.tabFolders.ResumeLayout(false);
             this.tabSettings.ResumeLayout(false);
+            this.groupBox13.ResumeLayout(false);
             this.groupBox14.ResumeLayout(false);
             this.groupBox14.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericTop)).EndInit();
@@ -1688,5 +1733,9 @@
         private System.Windows.Forms.Button btnErase11;
         private System.Windows.Forms.TextBox txtSet11;
         private System.Windows.Forms.Button btnSet11;
+        private System.Windows.Forms.GroupBox groupBox13;
+        private System.Windows.Forms.Label label18;
+        private System.Windows.Forms.Label label17;
+        private System.Windows.Forms.Label label19;
     }
 }

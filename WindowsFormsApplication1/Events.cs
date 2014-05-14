@@ -75,7 +75,7 @@ namespace PatkaPlayer
         private void timer_Tick(object sender, EventArgs e)
         {
             //labelTest.Text = DateTime.Now.ToString("HH:mm:ss");
-            buttonLocations();
+            //buttonLocations();
         }
 
         // temp timer for setting focus off from buttons at load
@@ -178,6 +178,18 @@ namespace PatkaPlayer
                 Button button = this.Controls.Find("SoundButton1", true).FirstOrDefault() as Button;
                 this.ActiveControl = button;
             }
+            else
+            {
+                /*
+                for (int i = 0; i <= array1.Length -1; i++)
+                {
+                    Application.DoEvents();
+                    Button button = this.Controls.Find("SoundButton" + (i + 1).ToString(), true).FirstOrDefault() as Button;
+                    if (array1[i].IndexOf(txtFilterFile.Text, StringComparison.OrdinalIgnoreCase) == -1) button.Visible = false;
+                    else button.Visible = true;
+                }
+                */
+            }
         }
 
         // clear filters
@@ -251,6 +263,10 @@ namespace PatkaPlayer
         {
             if (txtFilterFolder.Selected == true || txtFilterFile.Selected == true) return;
 
+            if (e.KeyCode == Keys.Space) btnRandom.PerformClick();
+            if (e.KeyCode == Keys.R) btnReplay.PerformClick();
+            if (e.KeyCode == Keys.S) btnStop.PerformClick();
+
             if (e.KeyCode == Keys.F1 && File.Exists(mp3Dir + "\\" + hotkey1)) playFile(mp3Dir + "\\" + hotkey1);
             if (e.KeyCode == Keys.F2 && File.Exists(mp3Dir + "\\" + hotkey2)) playFile(mp3Dir + "\\" + hotkey2);
             if (e.KeyCode == Keys.F3 && File.Exists(mp3Dir + "\\" + hotkey3)) playFile(mp3Dir + "\\" + hotkey3);
@@ -263,9 +279,6 @@ namespace PatkaPlayer
             if (e.KeyCode == Keys.F10 && File.Exists(mp3Dir + "\\" + hotkey10)) playFile(mp3Dir + "\\" + hotkey10);
             if (e.KeyCode == Keys.F11 && File.Exists(mp3Dir + "\\" + hotkey11)) playFile(mp3Dir + "\\" + hotkey11);
             if (e.KeyCode == Keys.F12 && File.Exists(mp3Dir + "\\" + hotkey12)) playFile(mp3Dir + "\\" + hotkey12);
-            if (e.KeyCode == Keys.Escape) btnStop.PerformClick();
-            if (e.KeyCode == Keys.ControlKey) btnReplay.PerformClick();
-            if (e.KeyCode == Keys.Space) btnRandom.PerformClick();
         }
 
         // stop button
@@ -417,24 +430,22 @@ namespace PatkaPlayer
         private void Form1_SizeChanged(object sender, System.EventArgs e)
         {
             buttonLocations();
-            Application.DoEvents();
+        }
+
+        private void Form1_Layout(object sender, LayoutEventArgs e)
+        {
+            buttonLocations();
         }
 
         // window resize end
         private void Form1_ResizeEnd(object sender, System.EventArgs e)
         {
-        }
-
-        private void panelButtons_SizeChanged(object sender, EventArgs e)
-        {
-            /*
-            panelButtons.SuspendLayout();
-            foreach (Control ctrl in panelButtons.Controls)
+            if (FormWindowState.Minimized == this.WindowState)
             {
-                if (ctrl is Panel) ctrl.Width = panelButtons.ClientSize.Width - 25;
+                notifyIcon1.Visible = true;
+                notifyIcon1.ShowBalloonTip(500);
+                this.Hide();
             }
-            panelButtons.ResumeLayout();
-            */
         }
 
         private void menuItemSet_Click(object sender, EventArgs e)
@@ -449,12 +460,59 @@ namespace PatkaPlayer
             config.AppSettings.Settings.Remove("hotkey_" + hotkey);
             config.AppSettings.Settings.Add("hotkey_" + hotkey, clip);
 
-            config.AppSettings.SectionInformation.ForceSave = true;
-            config.Save(ConfigurationSaveMode.Full);
+            try
+            {
+                config.AppSettings.SectionInformation.ForceSave = true;
+                config.Save(ConfigurationSaveMode.Full);
+            }
+            catch
+            {
+                MessageBox.Show("Can't save config, write access denied.", "Error Saving Configuration", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
 
             ReadSettings();
         }
 
+        void hook_KeyPressed(object sender, KeyPressedEventArgs e)
+        {
+            //MessageBox.Show(e.Modifier.ToString() + " + " + e.Key.ToString());
+
+            if (e.Key == Keys.Space) btnRandom.PerformClick();
+            if (e.Key == Keys.R) btnReplay.PerformClick();
+            if (e.Key == Keys.S) btnStop.PerformClick();
+
+            if (e.Key == Keys.F1 && File.Exists(mp3Dir + "\\" + hotkey1)) playFile(mp3Dir + "\\" + hotkey1);
+            if (e.Key == Keys.F2 && File.Exists(mp3Dir + "\\" + hotkey2)) playFile(mp3Dir + "\\" + hotkey2);
+            if (e.Key == Keys.F3 && File.Exists(mp3Dir + "\\" + hotkey3)) playFile(mp3Dir + "\\" + hotkey3);
+            if (e.Key == Keys.F4 && File.Exists(mp3Dir + "\\" + hotkey4)) playFile(mp3Dir + "\\" + hotkey4);
+            if (e.Key == Keys.F5 && File.Exists(mp3Dir + "\\" + hotkey5)) playFile(mp3Dir + "\\" + hotkey5);
+            if (e.Key == Keys.F6 && File.Exists(mp3Dir + "\\" + hotkey6)) playFile(mp3Dir + "\\" + hotkey6);
+            if (e.Key == Keys.F7 && File.Exists(mp3Dir + "\\" + hotkey7)) playFile(mp3Dir + "\\" + hotkey7);
+            if (e.Key == Keys.F8 && File.Exists(mp3Dir + "\\" + hotkey8)) playFile(mp3Dir + "\\" + hotkey8);
+            if (e.Key == Keys.F9 && File.Exists(mp3Dir + "\\" + hotkey9)) playFile(mp3Dir + "\\" + hotkey9);
+            if (e.Key == Keys.F10 && File.Exists(mp3Dir + "\\" + hotkey10)) playFile(mp3Dir + "\\" + hotkey10);
+            if (e.Key == Keys.F11 && File.Exists(mp3Dir + "\\" + hotkey11)) playFile(mp3Dir + "\\" + hotkey11);
+            if (e.Key == Keys.F12 && File.Exists(mp3Dir + "\\" + hotkey12)) playFile(mp3Dir + "\\" + hotkey12);
+        }
+
+        private void NotifyIcon1_Click(object sender, MouseEventArgs e)
+        {
+            tray = false;
+            notifyIcon1.Visible = false;
+
+            this.Opacity = 0;
+            this.Show();
+            fadeIn(1);
+        }
+        
+        private void btnHide_Click(object sender, EventArgs e)
+        {
+            tray = true;
+            notifyIcon1.Visible = true;
+
+            fadeOut(1);
+            this.Hide();
+        }
 
 
 

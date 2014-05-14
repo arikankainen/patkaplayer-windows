@@ -33,6 +33,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmPlayer));
             this.toolStripContainer1 = new System.Windows.Forms.ToolStripContainer();
             this.statusStrip2 = new System.Windows.Forms.StatusStrip();
@@ -46,6 +47,7 @@
             this.panelToolStripLine = new System.Windows.Forms.Panel();
             this.label1 = new System.Windows.Forms.Label();
             this.toolStripSettings = new System.Windows.Forms.ToolStrip();
+            this.btnHide = new System.Windows.Forms.ToolStripButton();
             this.btnToggle = new System.Windows.Forms.ToolStripButton();
             this.btnDropdown = new System.Windows.Forms.ToolStripButton();
             this.toolStripFilters = new System.Windows.Forms.ToolStrip();
@@ -73,6 +75,7 @@
             this.menuItem6 = new System.Windows.Forms.MenuItem();
             this.menuTimer1 = new System.Windows.Forms.MenuItem();
             this.menuTimer2 = new System.Windows.Forms.MenuItem();
+            this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
             this.toolStripContainer1.BottomToolStripPanel.SuspendLayout();
             this.toolStripContainer1.ContentPanel.SuspendLayout();
             this.toolStripContainer1.TopToolStripPanel.SuspendLayout();
@@ -198,7 +201,6 @@
             this.panelButtons.Padding = new System.Windows.Forms.Padding(5, 0, 5, 5);
             this.panelButtons.Size = new System.Drawing.Size(1119, 515);
             this.panelButtons.TabIndex = 12;
-            this.panelButtons.SizeChanged += new System.EventHandler(this.panelButtons_SizeChanged);
             // 
             // panelToolStripLine
             // 
@@ -225,13 +227,27 @@
             this.toolStripSettings.Dock = System.Windows.Forms.DockStyle.None;
             this.toolStripSettings.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
             this.toolStripSettings.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.btnHide,
             this.btnToggle,
             this.btnDropdown});
             this.toolStripSettings.Location = new System.Drawing.Point(3, 0);
             this.toolStripSettings.Name = "toolStripSettings";
             this.toolStripSettings.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
-            this.toolStripSettings.Size = new System.Drawing.Size(94, 35);
+            this.toolStripSettings.Size = new System.Drawing.Size(124, 35);
             this.toolStripSettings.TabIndex = 2;
+            // 
+            // btnHide
+            // 
+            this.btnHide.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.btnHide.Image = ((System.Drawing.Image)(resources.GetObject("btnHide.Image")));
+            this.btnHide.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnHide.Margin = new System.Windows.Forms.Padding(0, 3, 0, 2);
+            this.btnHide.Name = "btnHide";
+            this.btnHide.Padding = new System.Windows.Forms.Padding(5);
+            this.btnHide.Size = new System.Drawing.Size(30, 30);
+            this.btnHide.Text = "Hide";
+            this.btnHide.ToolTipText = "Hide to Tray";
+            this.btnHide.Click += new System.EventHandler(this.btnHide_Click);
             // 
             // btnToggle
             // 
@@ -277,7 +293,7 @@
             this.toolStripFilters.Location = new System.Drawing.Point(3, 35);
             this.toolStripFilters.Name = "toolStripFilters";
             this.toolStripFilters.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
-            this.toolStripFilters.Size = new System.Drawing.Size(243, 35);
+            this.toolStripFilters.Size = new System.Drawing.Size(195, 35);
             this.toolStripFilters.TabIndex = 3;
             // 
             // toolStripLabel1
@@ -296,7 +312,7 @@
             this.txtFilterFolder.Margin = new System.Windows.Forms.Padding(1, 3, 1, 0);
             this.txtFilterFolder.Name = "txtFilterFolder";
             this.txtFilterFolder.Padding = new System.Windows.Forms.Padding(3, 7, 3, 7);
-            this.txtFilterFolder.Size = new System.Drawing.Size(36, 32);
+            this.txtFilterFolder.Size = new System.Drawing.Size(12, 32);
             // 
             // btnClearFilters
             // 
@@ -318,7 +334,7 @@
             this.txtFilterFile.Margin = new System.Windows.Forms.Padding(1, 3, 1, 0);
             this.txtFilterFile.Name = "txtFilterFile";
             this.txtFilterFile.Padding = new System.Windows.Forms.Padding(3, 7, 3, 7);
-            this.txtFilterFile.Size = new System.Drawing.Size(36, 32);
+            this.txtFilterFile.Size = new System.Drawing.Size(12, 32);
             // 
             // toolStripLabel2
             // 
@@ -485,6 +501,12 @@
             this.menuTimer2.Text = "Start Timer 2";
             this.menuTimer2.Click += new System.EventHandler(this.menuTimer2_Click);
             // 
+            // notifyIcon1
+            // 
+            this.notifyIcon1.Icon = ((System.Drawing.Icon)(resources.GetObject("notifyIcon1.Icon")));
+            this.notifyIcon1.Text = "Pätkä Player";
+            this.notifyIcon1.Visible = true;
+            // 
             // frmPlayer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -559,6 +581,8 @@
         private System.Windows.Forms.ToolStripButton btnToggle;
         private System.Windows.Forms.MenuItem menuCenter;
         private System.Windows.Forms.MenuItem menuTimers;
+        private System.Windows.Forms.NotifyIcon notifyIcon1;
+        private System.Windows.Forms.ToolStripButton btnHide;
     }
 }
 
