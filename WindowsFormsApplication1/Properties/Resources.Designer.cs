@@ -71,22 +71,22 @@ namespace patka.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        internal static System.Drawing.Bitmap maxi {
+        internal static System.Drawing.Icon patka_taskbar {
             get {
-                object obj = ResourceManager.GetObject("maxi", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
+                object obj = ResourceManager.GetObject("patka_taskbar", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
             }
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        internal static System.Drawing.Bitmap mini {
+        internal static System.Drawing.Icon patka_taskbar_red {
             get {
-                object obj = ResourceManager.GetObject("mini", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
+                object obj = ResourceManager.GetObject("patka_taskbar_red", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
             }
         }
     }

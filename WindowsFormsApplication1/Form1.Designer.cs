@@ -42,13 +42,13 @@
             this.labelTimer1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.labelTimer2 = new System.Windows.Forms.ToolStripStatusLabel();
             this.labelLastPlayed = new System.Windows.Forms.ToolStripStatusLabel();
-            this.labelTest = new System.Windows.Forms.ToolStripStatusLabel();
+            this.labelSpacer = new System.Windows.Forms.ToolStripStatusLabel();
+            this.labelVersion = new System.Windows.Forms.ToolStripStatusLabel();
             this.panelButtons = new System.Windows.Forms.FlowLayoutPanel();
             this.panelToolStripLine = new System.Windows.Forms.Panel();
             this.label1 = new System.Windows.Forms.Label();
             this.toolStripSettings = new System.Windows.Forms.ToolStrip();
             this.btnHide = new System.Windows.Forms.ToolStripButton();
-            this.btnToggle = new System.Windows.Forms.ToolStripButton();
             this.btnDropdown = new System.Windows.Forms.ToolStripButton();
             this.toolStripFilters = new System.Windows.Forms.ToolStrip();
             this.toolStripLabel1 = new System.Windows.Forms.ToolStripLabel();
@@ -118,14 +118,14 @@
             // statusStrip2
             // 
             this.statusStrip2.Dock = System.Windows.Forms.DockStyle.None;
-            this.statusStrip2.GripStyle = System.Windows.Forms.ToolStripGripStyle.Visible;
             this.statusStrip2.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.labelTotalClips,
             this.labelClipsPlayed,
             this.labelTimer1,
             this.labelTimer2,
             this.labelLastPlayed,
-            this.labelTest});
+            this.labelSpacer,
+            this.labelVersion});
             this.statusStrip2.Location = new System.Drawing.Point(0, 0);
             this.statusStrip2.Name = "statusStrip2";
             this.statusStrip2.Size = new System.Drawing.Size(1120, 24);
@@ -135,8 +135,8 @@
             // 
             this.labelTotalClips.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.labelTotalClips.Name = "labelTotalClips";
-            this.labelTotalClips.Padding = new System.Windows.Forms.Padding(0, 0, 10, 0);
-            this.labelTotalClips.Size = new System.Drawing.Size(54, 19);
+            this.labelTotalClips.Padding = new System.Windows.Forms.Padding(5, 0, 10, 0);
+            this.labelTotalClips.Size = new System.Drawing.Size(59, 19);
             this.labelTotalClips.Text = "Clips: -";
             // 
             // labelClipsPlayed
@@ -145,8 +145,8 @@
             this.labelClipsPlayed.BorderStyle = System.Windows.Forms.Border3DStyle.Etched;
             this.labelClipsPlayed.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.labelClipsPlayed.Name = "labelClipsPlayed";
-            this.labelClipsPlayed.Padding = new System.Windows.Forms.Padding(0, 0, 10, 0);
-            this.labelClipsPlayed.Size = new System.Drawing.Size(91, 19);
+            this.labelClipsPlayed.Padding = new System.Windows.Forms.Padding(5, 0, 10, 0);
+            this.labelClipsPlayed.Size = new System.Drawing.Size(96, 19);
             this.labelClipsPlayed.Text = "Play Count: 0";
             // 
             // labelTimer1
@@ -182,13 +182,23 @@
             this.labelLastPlayed.Text = "-";
             this.labelLastPlayed.Click += new System.EventHandler(this.labelLastPlayed_Click);
             // 
-            // labelTest
+            // labelSpacer
             // 
-            this.labelTest.BorderStyle = System.Windows.Forms.Border3DStyle.Etched;
-            this.labelTest.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.labelTest.Name = "labelTest";
-            this.labelTest.Padding = new System.Windows.Forms.Padding(5, 0, 10, 0);
-            this.labelTest.Size = new System.Drawing.Size(15, 19);
+            this.labelSpacer.BorderStyle = System.Windows.Forms.Border3DStyle.Etched;
+            this.labelSpacer.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.labelSpacer.Name = "labelSpacer";
+            this.labelSpacer.Padding = new System.Windows.Forms.Padding(5, 0, 10, 0);
+            this.labelSpacer.Size = new System.Drawing.Size(692, 19);
+            this.labelSpacer.Spring = true;
+            // 
+            // labelVersion
+            // 
+            this.labelVersion.BorderStyle = System.Windows.Forms.Border3DStyle.Etched;
+            this.labelVersion.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(150)))), ((int)(((byte)(150)))), ((int)(((byte)(150)))));
+            this.labelVersion.Name = "labelVersion";
+            this.labelVersion.Padding = new System.Windows.Forms.Padding(5, 0, 0, 0);
+            this.labelVersion.Size = new System.Drawing.Size(33, 19);
+            this.labelVersion.Text = "v1.0";
             // 
             // panelButtons
             // 
@@ -228,12 +238,11 @@
             this.toolStripSettings.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
             this.toolStripSettings.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.btnHide,
-            this.btnToggle,
             this.btnDropdown});
             this.toolStripSettings.Location = new System.Drawing.Point(3, 0);
             this.toolStripSettings.Name = "toolStripSettings";
             this.toolStripSettings.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
-            this.toolStripSettings.Size = new System.Drawing.Size(124, 35);
+            this.toolStripSettings.Size = new System.Drawing.Size(63, 35);
             this.toolStripSettings.TabIndex = 2;
             // 
             // btnHide
@@ -248,22 +257,6 @@
             this.btnHide.Text = "Hide";
             this.btnHide.ToolTipText = "Hide to Tray";
             this.btnHide.Click += new System.EventHandler(this.btnHide_Click);
-            // 
-            // btnToggle
-            // 
-            this.btnToggle.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.btnToggle.Image = ((System.Drawing.Image)(resources.GetObject("btnToggle.Image")));
-            this.btnToggle.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-            this.btnToggle.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.btnToggle.Margin = new System.Windows.Forms.Padding(0, 3, 0, 2);
-            this.btnToggle.Name = "btnToggle";
-            this.btnToggle.Padding = new System.Windows.Forms.Padding(5);
-            this.btnToggle.Size = new System.Drawing.Size(30, 30);
-            this.btnToggle.Tag = "";
-            this.btnToggle.Text = "MiniPlayer";
-            this.btnToggle.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage;
-            this.btnToggle.ToolTipText = "Switch between Normal and MiniPlayer";
-            this.btnToggle.Click += new System.EventHandler(this.btnToggle_Click);
             // 
             // btnDropdown
             // 
@@ -293,7 +286,7 @@
             this.toolStripFilters.Location = new System.Drawing.Point(3, 35);
             this.toolStripFilters.Name = "toolStripFilters";
             this.toolStripFilters.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
-            this.toolStripFilters.Size = new System.Drawing.Size(195, 35);
+            this.toolStripFilters.Size = new System.Drawing.Size(171, 35);
             this.toolStripFilters.TabIndex = 3;
             // 
             // toolStripLabel1
@@ -312,7 +305,7 @@
             this.txtFilterFolder.Margin = new System.Windows.Forms.Padding(1, 3, 1, 0);
             this.txtFilterFolder.Name = "txtFilterFolder";
             this.txtFilterFolder.Padding = new System.Windows.Forms.Padding(3, 7, 3, 7);
-            this.txtFilterFolder.Size = new System.Drawing.Size(12, 32);
+            this.txtFilterFolder.Size = new System.Drawing.Size(0, 32);
             // 
             // btnClearFilters
             // 
@@ -334,7 +327,7 @@
             this.txtFilterFile.Margin = new System.Windows.Forms.Padding(1, 3, 1, 0);
             this.txtFilterFile.Name = "txtFilterFile";
             this.txtFilterFile.Padding = new System.Windows.Forms.Padding(3, 7, 3, 7);
-            this.txtFilterFile.Size = new System.Drawing.Size(12, 32);
+            this.txtFilterFile.Size = new System.Drawing.Size(0, 32);
             // 
             // toolStripLabel2
             // 
@@ -573,16 +566,16 @@
         private System.Windows.Forms.MenuItem menuItem6;
         private System.Windows.Forms.ToolStripButton btnDropdown;
         private System.Windows.Forms.ToolStripStatusLabel labelTimer2;
-        private System.Windows.Forms.ToolStripStatusLabel labelTest;
+        private System.Windows.Forms.ToolStripStatusLabel labelSpacer;
         private System.Windows.Forms.MenuItem menuFolders;
         private System.Windows.Forms.MenuItem menuItem2;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.FlowLayoutPanel panelButtons;
-        private System.Windows.Forms.ToolStripButton btnToggle;
         private System.Windows.Forms.MenuItem menuCenter;
         private System.Windows.Forms.MenuItem menuTimers;
         private System.Windows.Forms.NotifyIcon notifyIcon1;
         private System.Windows.Forms.ToolStripButton btnHide;
+        private System.Windows.Forms.ToolStripStatusLabel labelVersion;
     }
 }
 

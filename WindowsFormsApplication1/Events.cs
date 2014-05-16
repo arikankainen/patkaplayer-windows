@@ -59,18 +59,6 @@ namespace PatkaPlayer
             if (e.Button == MouseButtons.Right) menuTimers.PerformClick();
         }
 
-        // toggle miniplayer
-        private void menuToggle_Click(object sender, EventArgs e)
-        {
-            MiniPlayer();
-        }
-
-        // toggle miniplayer
-        private void btnToggle_Click(object sender, EventArgs e)
-        {
-            MiniPlayer();
-        }
-
         // main timer, updates statusbar and button locations
         private void timer_Tick(object sender, EventArgs e)
         {
@@ -266,6 +254,11 @@ namespace PatkaPlayer
             if (e.KeyCode == Keys.Space) btnRandom.PerformClick();
             if (e.KeyCode == Keys.R) btnReplay.PerformClick();
             if (e.KeyCode == Keys.S) btnStop.PerformClick();
+
+            if (e.KeyCode == Keys.D1 && !timer1Started) startTimer1();
+            if (e.KeyCode == Keys.D2 && !timer2Started) startTimer2();
+            if (e.KeyCode == Keys.D3 && timer1Started) startTimer1();
+            else if (e.KeyCode == Keys.D3 && timer2Started) startTimer2();
 
             if (e.KeyCode == Keys.F1 && File.Exists(mp3Dir + "\\" + hotkey1)) playFile(mp3Dir + "\\" + hotkey1);
             if (e.KeyCode == Keys.F2 && File.Exists(mp3Dir + "\\" + hotkey2)) playFile(mp3Dir + "\\" + hotkey2);
@@ -481,6 +474,11 @@ namespace PatkaPlayer
             if (e.Key == Keys.R) btnReplay.PerformClick();
             if (e.Key == Keys.S) btnStop.PerformClick();
 
+            if (e.Key == Keys.D1 && !timer1Started) startTimer1();
+            if (e.Key == Keys.D2 && !timer2Started) startTimer2();
+            if (e.Key == Keys.D3 && timer1Started) startTimer1();
+            else if (e.Key == Keys.D3 && timer2Started) startTimer2();
+
             if (e.Key == Keys.F1 && File.Exists(mp3Dir + "\\" + hotkey1)) playFile(mp3Dir + "\\" + hotkey1);
             if (e.Key == Keys.F2 && File.Exists(mp3Dir + "\\" + hotkey2)) playFile(mp3Dir + "\\" + hotkey2);
             if (e.Key == Keys.F3 && File.Exists(mp3Dir + "\\" + hotkey3)) playFile(mp3Dir + "\\" + hotkey3);
@@ -498,7 +496,7 @@ namespace PatkaPlayer
         private void NotifyIcon1_Click(object sender, MouseEventArgs e)
         {
             tray = false;
-            notifyIcon1.Visible = false;
+            if (!trayIcon) notifyIcon1.Visible = false;
 
             this.Opacity = 0;
             this.Show();

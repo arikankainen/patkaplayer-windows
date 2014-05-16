@@ -23,23 +23,19 @@ namespace PatkaPlayer
         private bool minimized { get; set; }
         private string mp3Dir, hotkey1, hotkey2, hotkey3, hotkey4, hotkey5, hotkey6, hotkey7, hotkey8, hotkey9, hotkey10, hotkey11, hotkey12;
         private int timer1MinHour, timer1MinMin, timer1MinSec, timer1MaxHour, timer1MaxMin, timer1MaxSec, timer2MinHour, timer2MinMin, timer2MinSec, timer2MaxHour, timer2MaxMin, timer2MaxSec;
-        private int numTop, numBottom, numLeft, numRight;
-        private bool checkTop, checkBottom, checkLeft, checkRight;
         private decimal transNormal = 1, transMini = 1;
         private bool timer1ClipsAll = true;
         private bool timer2ClipsAll = true;
         private bool logging, rememberDaily;
+        private bool trayIcon, balloonPlay, balloonTimer;
         private string dailyDate;
         private int dailyCount;
         private bool timer1Started = false;
         private bool timer2Started = false;
         private int frmSize = 1;
-        private int frmMaximized;
         private string lastPlayed;
         private string filterFolder = "";
         private string filterFile = "";
-        private int normalSizeX;
-        private int normalSizeY;
         private int numOfButtons;
         private List<string> randomSound = new List<string>();
         private int lastRandomNumber = 0;
@@ -104,7 +100,7 @@ namespace PatkaPlayer
         public frmPlayer()
         {
             InitializeComponent();
-            this.Text = "Pätkä Player v1.21";
+            labelVersion.Text = "v1.22";
 
             notifyIcon1.Visible = false;
             notifyIcon1.MouseUp += new MouseEventHandler(NotifyIcon1_Click);
@@ -118,6 +114,9 @@ namespace PatkaPlayer
                 hook.RegisterHotKey((ModifierKeys)1, Keys.Space);
                 hook.RegisterHotKey((ModifierKeys)1, Keys.R);
                 hook.RegisterHotKey((ModifierKeys)1, Keys.S);
+                hook.RegisterHotKey((ModifierKeys)1, Keys.D1);
+                hook.RegisterHotKey((ModifierKeys)1, Keys.D2);
+                hook.RegisterHotKey((ModifierKeys)1, Keys.D3);
                 hook.RegisterHotKey((ModifierKeys)1, Keys.F1);
                 hook.RegisterHotKey((ModifierKeys)1, Keys.F2);
                 hook.RegisterHotKey((ModifierKeys)1, Keys.F3);
@@ -365,12 +364,15 @@ namespace PatkaPlayer
                 }
             }
 
-            if (tray)
+            if (tray || trayIcon)
             {
-                string balloonFolder = pathToPlay.Substring(pathToPlay.LastIndexOf("\\") + 1);
-                string balloonFile = Path.GetFileNameWithoutExtension(fileToPlay);
-                notifyIcon1.BalloonTipText = balloonFolder + " - " + balloonFile;
-                notifyIcon1.ShowBalloonTip(100);
+                if (balloonPlay)
+                {
+                    string balloonFolder = pathToPlay.Substring(pathToPlay.LastIndexOf("\\") + 1);
+                    string balloonFile = Path.GetFileNameWithoutExtension(fileToPlay);
+                    notifyIcon1.BalloonTipText = balloonFolder + " - " + balloonFile;
+                    notifyIcon1.ShowBalloonTip(100);
+                }
             }
 
             playCount++;
@@ -478,101 +480,6 @@ namespace PatkaPlayer
             }
         }
 
-        // switch to miniplayer or back to normal
-        public void MiniPlayer()
-        {
-            if (this.WindowState == FormWindowState.Maximized) frmMaximized = 1;
-
-            if (frmSize == 1) // switch to mini player
-            {
-                // hide window
-                fadeOut(Convert.ToDouble(transNormal));
-                this.Opacity = 0;
-
-                //btnToggle.Checked = true;
-                btnToggle.Image = patka.Properties.Resources.maxi;
-                //btnToggle.ForeColor = ColorTranslator.FromHtml("#416585");
-                
-                frmSize = 2;
-
-                // restore window to normal if maximized, then save size to variables
-                this.WindowState = FormWindowState.Normal;
-                normalSizeX = this.Width;
-                normalSizeY = this.Height;
-
-                this.MaximizeBox = false;
-                this.FormBorderStyle = FormBorderStyle.FixedSingle;
-                this.Size = new Size(824, 97);
-
-                Screen screen = Screen.FromPoint(Cursor.Position);
-
-                if (numLeft + this.Width > screen.Bounds.Size.Width) numLeft = screen.Bounds.Size.Width - this.Width;
-                if (numRight + this.Width > screen.Bounds.Size.Width) numRight = screen.Bounds.Size.Width - this.Width;
-                if (numTop + this.Height > screen.Bounds.Size.Height) numTop = screen.Bounds.Size.Height - this.Height;
-                if (numBottom + this.Height > screen.Bounds.Size.Height) numBottom = screen.Bounds.Size.Height - this.Height;
-
-                if (checkTop)
-                {
-                    this.Top = screen.WorkingArea.Top + numTop;
-                }
-                else if (checkBottom)
-                {
-                    this.Top = screen.WorkingArea.Top + (screen.Bounds.Size.Height - (this.Height + numBottom));
-                }
-
-                if (checkLeft)
-                {
-                    this.Left = screen.WorkingArea.Left + numLeft;
-                }
-                else if (checkRight)
-                {
-                    this.Left = screen.WorkingArea.Left + (screen.Bounds.Size.Width - (this.Width + numRight));
-                }
-                
-                buttonLocations();
-                Application.DoEvents();
-
-                // show window
-                fadeIn(Convert.ToDouble(transMini));
-                this.Opacity = Convert.ToDouble(transMini);
-            }
-
-            else // switch to normal player
-            {
-                // hide window
-                fadeOut(Convert.ToDouble(transMini));
-                this.Opacity = 0;
-
-                //btnToggle.Checked = false;
-                btnToggle.Image = patka.Properties.Resources.mini;
-
-                btnToggle.ForeColor = ColorTranslator.FromHtml("#000"); 
-                
-                this.MaximizeBox = true;
-                this.FormBorderStyle = FormBorderStyle.Sizable;
-
-                // restore window size
-                this.Width = normalSizeX;
-                this.Height = normalSizeY;
-
-                Screen screen = Screen.FromPoint(Cursor.Position);
-                this.Left = screen.WorkingArea.Left + (screen.Bounds.Size.Width / 2 - this.Width / 2);
-                this.Top = screen.WorkingArea.Top + (screen.Bounds.Size.Height / 2 - this.Height / 2);
-
-                if (frmMaximized == 1) this.WindowState = FormWindowState.Maximized;
-                frmMaximized = 0;
-
-                frmSize = 1;
-
-                buttonLocations();
-                Application.DoEvents();
-
-                // show window
-                fadeIn(Convert.ToDouble(transNormal));
-                this.Opacity = Convert.ToDouble(transNormal);
-            }
-        }
-        
         // get random time
         private int randomTime(int minHour, int minMin, int minSec, int maxHour, int maxMin, int maxSec)
         {
@@ -597,9 +504,19 @@ namespace PatkaPlayer
             {
                 if (!timer1Started)
                 {
+                    notifyIcon1.Icon = patka.Properties.Resources.patka_taskbar_red;
                     timer1.Interval = randomTime(timer1MinHour, timer1MinMin, timer1MinSec, timer1MaxHour, timer1MaxMin, timer1MaxSec);
                     timer1.Start();
                     timer2.Stop();
+
+                    if (tray || trayIcon)
+                    {
+                        if (balloonTimer)
+                        {
+                            notifyIcon1.BalloonTipText = "Timer 1 started";
+                            notifyIcon1.ShowBalloonTip(100);
+                        }
+                    }
 
                     labelTimer1.Text = "Timer 1: On";
                     labelTimer1.ForeColor = ColorTranslator.FromHtml("#dd0000");
@@ -614,7 +531,17 @@ namespace PatkaPlayer
                 }
                 else
                 {
+                    notifyIcon1.Icon = patka.Properties.Resources.patka_taskbar;
                     timer1.Stop();
+
+                    if (tray || trayIcon)
+                    {
+                        if (balloonTimer)
+                        {
+                            notifyIcon1.BalloonTipText = "Timer stopped";
+                            notifyIcon1.ShowBalloonTip(100);
+                        }
+                    }
 
                     labelTimer1.Text = "Timer 1: Off";
                     labelTimer1.ForeColor = ColorTranslator.FromHtml("#404040");
@@ -636,9 +563,19 @@ namespace PatkaPlayer
             {
                 if (!timer2Started)
                 {
+                    notifyIcon1.Icon = patka.Properties.Resources.patka_taskbar_red;
                     timer2.Interval = randomTime(timer2MinHour, timer2MinMin, timer2MinSec, timer2MaxHour, timer2MaxMin, timer2MaxSec);
                     timer2.Start();
                     timer1.Stop();
+
+                    if (tray || trayIcon)
+                    {
+                        if (balloonTimer)
+                        {
+                            notifyIcon1.BalloonTipText = "Timer 2 started";
+                            notifyIcon1.ShowBalloonTip(100);
+                        }
+                    }
 
                     labelTimer2.Text = "Timer 2: On";
                     labelTimer2.ForeColor = ColorTranslator.FromHtml("#dd0000");
@@ -652,8 +589,18 @@ namespace PatkaPlayer
                 }
                 else
                 {
+                    notifyIcon1.Icon = patka.Properties.Resources.patka_taskbar;
                     timer2.Stop();
 
+                    if (tray || trayIcon)
+                    {
+                        if (balloonTimer)
+                        {
+                            notifyIcon1.BalloonTipText = "Timer stopped";
+                            notifyIcon1.ShowBalloonTip(100);
+                        }
+                    }
+                    
                     labelTimer2.Text = "Timer 2: Off";
                     labelTimer2.ForeColor = ColorTranslator.FromHtml("#404040");
                     menuTimer2.Text = "Start Timer 2";
@@ -668,14 +615,10 @@ namespace PatkaPlayer
             mp3Dir = hotkey1 = hotkey2 = hotkey3 = hotkey4 = hotkey5 = hotkey6 = hotkey7 = hotkey8 = hotkey9 = hotkey10 = hotkey11 = hotkey12 = "";
             timer1MinHour = timer1MinMin = timer1MinSec = timer1MaxHour = timer1MaxMin = timer1MaxSec = 0;
             timer2MinHour = timer2MinMin = timer2MinSec = timer2MaxHour = timer2MaxMin = timer2MaxSec = 0;
-            transNormal = transMini = 1;
-            numTop = numLeft = 0;
-            numBottom = 50;
-            numRight = 10;
+            transNormal = 1;
             logging = rememberDaily = false;
             timer1ClipsAll = timer2ClipsAll = false;
-            checkTop = checkLeft = false;
-            checkBottom = checkRight = true;
+            trayIcon = balloonPlay = balloonTimer = false;
 
             Configuration config = ConfigurationManager.OpenExeConfiguration(Application.ExecutablePath);
             ConfigurationManager.RefreshSection("appSettings");
@@ -713,25 +656,21 @@ namespace PatkaPlayer
             if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["timer2maxsec"])) timer2MaxSec = Convert.ToInt32(config.AppSettings.Settings["timer2maxsec"].Value);
             if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["timer2playall"])) timer2ClipsAll = true;
 
-            // misc settings
+            // log
             if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["log"])) logging = true;
             if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["daily"])) rememberDaily = true;
 
             if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["transparencynormal"])) transNormal = Convert.ToDecimal(config.AppSettings.Settings["transparencynormal"].Value);
-            if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["transparencymini"])) transMini = Convert.ToDecimal(config.AppSettings.Settings["transparencymini"].Value);
 
-            // miniplayer location
-            if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["numtop"])) numTop = Convert.ToInt32(config.AppSettings.Settings["numtop"].Value);
-            if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["numbottom"])) numBottom = Convert.ToInt32(config.AppSettings.Settings["numbottom"].Value);
-            if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["numleft"])) numLeft = Convert.ToInt32(config.AppSettings.Settings["numleft"].Value);
-            if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["numright"])) numRight = Convert.ToInt32(config.AppSettings.Settings["numright"].Value);
+            // tray
+            if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["trayicon"])) trayIcon = true;
+            if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["balloonplay"])) balloonPlay = true;
+            if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["balloontimer"])) balloonTimer = true;
 
-            if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["checktop"])) checkTop = true;
-            if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["checkbottom"])) checkBottom = true;
-            if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["checkleft"])) checkLeft = true;
-            if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["checkright"])) checkRight = true;
-            
             // loading complete, setting things
+            if (trayIcon) notifyIcon1.Visible = true;
+            else notifyIcon1.Visible = false;
+
             if (rememberDaily) saveDailyDate();
             labelClipsPlayed.Text = "Play Count: " + playCount.ToString();
 

@@ -162,6 +162,8 @@
     <Content Include="patka_2014_04_06.ico" />
     <None Include="Resources\mini.png" />
     <None Include="Resources\maxi.png" />
+    <None Include="Resources\patka_taskbar.ico" />
+    <None Include="Resources\patka_taskbar_red.ico" />
     <Content Include="TextFile1.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

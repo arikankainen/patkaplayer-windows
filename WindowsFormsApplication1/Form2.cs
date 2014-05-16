@@ -78,65 +78,22 @@ namespace PatkaPlayer
             if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["timer1playall"])) radioClipsAll1.Checked = true;
             else radioClipsFilter1.Checked = true;
 
-            // misc Settings
+            // log
             if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["log"])) checkLog.Checked = true;
             else checkLog.Checked = false;
             if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["daily"])) checkDaily.Checked = true;
             else checkDaily.Checked = false;
 
+            // tray
+            if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["trayicon"])) checkTrayIcon.Checked = true;
+            else checkTrayIcon.Checked = false;
+            if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["balloonplay"])) checkBalloonPlay.Checked = true;
+            else checkBalloonPlay.Checked = false;
+            if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["balloontimer"])) checkBalloonTimer.Checked = true;
+            else checkBalloonTimer.Checked = false;
+
             if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["transparencynormal"])) transparencyNormal.Value = Convert.ToDecimal(config.AppSettings.Settings["transparencynormal"].Value);
-            if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["transparencymini"])) transparencyMini.Value = Convert.ToDecimal(config.AppSettings.Settings["transparencymini"].Value);
 
-            //miniplayer location
-            if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["numtop"])) numericTop.Value = Convert.ToInt32(config.AppSettings.Settings["numtop"].Value);
-            if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["numbottom"])) numericBottom.Value = Convert.ToInt32(config.AppSettings.Settings["numbottom"].Value);
-            if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["numleft"])) numericLeft.Value = Convert.ToInt32(config.AppSettings.Settings["numleft"].Value);
-            if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["numright"])) numericRight.Value = Convert.ToInt32(config.AppSettings.Settings["numright"].Value);
-
-            if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["checkbottom"]))
-            {
-                checkBottom.Checked = true;
-                numericBottom.Enabled = true;
-            }
-            else
-            {
-                checkBottom.Checked = false;
-                numericBottom.Enabled = false;
-            }
-
-            if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["checktop"]))
-            {
-                checkTop.Checked = true;
-                numericTop.Enabled = true;
-            }
-            else
-            {
-                checkTop.Checked = false;
-                numericTop.Enabled = false;
-            }
-
-            if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["checkright"]))
-            {
-                checkRight.Checked = true;
-                numericRight.Enabled = true;
-            }
-            else
-            {
-                checkRight.Checked = false;
-                numericRight.Enabled = false;
-            }
-
-            if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["checkleft"]))
-            {
-                checkLeft.Checked = true;
-                numericLeft.Enabled = true;
-            }
-            else
-            {
-                checkLeft.Checked = false;
-                numericLeft.Enabled = false;
-            }
-        
         }
 
         // save config file
@@ -174,16 +131,10 @@ namespace PatkaPlayer
             config.AppSettings.Settings.Remove("timer2playall");
             config.AppSettings.Settings.Remove("log");
             config.AppSettings.Settings.Remove("daily");
+            config.AppSettings.Settings.Remove("trayicon");
+            config.AppSettings.Settings.Remove("balloonplay");
+            config.AppSettings.Settings.Remove("balloontimer");
             config.AppSettings.Settings.Remove("transparencynormal");
-            config.AppSettings.Settings.Remove("transparencymini");
-            config.AppSettings.Settings.Remove("numtop");
-            config.AppSettings.Settings.Remove("numbottom");
-            config.AppSettings.Settings.Remove("numleft");
-            config.AppSettings.Settings.Remove("numright");
-            config.AppSettings.Settings.Remove("checktop");
-            config.AppSettings.Settings.Remove("checkbottom");
-            config.AppSettings.Settings.Remove("checkleft");
-            config.AppSettings.Settings.Remove("checkright");
 
             // folders
             if (txtSetFolder.Text != "") config.AppSettings.Settings.Add("mp3dir", txtSetFolder.Text);
@@ -218,22 +169,15 @@ namespace PatkaPlayer
             if (numericMaxSec2.Value > 0) config.AppSettings.Settings.Add("timer2maxsec", numericMaxSec2.Value.ToString());
             if (radioClipsAll2.Checked == true) config.AppSettings.Settings.Add("timer2playall", "true");
 
-            // misc Settings
+            // log
             if (checkLog.Checked == true) config.AppSettings.Settings.Add("log", "true");
             if (checkDaily.Checked == true) config.AppSettings.Settings.Add("daily", "true");
             if (transparencyNormal.Value < 1) config.AppSettings.Settings.Add("transparencynormal", transparencyNormal.Value.ToString());
-            if (transparencyMini.Value < 1) config.AppSettings.Settings.Add("transparencymini", transparencyMini.Value.ToString());
 
-            // miniplayer location
-            if (numericTop.Value > 0) config.AppSettings.Settings.Add("numtop", numericTop.Value.ToString());
-            if (numericBottom.Value != 50) config.AppSettings.Settings.Add("numbottom", numericBottom.Value.ToString());
-            if (numericLeft.Value > 0) config.AppSettings.Settings.Add("numleft", numericLeft.Value.ToString());
-            if (numericRight.Value != 10) config.AppSettings.Settings.Add("numright", numericRight.Value.ToString());
-
-            if (checkTop.Checked == true) config.AppSettings.Settings.Add("checktop", "true");
-            if (checkBottom.Checked == true) config.AppSettings.Settings.Add("checkbottom", "true");
-            if (checkLeft.Checked == true) config.AppSettings.Settings.Add("checkleft", "true");
-            if (checkRight.Checked == true) config.AppSettings.Settings.Add("checkright", "true");
+            // tray
+            if (checkTrayIcon.Checked == true) config.AppSettings.Settings.Add("trayicon", "true");
+            if (checkBalloonPlay.Checked == true) config.AppSettings.Settings.Add("balloonplay", "true");
+            if (checkBalloonTimer.Checked == true) config.AppSettings.Settings.Add("balloontimer", "true");
 
             try
             {
@@ -474,99 +418,6 @@ namespace PatkaPlayer
         private void btnErase12_Click(object sender, EventArgs e)
         {
             txtSet12.Text = "";
-        }
-
-        private void checkTop_CheckedChanged(object sender, EventArgs e)
-        {
-            if (checkTop.Checked == true)
-            {
-                checkBottom.Checked = false;
-                numericBottom.Enabled = false;
-                numericTop.Enabled = true;
-            }
-            else
-            {
-                checkBottom.Checked = true;
-                numericBottom.Enabled = true;
-                numericTop.Enabled = false;
-            }
-            btnApply.Enabled = true;
-        }
-
-        private void checkBottom_CheckedChanged(object sender, EventArgs e)
-        {
-            if (checkBottom.Checked == true)
-            {
-                checkTop.Checked = false;
-                numericTop.Enabled = false;
-                numericBottom.Enabled = true;
-            }
-            else
-            {
-                checkTop.Checked = true;
-                numericTop.Enabled = true;
-                numericBottom.Enabled = false;
-            }
-            btnApply.Enabled = true;
-        }
-
-        private void checkLeft_CheckedChanged(object sender, EventArgs e)
-        {
-            if (checkLeft.Checked == true)
-            {
-                checkRight.Checked = false;
-                numericRight.Enabled = false;
-                numericLeft.Enabled = true;
-            }
-            else
-            {
-                checkRight.Checked = true;
-                numericRight.Enabled = true;
-                numericLeft.Enabled = false;
-            }
-            btnApply.Enabled = true;
-        }
-
-        private void checkRight_CheckedChanged(object sender, EventArgs e)
-        {
-            if (checkRight.Checked == true)
-            {
-                checkLeft.Checked = false;
-                numericLeft.Enabled = false;
-                numericRight.Enabled = true;
-            }
-            else
-            {
-                checkLeft.Checked = true;
-                numericLeft.Enabled = true;
-                numericRight.Enabled = false;
-            }
-            btnApply.Enabled = true;
-        }
-
-        private void btnMiniPlayer_Click(object sender, EventArgs e)
-        {
-            this._frmPlayer.MiniPlayer();
-        }
-
-        private void linkResetPosition_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-        {
-            numericTop.Enabled = false;
-            numericBottom.Enabled = true;
-            numericLeft.Enabled = false;
-            numericRight.Enabled = true;
-
-            numericTop.Value = 0;
-            numericBottom.Value = 50;
-            numericLeft.Value = 0;
-            numericRight.Value = 10;
-
-            checkTop.Checked = false;
-            checkBottom.Checked = true;
-            checkLeft.Checked = false;
-            checkRight.Checked = true;
-
-            btnApply.Enabled = true;
         }
 
         private void numericLocation_KeyPress(object sender, KeyPressEventArgs e)
