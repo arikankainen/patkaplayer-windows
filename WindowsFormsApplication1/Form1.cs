@@ -100,7 +100,10 @@ namespace PatkaPlayer
         public frmPlayer()
         {
             InitializeComponent();
-            labelVersion.Text = "v1.22";
+
+            //DoubleBuffered = true;
+
+            labelVersion.Text = "v1.23";
 
             notifyIcon1.Visible = false;
             notifyIcon1.MouseUp += new MouseEventHandler(NotifyIcon1_Click);
@@ -231,6 +234,7 @@ namespace PatkaPlayer
             if (filterFolder != "" || filterFile != "") btnClearFilters.Enabled = true;
             else btnClearFilters.Enabled = false;
 
+            panelButtons.SuspendLayout();
             panelButtons.Controls.Clear();
             
             string lastPath = "";
@@ -247,6 +251,8 @@ namespace PatkaPlayer
             // loop for adding buttons
             for (int i = 0; i < array1.Length; i++)
             {
+                //panelButtons.Visible = false;
+                //panelButtons.SuspendLayout();
 
                 if (filterFolder != "") folderName = Path.GetDirectoryName(array1[i]).Substring(Path.GetDirectoryName(array1[i]).LastIndexOf("\\") + 1);
                 if (filterFile != "") fileName = Path.GetFileNameWithoutExtension(array1[i]);
@@ -314,7 +320,6 @@ namespace PatkaPlayer
                 panelButtons.Controls.Add(button);
 
                 lastPath = currentPath;
-
             }
 
             // dummy invisible label to add space to bottom
@@ -334,7 +339,10 @@ namespace PatkaPlayer
                 labelTotalClips.Text = "Clips: " + numOfButtons.ToString() + " / " + array1.Length.ToString();
                 buttonLocations();
             }
+
+            panelButtons.ResumeLayout();
             timerTemp.Start();
+
         }
 
         // play file
@@ -520,13 +528,11 @@ namespace PatkaPlayer
 
                     labelTimer1.Text = "Timer 1: On";
                     labelTimer1.ForeColor = ColorTranslator.FromHtml("#dd0000");
-                    menuTimer1.Text = "Stop Timer 1";
                     timer1Started = true;
                     timer2Started = false;
 
                     labelTimer2.Text = "Timer 2: Off";
                     labelTimer2.ForeColor = ColorTranslator.FromHtml("#404040");
-                    menuTimer2.Text = "Start Timer 2";
                     timer2Started = false;
                 }
                 else
@@ -545,7 +551,6 @@ namespace PatkaPlayer
 
                     labelTimer1.Text = "Timer 1: Off";
                     labelTimer1.ForeColor = ColorTranslator.FromHtml("#404040");
-                    menuTimer1.Text = "Start Timer 1";
                     timer1Started = false;
                 }
             }
@@ -579,12 +584,10 @@ namespace PatkaPlayer
 
                     labelTimer2.Text = "Timer 2: On";
                     labelTimer2.ForeColor = ColorTranslator.FromHtml("#dd0000");
-                    menuTimer2.Text = "Stop Timer 2";
                     timer2Started = true;
 
                     labelTimer1.Text = "Timer 1: Off";
                     labelTimer1.ForeColor = ColorTranslator.FromHtml("#404040");
-                    menuTimer1.Text = "Start Timer 1";
                     timer1Started = false;
                 }
                 else
@@ -603,7 +606,6 @@ namespace PatkaPlayer
                     
                     labelTimer2.Text = "Timer 2: Off";
                     labelTimer2.ForeColor = ColorTranslator.FromHtml("#404040");
-                    menuTimer2.Text = "Start Timer 2";
                     timer2Started = false;
                 }
             }

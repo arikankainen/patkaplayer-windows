@@ -71,10 +71,6 @@
             this.menuTimers = new System.Windows.Forms.MenuItem();
             this.menuItem2 = new System.Windows.Forms.MenuItem();
             this.menuReload = new System.Windows.Forms.MenuItem();
-            this.menuCenter = new System.Windows.Forms.MenuItem();
-            this.menuItem6 = new System.Windows.Forms.MenuItem();
-            this.menuTimer1 = new System.Windows.Forms.MenuItem();
-            this.menuTimer2 = new System.Windows.Forms.MenuItem();
             this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
             this.toolStripContainer1.BottomToolStripPanel.SuspendLayout();
             this.toolStripContainer1.ContentPanel.SuspendLayout();
@@ -188,7 +184,7 @@
             this.labelSpacer.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.labelSpacer.Name = "labelSpacer";
             this.labelSpacer.Padding = new System.Windows.Forms.Padding(5, 0, 10, 0);
-            this.labelSpacer.Size = new System.Drawing.Size(692, 19);
+            this.labelSpacer.Size = new System.Drawing.Size(708, 19);
             this.labelSpacer.Spring = true;
             // 
             // labelVersion
@@ -436,11 +432,7 @@
             this.menuSettings,
             this.menuTimers,
             this.menuItem2,
-            this.menuReload,
-            this.menuCenter,
-            this.menuItem6,
-            this.menuTimer1,
-            this.menuTimer2});
+            this.menuReload});
             // 
             // menuFolders
             // 
@@ -470,29 +462,6 @@
             this.menuReload.Index = 4;
             this.menuReload.Text = "Reload";
             this.menuReload.Click += new System.EventHandler(this.menuReload_Click);
-            // 
-            // menuCenter
-            // 
-            this.menuCenter.Index = 5;
-            this.menuCenter.Text = "Center";
-            this.menuCenter.Click += new System.EventHandler(this.menuCenter_Click);
-            // 
-            // menuItem6
-            // 
-            this.menuItem6.Index = 6;
-            this.menuItem6.Text = "-";
-            // 
-            // menuTimer1
-            // 
-            this.menuTimer1.Index = 7;
-            this.menuTimer1.Text = "Start Timer 1";
-            this.menuTimer1.Click += new System.EventHandler(this.menuTimer1_Click);
-            // 
-            // menuTimer2
-            // 
-            this.menuTimer2.Index = 8;
-            this.menuTimer2.Text = "Start Timer 2";
-            this.menuTimer2.Click += new System.EventHandler(this.menuTimer2_Click);
             // 
             // notifyIcon1
             // 
@@ -559,11 +528,8 @@
         private System.Windows.Forms.ToolStripButton btnClearFilters;
         private System.Windows.Forms.ToolStripStatusLabel labelClipsPlayed;
         private System.Windows.Forms.ContextMenu contextMenu1;
-        private System.Windows.Forms.MenuItem menuTimer1;
-        private System.Windows.Forms.MenuItem menuTimer2;
         private System.Windows.Forms.MenuItem menuSettings;
         private System.Windows.Forms.MenuItem menuReload;
-        private System.Windows.Forms.MenuItem menuItem6;
         private System.Windows.Forms.ToolStripButton btnDropdown;
         private System.Windows.Forms.ToolStripStatusLabel labelTimer2;
         private System.Windows.Forms.ToolStripStatusLabel labelSpacer;
@@ -571,7 +537,6 @@
         private System.Windows.Forms.MenuItem menuItem2;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.FlowLayoutPanel panelButtons;
-        private System.Windows.Forms.MenuItem menuCenter;
         private System.Windows.Forms.MenuItem menuTimers;
         private System.Windows.Forms.NotifyIcon notifyIcon1;
         private System.Windows.Forms.ToolStripButton btnHide;

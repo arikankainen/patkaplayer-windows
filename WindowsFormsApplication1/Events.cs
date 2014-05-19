@@ -48,14 +48,14 @@ namespace PatkaPlayer
         // left click start timer, right click configure it
         private void labelTimer1_Click(object sender, MouseEventArgs e)
         {
-            if (e.Button == MouseButtons.Left) menuTimer1.PerformClick();
+            if (e.Button == MouseButtons.Left) startTimer1();
             if (e.Button == MouseButtons.Right) menuTimers.PerformClick();
         }
 
         // left click start timer, right click configure it
         private void labelTimer2_Click(object sender, MouseEventArgs e)
         {
-            if (e.Button == MouseButtons.Left) menuTimer2.PerformClick();
+            if (e.Button == MouseButtons.Left) startTimer2();
             if (e.Button == MouseButtons.Right) menuTimers.PerformClick();
         }
 
@@ -94,7 +94,7 @@ namespace PatkaPlayer
         {
             //btnDropdown.Checked = true;
             Rectangle rect = this.btnDropdown.Bounds;
-            Point pt = new Point(rect.Left - 124, rect.Bottom + 3);
+            Point pt = new Point(rect.Left - 107, rect.Bottom + 3);
             contextMenu1.Show(toolStripSettings, pt);
         }
 
