@@ -19,25 +19,27 @@ namespace PatkaPlayer
     public partial class frmPlayer : Form
     {
         private Mp3Player _mp3Player;
-        private string[] array1 = new string[] {};
-        private bool minimized { get; set; }
+        private string[] array1 = new string[] { };
+        private List<string> randomSound = new List<string>();
+
         private string mp3Dir, hotkey1, hotkey2, hotkey3, hotkey4, hotkey5, hotkey6, hotkey7, hotkey8, hotkey9, hotkey10, hotkey11, hotkey12;
         private int timer1MinHour, timer1MinMin, timer1MinSec, timer1MaxHour, timer1MaxMin, timer1MaxSec, timer2MinHour, timer2MinMin, timer2MinSec, timer2MaxHour, timer2MaxMin, timer2MaxSec;
-        private decimal transNormal = 1, transMini = 1;
+        private decimal transNormal = 1;
         private bool timer1ClipsAll = true;
         private bool timer2ClipsAll = true;
         private bool logging, rememberDaily;
         private bool trayIcon, balloonPlay, balloonTimer;
         private string dailyDate;
         private int dailyCount;
+        private string hotkeyPlayPreMod, hotkeyRandomMod, hotkeyRandomKey, hotkeyStopMod, hotkeyStopKey, hotkeyReplayMod, hotkeyReplayKey, hotkeyTimer1Mod, hotkeyTimer1Key, hotkeyTimer2Mod, hotkeyTimer2Key, hotkeyStopTimerMod, hotkeyStopTimerKey;
+        private bool hotkeyWarning;
+
         private bool timer1Started = false;
         private bool timer2Started = false;
-        private int frmSize = 1;
         private string lastPlayed;
         private string filterFolder = "";
         private string filterFile = "";
         private int numOfButtons;
-        private List<string> randomSound = new List<string>();
         private int lastRandomNumber = 0;
         private int lastRandomNumberAll = 0;
         private FormWindowState LastWindowState;
@@ -45,6 +47,8 @@ namespace PatkaPlayer
         private int playCount = 0;
         public int settingsPage;
         private bool tray = false;
+
+        //private bool minimized { get; set; }
 
         private ContextMenu contextButton;
         private MenuItem menuItemF1, menuItemF2, menuItemF3, menuItemF4, menuItemF5, menuItemF6, menuItemF7, menuItemF8, menuItemF9, menuItemF10, menuItemF11, menuItemF12;
@@ -95,6 +99,7 @@ namespace PatkaPlayer
         private string buttonColorBackGradientLowerBottomP = "#80acdd";
 
         KeyboardHook hook = new KeyboardHook();
+        Settings settings = new Settings();
 
         // default constructor
         public frmPlayer()
@@ -103,40 +108,10 @@ namespace PatkaPlayer
 
             //DoubleBuffered = true;
 
-            labelVersion.Text = "v1.23";
+            labelVersion.Text = "v1.24";
 
             notifyIcon1.Visible = false;
             notifyIcon1.MouseUp += new MouseEventHandler(NotifyIcon1_Click);
-
-            // register the event that is fired after the key press.
-            hook.KeyPressed += new EventHandler<KeyPressedEventArgs>(hook_KeyPressed);
-            // register the control + alt + F12 combination as hot key.
-            //hook.RegisterHotKey(ModifierKeys.Control | ModifierKeys.Alt, Keys.F12); // not working
-            try
-            {
-                hook.RegisterHotKey((ModifierKeys)1, Keys.Space);
-                hook.RegisterHotKey((ModifierKeys)1, Keys.R);
-                hook.RegisterHotKey((ModifierKeys)1, Keys.S);
-                hook.RegisterHotKey((ModifierKeys)1, Keys.D1);
-                hook.RegisterHotKey((ModifierKeys)1, Keys.D2);
-                hook.RegisterHotKey((ModifierKeys)1, Keys.D3);
-                hook.RegisterHotKey((ModifierKeys)1, Keys.F1);
-                hook.RegisterHotKey((ModifierKeys)1, Keys.F2);
-                hook.RegisterHotKey((ModifierKeys)1, Keys.F3);
-                hook.RegisterHotKey((ModifierKeys)1, Keys.F4);
-                hook.RegisterHotKey((ModifierKeys)1, Keys.F5);
-                hook.RegisterHotKey((ModifierKeys)1, Keys.F6);
-                hook.RegisterHotKey((ModifierKeys)1, Keys.F7);
-                hook.RegisterHotKey((ModifierKeys)1, Keys.F8);
-                hook.RegisterHotKey((ModifierKeys)1, Keys.F9);
-                hook.RegisterHotKey((ModifierKeys)1, Keys.F10);
-                hook.RegisterHotKey((ModifierKeys)1, Keys.F11);
-                hook.RegisterHotKey((ModifierKeys)1, Keys.F12);
-            }
-            catch
-            {
-                MessageBox.Show("Some of the global hotkeys are currently registered to another application, so they do not work with this instance of Pätkä Player.", "Global Hotkey Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
 
             this.MouseWheel += new MouseEventHandler(Form1_MouseWheel);
             this.ResizeEnd += new EventHandler(Form1_ResizeEnd);
@@ -145,6 +120,7 @@ namespace PatkaPlayer
             this.KeyUp += new KeyEventHandler(Form1_KeyEvent);
             txtFilterFolder.KeyDown += new KeyEventHandler(txtFilterFolder_KeyDown);
             txtFilterFile.KeyDown += new KeyEventHandler(txtFilterFile_KeyDown);
+            hook.KeyPressed += new EventHandler<KeyPressedEventArgs>(hook_KeyPressed);
 
             timer.Tick += new System.EventHandler(timer_Tick);
             timer.Interval = 1000;
@@ -224,8 +200,8 @@ namespace PatkaPlayer
                 array1 = Directory.GetFiles(@mp3Dir, "*.mp3", SearchOption.AllDirectories);
                 addPanel();
             }
-            else if (mp3Dir != "") errorText("Selected audio folder does not exist. Go to settings and reselect folder.");
-            else errorText("No audio folder selected. Go to settings and select folder.");
+            else if (mp3Dir != null) errorText("Selected audio folder does not exist. Go to the settings and reselect folder.");
+            else errorText("No audio folder selected. Go to the settings and select a folder.");
         }
 
         // add panel and sound buttons
@@ -244,7 +220,7 @@ namespace PatkaPlayer
             string folderName = "";
             numOfButtons = 0;
 
-            if (array1.Length == 0) errorText("No audio clips found. Go to settings and select another audio folder.");
+            if (array1.Length == 0) errorText("No audio clips found. Go to the settings and select another audio folder.");
 
             randomSound.Clear();
 
@@ -363,10 +339,15 @@ namespace PatkaPlayer
 
             if (logging)
             {
+                string originalPath = Application.ExecutablePath;
+                string pathname = Path.GetDirectoryName(originalPath);
+                string filename = Path.GetFileNameWithoutExtension(originalPath);
+                string customPath = pathname + "\\" + filename + ".log";
+
                 string logFolder = pathToPlay.Substring(pathToPlay.LastIndexOf("\\") + 1);
                 string logFile = Path.GetFileNameWithoutExtension(fileToPlay);
                 string log = DateTime.Now.ToString("dd.MM.yyyy|HH:mm:ss") + "|" + logFolder + "|" + logFile + "|" + lastPlayed;
-                using (System.IO.StreamWriter file = new System.IO.StreamWriter(@System.Windows.Forms.Application.ExecutablePath + ".log", true, System.Text.Encoding.Default))
+                using (System.IO.StreamWriter file = new System.IO.StreamWriter(@customPath, true, System.Text.Encoding.Default))
                 {
                     file.WriteLine(log);
                 }
@@ -391,11 +372,8 @@ namespace PatkaPlayer
         // save date for daily play count
         private void saveDailyDate()
         {
-            Configuration config = ConfigurationManager.OpenExeConfiguration(Application.ExecutablePath);
-            ConfigurationManager.RefreshSection("appSettings");
-
-            if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["dailydate"])) dailyDate = config.AppSettings.Settings["dailydate"].Value;
-            if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["dailycount"])) dailyCount = Convert.ToInt32(config.AppSettings.Settings["dailycount"].Value);
+            dailyDate = settings.LoadSetting("DailyDate");
+            dailyCount = Convert.ToInt32(settings.LoadSetting("DailyCount"));
 
             if (dailyCount > playCount) playCount = dailyCount;
             
@@ -405,14 +383,8 @@ namespace PatkaPlayer
                 playCount = 0;
             }
 
-            config.AppSettings.Settings.Remove("dailydate");
-            config.AppSettings.Settings.Remove("dailycount");
-
-            config.AppSettings.Settings.Add("dailydate", dailyDate);
-            config.AppSettings.Settings.Add("dailycount", playCount.ToString());
-
-            config.AppSettings.SectionInformation.ForceSave = true;
-            config.Save(ConfigurationSaveMode.Full);
+            settings.SaveSetting("DailyDate", dailyDate);
+            settings.SaveSetting("DailyCount", playCount.ToString());
         }
 
         // play random, filtered clips
@@ -512,7 +484,7 @@ namespace PatkaPlayer
             {
                 if (!timer1Started)
                 {
-                    notifyIcon1.Icon = patka.Properties.Resources.patka_taskbar_red;
+                    notifyIcon1.Icon = PatkaPlayer.Properties.Resources.patka_taskbar_red;
                     timer1.Interval = randomTime(timer1MinHour, timer1MinMin, timer1MinSec, timer1MaxHour, timer1MaxMin, timer1MaxSec);
                     timer1.Start();
                     timer2.Stop();
@@ -537,7 +509,7 @@ namespace PatkaPlayer
                 }
                 else
                 {
-                    notifyIcon1.Icon = patka.Properties.Resources.patka_taskbar;
+                    notifyIcon1.Icon = PatkaPlayer.Properties.Resources.patka_taskbar;
                     timer1.Stop();
 
                     if (tray || trayIcon)
@@ -568,7 +540,7 @@ namespace PatkaPlayer
             {
                 if (!timer2Started)
                 {
-                    notifyIcon1.Icon = patka.Properties.Resources.patka_taskbar_red;
+                    notifyIcon1.Icon = PatkaPlayer.Properties.Resources.patka_taskbar_red;
                     timer2.Interval = randomTime(timer2MinHour, timer2MinMin, timer2MinSec, timer2MaxHour, timer2MaxMin, timer2MaxSec);
                     timer2.Start();
                     timer1.Stop();
@@ -592,7 +564,7 @@ namespace PatkaPlayer
                 }
                 else
                 {
-                    notifyIcon1.Icon = patka.Properties.Resources.patka_taskbar;
+                    notifyIcon1.Icon = PatkaPlayer.Properties.Resources.patka_taskbar;
                     timer2.Stop();
 
                     if (tray || trayIcon)
@@ -614,60 +586,50 @@ namespace PatkaPlayer
         // read application settings from config file
         public void ReadSettings()
         {
-            mp3Dir = hotkey1 = hotkey2 = hotkey3 = hotkey4 = hotkey5 = hotkey6 = hotkey7 = hotkey8 = hotkey9 = hotkey10 = hotkey11 = hotkey12 = "";
-            timer1MinHour = timer1MinMin = timer1MinSec = timer1MaxHour = timer1MaxMin = timer1MaxSec = 0;
-            timer2MinHour = timer2MinMin = timer2MinSec = timer2MaxHour = timer2MaxMin = timer2MaxSec = 0;
-            transNormal = 1;
-            logging = rememberDaily = false;
-            timer1ClipsAll = timer2ClipsAll = false;
-            trayIcon = balloonPlay = balloonTimer = false;
-
-            Configuration config = ConfigurationManager.OpenExeConfiguration(Application.ExecutablePath);
-            ConfigurationManager.RefreshSection("appSettings");
-
             // folders
-            if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["mp3dir"])) mp3Dir = config.AppSettings.Settings["mp3dir"].Value;
-            if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["hotkey_1"])) hotkey1 = config.AppSettings.Settings["hotkey_1"].Value;
-            if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["hotkey_2"])) hotkey2 = config.AppSettings.Settings["hotkey_2"].Value;
-            if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["hotkey_3"])) hotkey3 = config.AppSettings.Settings["hotkey_3"].Value;
-            if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["hotkey_4"])) hotkey4 = config.AppSettings.Settings["hotkey_4"].Value;
-            if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["hotkey_5"])) hotkey5 = config.AppSettings.Settings["hotkey_5"].Value;
-            if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["hotkey_6"])) hotkey6 = config.AppSettings.Settings["hotkey_6"].Value;
-            if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["hotkey_7"])) hotkey7 = config.AppSettings.Settings["hotkey_7"].Value;
-            if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["hotkey_8"])) hotkey8 = config.AppSettings.Settings["hotkey_8"].Value;
-            if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["hotkey_9"])) hotkey9 = config.AppSettings.Settings["hotkey_9"].Value;
-            if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["hotkey_10"])) hotkey10 = config.AppSettings.Settings["hotkey_10"].Value;
-            if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["hotkey_11"])) hotkey11 = config.AppSettings.Settings["hotkey_11"].Value;
-            if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["hotkey_12"])) hotkey12 = config.AppSettings.Settings["hotkey_12"].Value;
+            mp3Dir = settings.LoadSetting("Mp3Dir");
+            hotkey1 = settings.LoadSetting("Hotkey1");
+            hotkey2 = settings.LoadSetting("Hotkey2");
+            hotkey3 = settings.LoadSetting("Hotkey3");
+            hotkey4 = settings.LoadSetting("Hotkey4");
+            hotkey5 = settings.LoadSetting("Hotkey5");
+            hotkey6 = settings.LoadSetting("Hotkey6");
+            hotkey7 = settings.LoadSetting("Hotkey7");
+            hotkey8 = settings.LoadSetting("Hotkey8");
+            hotkey9 = settings.LoadSetting("Hotkey9");
+            hotkey10 = settings.LoadSetting("Hotkey10");
+            hotkey11 = settings.LoadSetting("Hotkey11");
+            hotkey12 = settings.LoadSetting("Hotkey12");
 
             // timer 1 settings
-            if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["timer1minhour"])) timer1MinHour = Convert.ToInt32(config.AppSettings.Settings["timer1minhour"].Value);
-            if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["timer1minmin"])) timer1MinMin = Convert.ToInt32(config.AppSettings.Settings["timer1minmin"].Value);
-            if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["timer1minsec"])) timer1MinSec = Convert.ToInt32(config.AppSettings.Settings["timer1minsec"].Value);
-            if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["timer1maxhour"])) timer1MaxHour = Convert.ToInt32(config.AppSettings.Settings["timer1maxhour"].Value);
-            if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["timer1maxmin"])) timer1MaxMin = Convert.ToInt32(config.AppSettings.Settings["timer1maxmin"].Value);
-            if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["timer1maxsec"])) timer1MaxSec = Convert.ToInt32(config.AppSettings.Settings["timer1maxsec"].Value);
-            if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["timer1playall"])) timer1ClipsAll = true;
+            timer1MinHour = Convert.ToInt32(settings.LoadSetting("Timer1MinHour"));
+            timer1MinMin = Convert.ToInt32(settings.LoadSetting("Timer1MinMin"));
+            timer1MinSec = Convert.ToInt32(settings.LoadSetting("Timer1MinSec"));
+            timer1MaxHour = Convert.ToInt32(settings.LoadSetting("Timer1MaxHour"));
+            timer1MaxMin = Convert.ToInt32(settings.LoadSetting("Timer1MaxMin"));
+            timer1MaxSec = Convert.ToInt32(settings.LoadSetting("Timer1MaxSec"));
+            timer1ClipsAll = Convert.ToBoolean(settings.LoadSetting("Timer1ClipsAll"));
 
             // timer 2 settings
-            if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["timer2minhour"])) timer2MinHour = Convert.ToInt32(config.AppSettings.Settings["timer2minhour"].Value);
-            if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["timer2minmin"])) timer2MinMin = Convert.ToInt32(config.AppSettings.Settings["timer2minmin"].Value);
-            if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["timer2minsec"])) timer2MinSec = Convert.ToInt32(config.AppSettings.Settings["timer2minsec"].Value);
-            if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["timer2maxhour"])) timer2MaxHour = Convert.ToInt32(config.AppSettings.Settings["timer2maxhour"].Value);
-            if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["timer2maxmin"])) timer2MaxMin = Convert.ToInt32(config.AppSettings.Settings["timer2maxmin"].Value);
-            if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["timer2maxsec"])) timer2MaxSec = Convert.ToInt32(config.AppSettings.Settings["timer2maxsec"].Value);
-            if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["timer2playall"])) timer2ClipsAll = true;
-
+            timer2MinHour = Convert.ToInt32(settings.LoadSetting("Timer2MinHour"));
+            timer2MinMin = Convert.ToInt32(settings.LoadSetting("Timer2MinMin"));
+            timer2MinSec = Convert.ToInt32(settings.LoadSetting("Timer2MinSec"));
+            timer2MaxHour = Convert.ToInt32(settings.LoadSetting("Timer2MaxHour"));
+            timer2MaxMin = Convert.ToInt32(settings.LoadSetting("Timer2MaxMin"));
+            timer2MaxSec = Convert.ToInt32(settings.LoadSetting("Timer2MaxSec"));
+            timer2ClipsAll = Convert.ToBoolean(settings.LoadSetting("Timer2ClipsAll"));
+            
             // log
-            if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["log"])) logging = true;
-            if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["daily"])) rememberDaily = true;
-
-            if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["transparencynormal"])) transNormal = Convert.ToDecimal(config.AppSettings.Settings["transparencynormal"].Value);
+            logging = Convert.ToBoolean(settings.LoadSetting("Logging"));
+            rememberDaily = Convert.ToBoolean(settings.LoadSetting("RememberDaily"));
 
             // tray
-            if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["trayicon"])) trayIcon = true;
-            if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["balloonplay"])) balloonPlay = true;
-            if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["balloontimer"])) balloonTimer = true;
+            trayIcon = Convert.ToBoolean(settings.LoadSetting("TrayIcon"));
+            balloonPlay = Convert.ToBoolean(settings.LoadSetting("BalloonPlay"));
+            balloonTimer = Convert.ToBoolean(settings.LoadSetting("BalloonTimer"));
+            
+            // misc
+            transNormal = Convert.ToDecimal(settings.LoadSetting("Transparency") ?? "1");
 
             // loading complete, setting things
             if (trayIcon) notifyIcon1.Visible = true;
@@ -676,8 +638,65 @@ namespace PatkaPlayer
             if (rememberDaily) saveDailyDate();
             labelClipsPlayed.Text = "Play Count: " + playCount.ToString();
 
-            if (frmSize == 1) this.Opacity = Convert.ToDouble(transNormal);
-            if (frmSize == 2) this.Opacity = Convert.ToDouble(transMini);
+            this.Opacity = Convert.ToDouble(transNormal);
+            readHotkeys();
+        }
+
+        private int getHotkeyNumber(string keyname)
+        {
+            int i = 0;
+                if (keyname.IndexOf("Alt") != -1) i += 1;
+                if (keyname.IndexOf("Ctrl") != -1) i += 2;
+                if (keyname.IndexOf("Shift") != -1) i += 4;
+                if (keyname.IndexOf("Win") != -1) i += 8;
+            return i;
+        }
+        
+        private void readHotkeys()
+        {
+            // hotkeys
+            hotkeyPlayPreMod = settings.LoadSetting("HotkeyPlayPreMod");
+            hotkeyRandomMod = settings.LoadSetting("HotkeyRandomMod");
+            hotkeyRandomKey = settings.LoadSetting("HotkeyRandomKey");
+            hotkeyStopMod = settings.LoadSetting("HotkeyStopMod");
+            hotkeyStopKey = settings.LoadSetting("HotkeyStopKey");
+            hotkeyReplayMod = settings.LoadSetting("HotkeyReplayMod");
+            hotkeyReplayKey = settings.LoadSetting("HotkeyReplayKey");
+            hotkeyTimer1Mod = settings.LoadSetting("HotkeyTimer1Mod");
+            hotkeyTimer1Key = settings.LoadSetting("HotkeyTimer1Key");
+            hotkeyTimer2Mod = settings.LoadSetting("HotkeyTimer2Mod");
+            hotkeyTimer2Key = settings.LoadSetting("HotkeyTimer2Key");
+            hotkeyStopTimerMod = settings.LoadSetting("HotkeyStopTimerMod");
+            hotkeyStopTimerKey = settings.LoadSetting("HotkeyStopTimerKey");
+            hotkeyWarning = Convert.ToBoolean(settings.LoadSetting("HotkeyWarning"));
+
+            hook.DisposeKeysOnly();
+            hook.ClearErrors();
+
+            if (!String.IsNullOrEmpty(hotkeyPlayPreMod))
+            {
+                hook.RegisterHotKey((ModifierKeys)getHotkeyNumber(hotkeyPlayPreMod), Keys.F1);
+                hook.RegisterHotKey((ModifierKeys)getHotkeyNumber(hotkeyPlayPreMod), Keys.F2);
+                hook.RegisterHotKey((ModifierKeys)getHotkeyNumber(hotkeyPlayPreMod), Keys.F3);
+                hook.RegisterHotKey((ModifierKeys)getHotkeyNumber(hotkeyPlayPreMod), Keys.F4);
+                hook.RegisterHotKey((ModifierKeys)getHotkeyNumber(hotkeyPlayPreMod), Keys.F5);
+                hook.RegisterHotKey((ModifierKeys)getHotkeyNumber(hotkeyPlayPreMod), Keys.F6);
+                hook.RegisterHotKey((ModifierKeys)getHotkeyNumber(hotkeyPlayPreMod), Keys.F7);
+                hook.RegisterHotKey((ModifierKeys)getHotkeyNumber(hotkeyPlayPreMod), Keys.F8);
+                hook.RegisterHotKey((ModifierKeys)getHotkeyNumber(hotkeyPlayPreMod), Keys.F9);
+                hook.RegisterHotKey((ModifierKeys)getHotkeyNumber(hotkeyPlayPreMod), Keys.F10);
+                hook.RegisterHotKey((ModifierKeys)getHotkeyNumber(hotkeyPlayPreMod), Keys.F11);
+                hook.RegisterHotKey((ModifierKeys)getHotkeyNumber(hotkeyPlayPreMod), Keys.F12);
+            }
+
+            if (!String.IsNullOrEmpty(hotkeyRandomMod)) hook.RegisterHotKey((ModifierKeys)getHotkeyNumber(hotkeyRandomMod), (Keys)Enum.Parse(typeof(Keys), hotkeyRandomKey));
+            if (!String.IsNullOrEmpty(hotkeyStopMod)) hook.RegisterHotKey((ModifierKeys)getHotkeyNumber(hotkeyStopMod), (Keys)Enum.Parse(typeof(Keys), hotkeyStopKey));
+            if (!String.IsNullOrEmpty(hotkeyReplayMod)) hook.RegisterHotKey((ModifierKeys)getHotkeyNumber(hotkeyReplayMod), (Keys)Enum.Parse(typeof(Keys), hotkeyReplayKey));
+            if (!String.IsNullOrEmpty(hotkeyTimer1Mod)) hook.RegisterHotKey((ModifierKeys)getHotkeyNumber(hotkeyTimer1Mod), (Keys)Enum.Parse(typeof(Keys), hotkeyTimer1Key));
+            if (!String.IsNullOrEmpty(hotkeyTimer2Mod)) hook.RegisterHotKey((ModifierKeys)getHotkeyNumber(hotkeyTimer2Mod), (Keys)Enum.Parse(typeof(Keys), hotkeyTimer2Key));
+            if (!String.IsNullOrEmpty(hotkeyStopTimerMod)) hook.RegisterHotKey((ModifierKeys)getHotkeyNumber(hotkeyStopTimerMod), (Keys)Enum.Parse(typeof(Keys), hotkeyStopTimerKey));
+
+            if (hotkeyWarning && hook.ShowErrors() != "") MessageBox.Show("Following global hotkeys are currently registered to another application, so they do not work with this instance of Pätkä Player.\n" + hook.ShowErrors(), "Global Hotkey Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
 
         // error text to form, eg. "no clips", "no folder selected", etc...

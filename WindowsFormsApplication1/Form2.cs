@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Configuration;
+using System.Runtime.InteropServices;
 
 namespace PatkaPlayer
 {
@@ -17,6 +18,14 @@ namespace PatkaPlayer
         // storage for frmPlayer instance
         private readonly frmPlayer _frmPlayer;
         private string oldMp3Dir;
+        private List<string> listMod = new List<string>();
+        private bool txtChanged = false;
+        private string txtOrig = "";
+        Settings settings = new Settings();
+
+        //[DllImport("user32.dll")]
+        //static extern bool HideCaret(IntPtr hWnd);
+        //HideCaret(txtSet1.Handle);
 
         // default constructor
         public frmSettings()
@@ -35,165 +44,141 @@ namespace PatkaPlayer
             else if (temp.settingsPage == 2) this.tabControl1.SelectedTab = tabSettings;
             else if (temp.settingsPage == 3) this.tabControl1.SelectedTab = tabTimers;
             btnApply.Enabled = false;
+
         }
 
         // read values from config
         private void readConfig()
         {
-            Configuration config = ConfigurationManager.OpenExeConfiguration(Application.ExecutablePath);
-            ConfigurationManager.RefreshSection("appSettings");
-
             // folders
-            if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["mp3dir"])) txtSetFolder.Text = config.AppSettings.Settings["mp3dir"].Value;
-            if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["hotkey_1"])) txtSet1.Text = config.AppSettings.Settings["hotkey_1"].Value;
-            if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["hotkey_2"])) txtSet2.Text = config.AppSettings.Settings["hotkey_2"].Value;
-            if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["hotkey_3"])) txtSet3.Text = config.AppSettings.Settings["hotkey_3"].Value;
-            if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["hotkey_4"])) txtSet4.Text = config.AppSettings.Settings["hotkey_4"].Value;
-            if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["hotkey_5"])) txtSet5.Text = config.AppSettings.Settings["hotkey_5"].Value;
-            if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["hotkey_6"])) txtSet6.Text = config.AppSettings.Settings["hotkey_6"].Value;
-            if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["hotkey_7"])) txtSet7.Text = config.AppSettings.Settings["hotkey_7"].Value;
-            if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["hotkey_8"])) txtSet8.Text = config.AppSettings.Settings["hotkey_8"].Value;
-            if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["hotkey_9"])) txtSet9.Text = config.AppSettings.Settings["hotkey_9"].Value;
-            if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["hotkey_10"])) txtSet10.Text = config.AppSettings.Settings["hotkey_10"].Value;
-            if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["hotkey_11"])) txtSet11.Text = config.AppSettings.Settings["hotkey_11"].Value;
-            if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["hotkey_12"])) txtSet12.Text = config.AppSettings.Settings["hotkey_12"].Value;
+            txtSetFolder.Text = settings.LoadSetting("Mp3Dir");
+            txtSet1.Text = settings.LoadSetting("Hotkey1");
+            txtSet2.Text = settings.LoadSetting("Hotkey2");
+            txtSet3.Text = settings.LoadSetting("Hotkey3");
+            txtSet4.Text = settings.LoadSetting("Hotkey4");
+            txtSet5.Text = settings.LoadSetting("Hotkey5");
+            txtSet6.Text = settings.LoadSetting("Hotkey6");
+            txtSet7.Text = settings.LoadSetting("Hotkey7");
+            txtSet8.Text = settings.LoadSetting("Hotkey8");
+            txtSet9.Text = settings.LoadSetting("Hotkey9");
+            txtSet10.Text = settings.LoadSetting("Hotkey10");
+            txtSet11.Text = settings.LoadSetting("Hotkey11");
+            txtSet12.Text = settings.LoadSetting("Hotkey12");
 
             // timer 2 settings
-            if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["timer2minhour"])) numericMinHour2.Value = Convert.ToInt32(config.AppSettings.Settings["timer2minhour"].Value);
-            if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["timer2minmin"])) numericMinMin2.Value = Convert.ToInt32(config.AppSettings.Settings["timer2minmin"].Value);
-            if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["timer2minsec"])) numericMinSec2.Value = Convert.ToInt32(config.AppSettings.Settings["timer2minsec"].Value);
-            if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["timer2maxhour"])) numericMaxHour2.Value = Convert.ToInt32(config.AppSettings.Settings["timer2maxhour"].Value);
-            if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["timer2maxmin"])) numericMaxMin2.Value = Convert.ToInt32(config.AppSettings.Settings["timer2maxmin"].Value);
-            if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["timer2maxsec"])) numericMaxSec2.Value = Convert.ToInt32(config.AppSettings.Settings["timer2maxsec"].Value);
-            if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["timer2playall"])) radioClipsAll2.Checked = true;
-            else radioClipsFilter2.Checked = true;
+            numericMinHour2.Value = Convert.ToInt32(settings.LoadSetting("Timer2MinHour"));
+            numericMinMin2.Value = Convert.ToInt32(settings.LoadSetting("Timer2MinMin"));
+            numericMinSec2.Value = Convert.ToInt32(settings.LoadSetting("Timer2MinSec"));
+            numericMaxHour2.Value = Convert.ToInt32(settings.LoadSetting("Timer2MaxHour"));
+            numericMaxMin2.Value = Convert.ToInt32(settings.LoadSetting("Timer2MaxMin"));
+            numericMaxSec2.Value = Convert.ToInt32(settings.LoadSetting("Timer2MaxSec"));
+
+            radioClipsAll2.Checked = Convert.ToBoolean(settings.LoadSetting("Timer2ClipsAll"));
+            if (radioClipsAll2.Checked == false) radioClipsFilter2.Checked = true;
 
             // timer 1 settings
-            if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["timer1minhour"])) numericMinHour1.Value = Convert.ToInt32(config.AppSettings.Settings["timer1minhour"].Value);
-            if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["timer1minmin"])) numericMinMin1.Value = Convert.ToInt32(config.AppSettings.Settings["timer1minmin"].Value);
-            if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["timer1minsec"])) numericMinSec1.Value = Convert.ToInt32(config.AppSettings.Settings["timer1minsec"].Value);
-            if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["timer1maxhour"])) numericMaxHour1.Value = Convert.ToInt32(config.AppSettings.Settings["timer1maxhour"].Value);
-            if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["timer1maxmin"])) numericMaxMin1.Value = Convert.ToInt32(config.AppSettings.Settings["timer1maxmin"].Value);
-            if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["timer1maxsec"])) numericMaxSec1.Value = Convert.ToInt32(config.AppSettings.Settings["timer1maxsec"].Value);
-            if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["timer1playall"])) radioClipsAll1.Checked = true;
-            else radioClipsFilter1.Checked = true;
+            numericMinHour1.Value = Convert.ToInt32(settings.LoadSetting("Timer1MinHour"));
+            numericMinMin1.Value = Convert.ToInt32(settings.LoadSetting("Timer1MinMin"));
+            numericMinSec1.Value = Convert.ToInt32(settings.LoadSetting("Timer1MinSec"));
+            numericMaxHour1.Value = Convert.ToInt32(settings.LoadSetting("Timer1MaxHour"));
+            numericMaxMin1.Value = Convert.ToInt32(settings.LoadSetting("Timer1MaxMin"));
+            numericMaxSec1.Value = Convert.ToInt32(settings.LoadSetting("Timer1MaxSec"));
+
+            radioClipsAll1.Checked = Convert.ToBoolean(settings.LoadSetting("Timer1ClipsAll"));
+            if (radioClipsAll1.Checked == false) radioClipsFilter1.Checked = true;
 
             // log
-            if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["log"])) checkLog.Checked = true;
-            else checkLog.Checked = false;
-            if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["daily"])) checkDaily.Checked = true;
-            else checkDaily.Checked = false;
+            checkLog.Checked = Convert.ToBoolean(settings.LoadSetting("Logging"));
+            checkDaily.Checked = Convert.ToBoolean(settings.LoadSetting("RememberDaily"));
 
             // tray
-            if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["trayicon"])) checkTrayIcon.Checked = true;
-            else checkTrayIcon.Checked = false;
-            if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["balloonplay"])) checkBalloonPlay.Checked = true;
-            else checkBalloonPlay.Checked = false;
-            if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["balloontimer"])) checkBalloonTimer.Checked = true;
-            else checkBalloonTimer.Checked = false;
+            checkTrayIcon.Checked = Convert.ToBoolean(settings.LoadSetting("TrayIcon"));
+            checkBalloonPlay.Checked = Convert.ToBoolean(settings.LoadSetting("BalloonPlay"));
+            checkBalloonTimer.Checked = Convert.ToBoolean(settings.LoadSetting("BalloonTimer"));
+            
+            // misc
+            numericTransparency.Value = Convert.ToDecimal(settings.LoadSetting("Transparency") ?? "1");
 
-            if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["transparencynormal"])) transparencyNormal.Value = Convert.ToDecimal(config.AppSettings.Settings["transparencynormal"].Value);
-
+            // hotkeys
+            txtPlayPreMod.Text = settings.LoadSetting("HotkeyPlayPreMod");
+            txtRandomMod.Text = settings.LoadSetting("HotkeyRandomMod");
+            txtRandomKey.Text = settings.LoadSetting("HotkeyRandomKey");
+            txtStopMod.Text = settings.LoadSetting("HotkeyStopMod");
+            txtStopKey.Text = settings.LoadSetting("HotkeyStopKey");
+            txtReplayMod.Text = settings.LoadSetting("HotkeyReplayMod");
+            txtReplayKey.Text = settings.LoadSetting("HotkeyReplayKey");
+            txtTimer1Mod.Text = settings.LoadSetting("HotkeyTimer1Mod");
+            txtTimer1Key.Text = settings.LoadSetting("HotkeyTimer1Key");
+            txtTimer2Mod.Text = settings.LoadSetting("HotkeyTimer2Mod");
+            txtTimer2Key.Text = settings.LoadSetting("HotkeyTimer2Key");
+            txtStopTimerMod.Text = settings.LoadSetting("HotkeyStopTimerMod");
+            txtStopTimerKey.Text = settings.LoadSetting("HotkeyStopTimerKey");
+            checkGlobalKeyWarning.Checked = Convert.ToBoolean(settings.LoadSetting("HotkeyWarning"));
         }
 
         // save config file
         private void saveConfig()
         {
-            Configuration config = ConfigurationManager.OpenExeConfiguration(Application.ExecutablePath);
-            ConfigurationManager.RefreshSection("appSettings");
-
-            config.AppSettings.Settings.Remove("mp3dir");
-            config.AppSettings.Settings.Remove("hotkey_1");
-            config.AppSettings.Settings.Remove("hotkey_2");
-            config.AppSettings.Settings.Remove("hotkey_3");
-            config.AppSettings.Settings.Remove("hotkey_4");
-            config.AppSettings.Settings.Remove("hotkey_5");
-            config.AppSettings.Settings.Remove("hotkey_6");
-            config.AppSettings.Settings.Remove("hotkey_7");
-            config.AppSettings.Settings.Remove("hotkey_8");
-            config.AppSettings.Settings.Remove("hotkey_9");
-            config.AppSettings.Settings.Remove("hotkey_10");
-            config.AppSettings.Settings.Remove("hotkey_11");
-            config.AppSettings.Settings.Remove("hotkey_12");
-            config.AppSettings.Settings.Remove("timer1minhour");
-            config.AppSettings.Settings.Remove("timer1minmin");
-            config.AppSettings.Settings.Remove("timer1minsec");
-            config.AppSettings.Settings.Remove("timer1maxhour");
-            config.AppSettings.Settings.Remove("timer1maxmin");
-            config.AppSettings.Settings.Remove("timer1maxsec");
-            config.AppSettings.Settings.Remove("timer1playall");
-            config.AppSettings.Settings.Remove("timer2minhour");
-            config.AppSettings.Settings.Remove("timer2minmin");
-            config.AppSettings.Settings.Remove("timer2minsec");
-            config.AppSettings.Settings.Remove("timer2maxhour");
-            config.AppSettings.Settings.Remove("timer2maxmin");
-            config.AppSettings.Settings.Remove("timer2maxsec");
-            config.AppSettings.Settings.Remove("timer2playall");
-            config.AppSettings.Settings.Remove("log");
-            config.AppSettings.Settings.Remove("daily");
-            config.AppSettings.Settings.Remove("trayicon");
-            config.AppSettings.Settings.Remove("balloonplay");
-            config.AppSettings.Settings.Remove("balloontimer");
-            config.AppSettings.Settings.Remove("transparencynormal");
-
             // folders
-            if (txtSetFolder.Text != "") config.AppSettings.Settings.Add("mp3dir", txtSetFolder.Text);
-            if (txtSet1.Text != "") config.AppSettings.Settings.Add("hotkey_1", txtSet1.Text);
-            if (txtSet2.Text != "") config.AppSettings.Settings.Add("hotkey_2", txtSet2.Text);
-            if (txtSet3.Text != "") config.AppSettings.Settings.Add("hotkey_3", txtSet3.Text);
-            if (txtSet4.Text != "") config.AppSettings.Settings.Add("hotkey_4", txtSet4.Text);
-            if (txtSet5.Text != "") config.AppSettings.Settings.Add("hotkey_5", txtSet5.Text);
-            if (txtSet6.Text != "") config.AppSettings.Settings.Add("hotkey_6", txtSet6.Text);
-            if (txtSet7.Text != "") config.AppSettings.Settings.Add("hotkey_7", txtSet7.Text);
-            if (txtSet8.Text != "") config.AppSettings.Settings.Add("hotkey_8", txtSet8.Text);
-            if (txtSet9.Text != "") config.AppSettings.Settings.Add("hotkey_9", txtSet9.Text);
-            if (txtSet10.Text != "") config.AppSettings.Settings.Add("hotkey_10", txtSet10.Text);
-            if (txtSet11.Text != "") config.AppSettings.Settings.Add("hotkey_11", txtSet11.Text);
-            if (txtSet12.Text != "") config.AppSettings.Settings.Add("hotkey_12", txtSet12.Text);
+            settings.SaveSetting("Mp3Dir", txtSetFolder.Text);
+            settings.SaveSetting("Hotkey1", txtSet1.Text);
+            settings.SaveSetting("Hotkey2", txtSet2.Text);
+            settings.SaveSetting("Hotkey3", txtSet3.Text);
+            settings.SaveSetting("Hotkey4", txtSet4.Text);
+            settings.SaveSetting("Hotkey5", txtSet5.Text);
+            settings.SaveSetting("Hotkey6", txtSet6.Text);
+            settings.SaveSetting("Hotkey7", txtSet7.Text);
+            settings.SaveSetting("Hotkey8", txtSet8.Text);
+            settings.SaveSetting("Hotkey9", txtSet9.Text);
+            settings.SaveSetting("Hotkey10", txtSet10.Text);
+            settings.SaveSetting("Hotkey11", txtSet11.Text);
+            settings.SaveSetting("Hotkey12", txtSet12.Text);
 
             // timer 1 settings
-            if (numericMinHour1.Value > 0) config.AppSettings.Settings.Add("timer1minhour", numericMinHour1.Value.ToString());
-            if (numericMinMin1.Value > 0) config.AppSettings.Settings.Add("timer1minmin", numericMinMin1.Value.ToString());
-            if (numericMinSec1.Value > 0) config.AppSettings.Settings.Add("timer1minsec", numericMinSec1.Value.ToString());
-            if (numericMaxHour1.Value > 0) config.AppSettings.Settings.Add("timer1maxhour", numericMaxHour1.Value.ToString());
-            if (numericMaxMin1.Value > 0) config.AppSettings.Settings.Add("timer1maxmin", numericMaxMin1.Value.ToString());
-            if (numericMaxSec1.Value > 0) config.AppSettings.Settings.Add("timer1maxsec", numericMaxSec1.Value.ToString());
-            if (radioClipsAll1.Checked == true) config.AppSettings.Settings.Add("timer1playall", "true");
+            settings.SaveSetting("Timer1MinHour", numericMinHour1.Value.ToString());
+            settings.SaveSetting("Timer1MinMin", numericMinMin1.Value.ToString());
+            settings.SaveSetting("Timer1MinSec", numericMinSec1.Value.ToString());
+            settings.SaveSetting("Timer1MaxHour", numericMaxHour1.Value.ToString());
+            settings.SaveSetting("Timer1MaxMin", numericMaxMin1.Value.ToString());
+            settings.SaveSetting("Timer1MaxSec", numericMaxSec1.Value.ToString());
+            settings.SaveSetting("Timer1ClipsAll", radioClipsAll1.Checked.ToString());
 
             // timer 2 settings
-            if (numericMinHour2.Value > 0) config.AppSettings.Settings.Add("timer2minhour", numericMinHour2.Value.ToString());
-            if (numericMinMin2.Value > 0) config.AppSettings.Settings.Add("timer2minmin", numericMinMin2.Value.ToString());
-            if (numericMinSec2.Value > 0) config.AppSettings.Settings.Add("timer2minsec", numericMinSec2.Value.ToString());
-            if (numericMaxHour2.Value > 0) config.AppSettings.Settings.Add("timer2maxhour", numericMaxHour2.Value.ToString());
-            if (numericMaxMin2.Value > 0) config.AppSettings.Settings.Add("timer2maxmin", numericMaxMin2.Value.ToString());
-            if (numericMaxSec2.Value > 0) config.AppSettings.Settings.Add("timer2maxsec", numericMaxSec2.Value.ToString());
-            if (radioClipsAll2.Checked == true) config.AppSettings.Settings.Add("timer2playall", "true");
+            settings.SaveSetting("Timer2MinHour", numericMinHour2.Value.ToString());
+            settings.SaveSetting("Timer2MinMin", numericMinMin2.Value.ToString());
+            settings.SaveSetting("Timer2MinSec", numericMinSec2.Value.ToString());
+            settings.SaveSetting("Timer2MaxHour", numericMaxHour2.Value.ToString());
+            settings.SaveSetting("Timer2MaxMin", numericMaxMin2.Value.ToString());
+            settings.SaveSetting("Timer2MaxSec", numericMaxSec2.Value.ToString());
+            settings.SaveSetting("Timer2ClipsAll", radioClipsAll2.Checked.ToString());
 
             // log
-            if (checkLog.Checked == true) config.AppSettings.Settings.Add("log", "true");
-            if (checkDaily.Checked == true) config.AppSettings.Settings.Add("daily", "true");
-            if (transparencyNormal.Value < 1) config.AppSettings.Settings.Add("transparencynormal", transparencyNormal.Value.ToString());
+            settings.SaveSetting("Logging", checkLog.Checked.ToString());
+            settings.SaveSetting("RememberDaily", checkDaily.Checked.ToString());
 
             // tray
-            if (checkTrayIcon.Checked == true) config.AppSettings.Settings.Add("trayicon", "true");
-            if (checkBalloonPlay.Checked == true) config.AppSettings.Settings.Add("balloonplay", "true");
-            if (checkBalloonTimer.Checked == true) config.AppSettings.Settings.Add("balloontimer", "true");
+            settings.SaveSetting("TrayIcon", checkTrayIcon.Checked.ToString());
+            settings.SaveSetting("BalloonPlay", checkBalloonPlay.Checked.ToString());
+            settings.SaveSetting("BalloonTimer", checkBalloonTimer.Checked.ToString());
 
-            try
-            {
-                config.AppSettings.SectionInformation.ForceSave = true;
-                config.Save(ConfigurationSaveMode.Full);
-            }
-            catch
-            {
-                MessageBox.Show("Cannot save config, write access denied.", "Error saving configuration", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
+            // misc
+            settings.SaveSetting("Transparency", numericTransparency.Value.ToString());
 
-        // ********** TURHA??????????
-        private void frmHotkeys_Load(object sender, EventArgs e)
-        {
-
+            // hotkeys
+            settings.SaveSetting("HotkeyPlayPreMod", txtPlayPreMod.Text);
+            settings.SaveSetting("HotkeyRandomMod", txtRandomMod.Text);
+            settings.SaveSetting("HotkeyRandomKey", txtRandomKey.Text);
+            settings.SaveSetting("HotkeyStopMod", txtStopMod.Text);
+            settings.SaveSetting("HotkeyStopKey", txtStopKey.Text);
+            settings.SaveSetting("HotkeyReplayMod", txtReplayMod.Text);
+            settings.SaveSetting("HotkeyReplayKey", txtReplayKey.Text);
+            settings.SaveSetting("HotkeyTimer1Mod", txtTimer1Mod.Text);
+            settings.SaveSetting("HotkeyTimer1Key", txtTimer1Key.Text);
+            settings.SaveSetting("HotkeyTimer2Mod", txtTimer2Mod.Text);
+            settings.SaveSetting("HotkeyTimer2Key", txtTimer2Key.Text);
+            settings.SaveSetting("HotkeyStopTimerMod", txtStopTimerMod.Text);
+            settings.SaveSetting("HotkeyStopTimerKey", txtStopTimerKey.Text);
+            settings.SaveSetting("HotkeyWarning", checkGlobalKeyWarning.Checked.ToString());
         }
 
         // OK button, saves config and reloads frmPlayer
@@ -425,7 +410,130 @@ namespace PatkaPlayer
             btnApply.Enabled = true;
         }
 
+        private void txtKey_Enter(object sender, EventArgs e)
+        {
+            TextBox textBox = (TextBox)sender;
+            txtChanged = false;
+            txtOrig = textBox.Text;
+            textBox.Text = "";
+            listMod.Clear();
+            textBox.BackColor = ColorTranslator.FromHtml("#b2d0ef");
+            textBox.Tag = null;
+        }
 
+        private void txtKey_Leave(object sender, EventArgs e)
+        {
+            TextBox textBox = (TextBox)sender;
+            textBox.BackColor = SystemColors.Window;
+            if (!txtChanged) textBox.Text = txtOrig;
+            else if (textBox.Text != txtOrig) btnApply.Enabled = true;
+        }
+
+        private void txtKey_KeyDown(object sender, KeyEventArgs e)
+        {
+            e.SuppressKeyPress = true;
+        }
+
+        private void txtKey_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
+        {
+            TextBox textBox = (TextBox)sender;
+            if (
+                e.KeyCode != Keys.Menu &&
+                e.KeyCode != Keys.ShiftKey &&
+                e.KeyCode != Keys.ControlKey &&
+                e.KeyCode != Keys.LWin &&
+                e.KeyCode != Keys.RWin &&
+                e.KeyCode != Keys.F1 &&
+                e.KeyCode != Keys.F2 &&
+                e.KeyCode != Keys.F3 &&
+                e.KeyCode != Keys.F4 &&
+                e.KeyCode != Keys.F5 &&
+                e.KeyCode != Keys.F6 &&
+                e.KeyCode != Keys.F7 &&
+                e.KeyCode != Keys.F8 &&
+                e.KeyCode != Keys.F9 &&
+                e.KeyCode != Keys.F10 &&
+                e.KeyCode != Keys.F11 &&
+                e.KeyCode != Keys.F12 &&
+                e.KeyCode.ToString() != txtRandomKey.Text &&
+                e.KeyCode.ToString() != txtReplayKey.Text &&
+                e.KeyCode.ToString() != txtStopKey.Text &&
+                e.KeyCode.ToString() != txtTimer1Key.Text &&
+                e.KeyCode.ToString() != txtTimer2Key.Text &&
+                e.KeyCode.ToString() != txtStopTimerKey.Text
+                )
+            {
+                txtChanged = true;
+                textBox.Text = e.KeyCode.ToString();
+                txtVersion.Focus();
+            }
+        }
+
+        private void txtMod_KeyDown(object sender, KeyEventArgs e)
+        {
+            TextBox textBox = (TextBox)sender;
+            e.SuppressKeyPress = true;
+
+            if (e.KeyCode == Keys.Menu || e.KeyCode == Keys.ShiftKey || e.KeyCode == Keys.ControlKey || e.KeyCode == Keys.LWin || e.KeyCode == Keys.RWin)
+            {
+                txtChanged = true;
+                string key = "";
+                switch (e.KeyCode)
+                {
+                    case Keys.Menu:
+                        key = "Alt";
+                        break;
+                    case Keys.ShiftKey:
+                        key = "Shift";
+                        break;
+                    case Keys.ControlKey:
+                        key = "Ctrl";
+                        break;
+                    case Keys.LWin:
+                        key = "Win";
+                        break;
+                    case Keys.RWin:
+                        key = "Win";
+                        break;
+                }
+                
+                if (!listMod.Contains(key)) listMod.Add(key);
+                listMod.Sort();
+
+                textBox.Text = "";
+                for (int i = 0; i < listMod.Count; i++)
+                {
+                    if (i > 0) textBox.Text += "+" + listMod[i];
+                    else textBox.Text = listMod[i];
+                }
+            }
+        }
+
+        private void txtMod_KeyUp(object sender, KeyEventArgs e)
+        {
+            listMod.Clear();
+            if (txtChanged) txtVersion.Focus();
+        }
+
+        private void txtKey_Click(object sender, EventArgs e)
+        {
+            TextBox textBox = (TextBox)sender;
+            if (textBox.Tag != null)
+            {
+                textBox.Text = txtOrig;
+                txtVersion.Focus();
+            }
+            textBox.Tag = "clicked";
+        }
+
+        private void txtKey_DoubleClick(object sender, EventArgs e)
+        {
+            TextBox textBox = (TextBox)sender;
+            textBox.Text = "";
+            txtOrig = "";
+            txtChanged = true;
+            txtVersion.Focus();
+        }
 
     } // class end
 } // namespace end

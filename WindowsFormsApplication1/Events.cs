@@ -211,55 +211,25 @@ namespace PatkaPlayer
             helpForm.Dispose();
         }
 
-
-        /*
-        // keypress event, hotkeys
-        private void Form1_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            if (txtFilterFolder.Selected == true || txtFilterFile.Selected == true) return;
-
-            if (e.KeyChar == 120 || e.KeyChar == 88 || e.KeyChar == (char)Keys.Back) btnRandom.PerformClick(); // play random = x, X, backspace
-            if (e.KeyChar == 114 || e.KeyChar == 82) btnReplay.PerformClick(); // replay = r, R
-            if (e.KeyChar == 115 || e.KeyChar == 83) btnStop.PerformClick(); // stop = s, S
-
-            if (e.KeyChar == 49 && File.Exists(mp3Dir + "\\" + hotkey1)) playFile(mp3Dir + "\\" + hotkey1); // 1
-            if (e.KeyChar == 50 && File.Exists(mp3Dir + "\\" + hotkey2)) playFile(mp3Dir + "\\" + hotkey2); // 2
-            if (e.KeyChar == 51 && File.Exists(mp3Dir + "\\" + hotkey3)) playFile(mp3Dir + "\\" + hotkey3); // 3
-            if (e.KeyChar == 52 && File.Exists(mp3Dir + "\\" + hotkey4)) playFile(mp3Dir + "\\" + hotkey4); // 4
-            if (e.KeyChar == 53 && File.Exists(mp3Dir + "\\" + hotkey5)) playFile(mp3Dir + "\\" + hotkey5); // 5
-            if (e.KeyChar == 54 && File.Exists(mp3Dir + "\\" + hotkey6)) playFile(mp3Dir + "\\" + hotkey6); // 6
-            if (e.KeyChar == 55 && File.Exists(mp3Dir + "\\" + hotkey7)) playFile(mp3Dir + "\\" + hotkey7); // 7
-            if (e.KeyChar == 56 && File.Exists(mp3Dir + "\\" + hotkey8)) playFile(mp3Dir + "\\" + hotkey8); // 8
-            if (e.KeyChar == 57 && File.Exists(mp3Dir + "\\" + hotkey9)) playFile(mp3Dir + "\\" + hotkey9); // 9
-            if (e.KeyChar == 48 && File.Exists(mp3Dir + "\\" + hotkey0)) playFile(mp3Dir + "\\" + hotkey0); // 0
-
-            if (e.KeyChar == 44 && File.Exists(mp3Dir + "\\" + hotkey1)) playFile(mp3Dir + "\\" + hotkey1); // ,
-            if (e.KeyChar == 97 && File.Exists(mp3Dir + "\\" + hotkey2)) playFile(mp3Dir + "\\" + hotkey2); // a
-            if (e.KeyChar == 100 && File.Exists(mp3Dir + "\\" + hotkey3)) playFile(mp3Dir + "\\" + hotkey3); // d
-            if (e.KeyChar == 103 && File.Exists(mp3Dir + "\\" + hotkey4)) playFile(mp3Dir + "\\" + hotkey4); // g
-            if (e.KeyChar == 106 && File.Exists(mp3Dir + "\\" + hotkey5)) playFile(mp3Dir + "\\" + hotkey5); // j
-            if (e.KeyChar == 109 && File.Exists(mp3Dir + "\\" + hotkey6)) playFile(mp3Dir + "\\" + hotkey6); // m
-            if (e.KeyChar == 112 && File.Exists(mp3Dir + "\\" + hotkey7)) playFile(mp3Dir + "\\" + hotkey7); // p
-            if (e.KeyChar == 116 && File.Exists(mp3Dir + "\\" + hotkey8)) playFile(mp3Dir + "\\" + hotkey8); // t
-            if (e.KeyChar == 119 && File.Exists(mp3Dir + "\\" + hotkey9)) playFile(mp3Dir + "\\" + hotkey9); // w
-            if (e.KeyChar == 32 && File.Exists(mp3Dir + "\\" + hotkey0)) playFile(mp3Dir + "\\" + hotkey0); // space
-        }
-        */
-
         // keyup event, hotkeys
         private void Form1_KeyEvent(object sender, KeyEventArgs e)
         {
             if (txtFilterFolder.Selected == true || txtFilterFile.Selected == true) return;
 
-            if (e.KeyCode == Keys.Space) btnRandom.PerformClick();
-            if (e.KeyCode == Keys.R) btnReplay.PerformClick();
-            if (e.KeyCode == Keys.S) btnStop.PerformClick();
+            string key = e.KeyCode.ToString();
 
-            if (e.KeyCode == Keys.D1 && !timer1Started) startTimer1();
-            if (e.KeyCode == Keys.D2 && !timer2Started) startTimer2();
-            if (e.KeyCode == Keys.D3 && timer1Started) startTimer1();
-            else if (e.KeyCode == Keys.D3 && timer2Started) startTimer2();
+            if (key == hotkeyRandomKey) btnRandom.PerformClick();
+            if (key == hotkeyReplayKey) btnReplay.PerformClick();
+            if (key == hotkeyStopKey) btnStop.PerformClick();
 
+            if (key == hotkeyTimer1Key && !timer1Started) startTimer1();
+            if (key == hotkeyTimer2Key && !timer2Started) startTimer2();
+            if (key == hotkeyStopTimerKey)
+            {
+                if (timer1Started) startTimer1();
+                else if (timer2Started) startTimer2();
+            }
+            
             if (e.KeyCode == Keys.F1 && File.Exists(mp3Dir + "\\" + hotkey1)) playFile(mp3Dir + "\\" + hotkey1);
             if (e.KeyCode == Keys.F2 && File.Exists(mp3Dir + "\\" + hotkey2)) playFile(mp3Dir + "\\" + hotkey2);
             if (e.KeyCode == Keys.F3 && File.Exists(mp3Dir + "\\" + hotkey3)) playFile(mp3Dir + "\\" + hotkey3);
@@ -447,37 +417,26 @@ namespace PatkaPlayer
             string clip = menuItem.Tag.ToString().Replace(mp3Dir + "\\", "");
             string hotkey = menuItem.Name;
 
-            Configuration config = ConfigurationManager.OpenExeConfiguration(Application.ExecutablePath);
-            ConfigurationManager.RefreshSection("appSettings");
-            
-            config.AppSettings.Settings.Remove("hotkey_" + hotkey);
-            config.AppSettings.Settings.Add("hotkey_" + hotkey, clip);
-
-            try
-            {
-                config.AppSettings.SectionInformation.ForceSave = true;
-                config.Save(ConfigurationSaveMode.Full);
-            }
-            catch
-            {
-                MessageBox.Show("Can't save config, write access denied.", "Error Saving Configuration", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-
+            settings.SaveSetting("Hotkey" + hotkey, clip);
             ReadSettings();
         }
 
         void hook_KeyPressed(object sender, KeyPressedEventArgs e)
         {
-            //MessageBox.Show(e.Modifier.ToString() + " + " + e.Key.ToString());
+            string mod = e.Modifier.ToString().Replace("Control", "Ctrl").Replace(", ", "+");
+            string key = e.Key.ToString();
 
-            if (e.Key == Keys.Space) btnRandom.PerformClick();
-            if (e.Key == Keys.R) btnReplay.PerformClick();
-            if (e.Key == Keys.S) btnStop.PerformClick();
+            if (mod == hotkeyRandomMod && key == hotkeyRandomKey) btnRandom.PerformClick();
+            if (mod == hotkeyReplayMod && key == hotkeyReplayKey) btnReplay.PerformClick();
+            if (mod == hotkeyStopMod && key == hotkeyStopKey) btnStop.PerformClick();
 
-            if (e.Key == Keys.D1 && !timer1Started) startTimer1();
-            if (e.Key == Keys.D2 && !timer2Started) startTimer2();
-            if (e.Key == Keys.D3 && timer1Started) startTimer1();
-            else if (e.Key == Keys.D3 && timer2Started) startTimer2();
+            if (mod == hotkeyTimer1Mod && key == hotkeyTimer1Key && !timer1Started) startTimer1();
+            if (mod == hotkeyTimer2Mod && key == hotkeyTimer2Key && !timer2Started) startTimer2();
+            if (mod == hotkeyStopTimerMod && key == hotkeyStopTimerKey)
+            {
+                if (timer1Started) startTimer1();
+                else if (timer2Started) startTimer2();
+            }
 
             if (e.Key == Keys.F1 && File.Exists(mp3Dir + "\\" + hotkey1)) playFile(mp3Dir + "\\" + hotkey1);
             if (e.Key == Keys.F2 && File.Exists(mp3Dir + "\\" + hotkey2)) playFile(mp3Dir + "\\" + hotkey2);
@@ -511,6 +470,25 @@ namespace PatkaPlayer
             fadeOut(1);
             this.Hide();
         }
+
+        private void menuTrayOpen_Click(object sender, EventArgs e)
+        {
+            if (tray)
+            {
+                tray = false;
+                if (!trayIcon) notifyIcon1.Visible = false;
+
+                this.Opacity = 0;
+                this.Show();
+                fadeIn(1);
+            }
+        }
+
+        private void menuTrayClose_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
+        }
+
 
 
 

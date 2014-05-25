@@ -7,8 +7,8 @@
     <ProjectGuid>{23598E34-D6F5-48C3-AF06-D7B402F29F73}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>patka</RootNamespace>
-    <AssemblyName>pätkä</AssemblyName>
+    <RootNamespace>PatkaPlayer</RootNamespace>
+    <AssemblyName>pp</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <IsWebBootstrapper>false</IsWebBootstrapper>
@@ -104,6 +104,7 @@
     <Compile Include="Mp3Player.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Settings.cs" />
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>

@@ -17,6 +17,8 @@ namespace PatkaPlayer
         [DllImport("user32.dll")]
         private static extern bool UnregisterHotKey(IntPtr hWnd, int id);
 
+        private List<string> errorKeys = new List<string>();
+
         /// <summary>
         /// Represents the window that is used internally to get the messages.
         /// </summary>
@@ -88,7 +90,24 @@ namespace PatkaPlayer
 
             // register the hot key.
             if (!RegisterHotKey(_window.Handle, _currentId, (uint)modifier, (uint)key))
-                throw new InvalidOperationException("Couldn’t register the hot key.");
+                //throw new InvalidOperationException("Couldn’t register the hot key.");
+                errorKeys.Add(modifier.ToString() + "+" + key.ToString());
+        }
+
+        public void ClearErrors()
+        {
+            errorKeys.Clear();
+        }
+
+        public string ShowErrors()
+        {
+            string errors = "";
+            foreach (string er in errorKeys)
+            {
+                errors += "\n" + er;
+            }
+
+            return errors;
         }
 
         /// <summary>
@@ -107,7 +126,17 @@ namespace PatkaPlayer
             }
 
             // dispose the inner native window.
-            _window.Dispose();
+            //_window.Dispose();
+        }
+
+        public void DisposeKeysOnly()
+        {
+            // unregister all the registered hot keys.
+            for (int i = _currentId; i > 0; i--)
+            {
+                UnregisterHotKey(_window.Handle, i);
+            }
+            _currentId = 0;
         }
 
         #endregion

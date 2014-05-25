@@ -72,6 +72,9 @@
             this.menuItem2 = new System.Windows.Forms.MenuItem();
             this.menuReload = new System.Windows.Forms.MenuItem();
             this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
+            this.contextTray = new System.Windows.Forms.ContextMenu();
+            this.menuTrayOpen = new System.Windows.Forms.MenuItem();
+            this.menuTrayClose = new System.Windows.Forms.MenuItem();
             this.toolStripContainer1.BottomToolStripPanel.SuspendLayout();
             this.toolStripContainer1.ContentPanel.SuspendLayout();
             this.toolStripContainer1.TopToolStripPanel.SuspendLayout();
@@ -467,7 +470,24 @@
             // 
             this.notifyIcon1.Icon = ((System.Drawing.Icon)(resources.GetObject("notifyIcon1.Icon")));
             this.notifyIcon1.Text = "Pätkä Player";
-            this.notifyIcon1.Visible = true;
+            // 
+            // contextTray
+            // 
+            this.contextTray.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+            this.menuTrayOpen,
+            this.menuTrayClose});
+            // 
+            // menuTrayOpen
+            // 
+            this.menuTrayOpen.Index = 0;
+            this.menuTrayOpen.Text = "Open";
+            this.menuTrayOpen.Click += new System.EventHandler(this.menuTrayOpen_Click);
+            // 
+            // menuTrayClose
+            // 
+            this.menuTrayClose.Index = 1;
+            this.menuTrayClose.Text = "Close";
+            this.menuTrayClose.Click += new System.EventHandler(this.menuTrayClose_Click);
             // 
             // frmPlayer
             // 
@@ -541,6 +561,9 @@
         private System.Windows.Forms.NotifyIcon notifyIcon1;
         private System.Windows.Forms.ToolStripButton btnHide;
         private System.Windows.Forms.ToolStripStatusLabel labelVersion;
+        private System.Windows.Forms.ContextMenu contextTray;
+        private System.Windows.Forms.MenuItem menuTrayOpen;
+        private System.Windows.Forms.MenuItem menuTrayClose;
     }
 }
 

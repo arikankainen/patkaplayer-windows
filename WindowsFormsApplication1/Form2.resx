@@ -117,6 +117,13 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="label28.Text" xml:space="preserve">
+    <value>Actions can be triggered by pressing the selected 'Key'. If you also set 'Modifier', then hotkeys become global, meaning that Pätkä Player does not have to be the active window. If global hotkey is already used by Windows or another application, that hotkey will not work.
+
+Click on any textbox to assign the hotkey. You can click that box again to cancel, or double-click to erase key. Modifier can be any combination of Alt, Ctrl, Shift and Win.
+
+</value>
+  </data>
   <data name="label16.Text" xml:space="preserve">
     <value>Timer plays random clips automatically, and randomizes the delay between clips to what you have entered to minimum and maximum delay boxes. You can choose to play from all or from filtered audio clips. If there's no folder filter or file filter active, all clips will be used regardless of what is selected in options.
 
