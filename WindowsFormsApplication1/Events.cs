@@ -59,17 +59,39 @@ namespace PatkaPlayer
             if (e.Button == MouseButtons.Right) menuTimers.PerformClick();
         }
 
+        private void labelSendKeystrokes_MouseUp(object sender, MouseEventArgs e)
+        {
+            if (sendKeystrokes) 
+            {
+                labelSendKeystrokes.Text = "Send Keystrokes: Off";
+                sendKeystrokes = false;
+            }
+            else
+            {
+                labelSendKeystrokes.Text = "Send Keystrokes: On";
+                sendKeystrokes = true;
+            }
+        }
+
         // main timer, updates statusbar and button locations
         private void timer_Tick(object sender, EventArgs e)
         {
-            //labelTest.Text = DateTime.Now.ToString("HH:mm:ss");
-            //buttonLocations();
+            if (waveOutDevice != null)
+            {
+                pbPosition.Maximum = Convert.ToInt32(audioFileReader.TotalTime.TotalMilliseconds);
+                pbPosition.Value = Convert.ToInt32(audioFileReader.CurrentTime.TotalMilliseconds);
+
+                if (Convert.ToInt32(audioFileReader.TotalTime.ToString(@"mm")) > 0)
+                    labelPosition.Text = audioFileReader.CurrentTime.ToString(@"mm\:ss\:ff") + " / " + audioFileReader.TotalTime.ToString(@"mm\:ss\:ff");
+                
+                else labelPosition.Text = audioFileReader.CurrentTime.ToString(@"ss\:ff") + " / " + audioFileReader.TotalTime.ToString(@"ss\:ff");
+            }
         }
 
         // temp timer for setting focus off from buttons at load
         private void timerTemp_Tick(object sender, EventArgs e)
         {
-            label1.Focus();
+            labelVolume.Focus();
             timerTemp.Stop();
         }
 
@@ -94,7 +116,7 @@ namespace PatkaPlayer
         {
             //btnDropdown.Checked = true;
             Rectangle rect = this.btnDropdown.Bounds;
-            Point pt = new Point(rect.Left - 107, rect.Bottom + 3);
+            Point pt = new Point(rect.Left - 106, rect.Bottom + 4);
             contextMenu1.Show(toolStripSettings, pt);
         }
 
@@ -145,6 +167,7 @@ namespace PatkaPlayer
         {
             if (e.KeyCode == Keys.Enter)
             {
+                folderList.Clear();
                 filterFolder = txtFilterFolder.Text;
                 txtFilterFile.Text = "";
                 filterFile = "";
@@ -159,24 +182,13 @@ namespace PatkaPlayer
         {
             if (e.KeyCode == Keys.Enter)
             {
+                folderList.Clear();
                 filterFile = txtFilterFile.Text;
                 txtFilterFolder.Text = "";
                 filterFolder = "";
                 addPanel();
                 Button button = this.Controls.Find("SoundButton1", true).FirstOrDefault() as Button;
                 this.ActiveControl = button;
-            }
-            else
-            {
-                /*
-                for (int i = 0; i <= array1.Length -1; i++)
-                {
-                    Application.DoEvents();
-                    Button button = this.Controls.Find("SoundButton" + (i + 1).ToString(), true).FirstOrDefault() as Button;
-                    if (array1[i].IndexOf(txtFilterFile.Text, StringComparison.OrdinalIgnoreCase) == -1) button.Visible = false;
-                    else button.Visible = true;
-                }
-                */
             }
         }
 
@@ -206,7 +218,7 @@ namespace PatkaPlayer
         // help button
         private void btnHelp_Click(object sender, EventArgs e)
         {
-            frmHelp helpForm = new frmHelp();
+            frmPopup helpForm = new frmPopup();
             helpForm.ShowDialog();
             helpForm.Dispose();
         }
@@ -247,13 +259,14 @@ namespace PatkaPlayer
         // stop button
         private void btnStop_Click(object sender, EventArgs e)
         {
-            if (_mp3Player != null) _mp3Player.Stop();
+            playpressed = false;
+            stopTrack();
         }
 
         // sound button click
         private void SoundButton_Click(object sender, EventArgs e)
         {
-            label1.Focus();
+            labelVolume.Focus();
             Button temp = (Button)sender;
             string fileToPlay = temp.Tag.ToString();
             playFile(fileToPlay);
@@ -263,32 +276,32 @@ namespace PatkaPlayer
         private void SoundButton_MouseEnter(object sender, EventArgs e)
         {
             Button button = (Button)sender;
-            button.BackgroundImage = buttonBackHover;
+            button.BackgroundImage = buttonBackHoverButton;
         }
 
         // sound button mouse leave
         private void SoundButton_MouseLeave(object sender, EventArgs e)
         {
             Button button = (Button)sender;
-            button.BackgroundImage = buttonBack;
+            button.BackgroundImage = buttonBackButton;
         }
 
         // sound button mouse down
         private void SoundButton_MouseDown(object sender, MouseEventArgs e)
         {
             Button button = (Button)sender;
-            button.BackgroundImage = buttonBackPress;
+            button.BackgroundImage = buttonBackPressButton;
         }
 
         // sound button mouse up
         private void SoundButton_MouseUp(object sender, MouseEventArgs e)
         {
             Button button = (Button)sender;
-            button.BackgroundImage = buttonBackHover;
+            button.BackgroundImage = buttonBackHoverButton;
 
             if (e.Button == MouseButtons.Left)
             {
-                label1.Focus();
+                panelButtons.Focus();
                 Button temp = (Button)sender;
                 string fileToPlay = temp.Tag.ToString();
                 playFile(fileToPlay);
@@ -383,6 +396,52 @@ namespace PatkaPlayer
 
         }
 
+        private void FolderButton_MouseEnter(object sender, EventArgs e)
+        {
+            Button button = (Button)sender;
+            button.BackgroundImage = buttonBackHoverFolder;
+        }
+
+        private void FolderButton_MouseLeave(object sender, EventArgs e)
+        {
+            Button button = (Button)sender;
+            button.BackgroundImage = buttonBackFolder;
+        }
+
+        private void FolderButton_MouseDown(object sender, MouseEventArgs e)
+        {
+            Button button = (Button)sender;
+            button.BackgroundImage = buttonBackPressFolder;
+        }
+
+        private void FolderButton_MouseUp(object sender, MouseEventArgs e)
+        {
+            Button button = (Button)sender;
+            button.BackgroundImage = buttonBackHoverFolder;
+
+            txtFilterFolder.Text = "";
+            filterFolder = "";
+            txtFilterFile.Text = "";
+            filterFile = "";
+
+            if (e.Button == MouseButtons.Left)
+            {
+                folderList.Clear();
+                if (button.Tag.ToString() != "") folderList.Add(button.Tag.ToString());
+                addPanel();
+                panelFolders.Focus();
+            }
+
+            if (e.Button == MouseButtons.Middle)
+            {
+                if (button.Tag.ToString() != "") folderList.Add(button.Tag.ToString());
+                else folderList.Clear();
+                addPanel();
+                panelFolders.Focus();
+            }
+
+        }
+
         // sets focus to panelbuttons on mousescroll
         private void Form1_MouseWheel(object sender, MouseEventArgs e)
         {
@@ -418,6 +477,11 @@ namespace PatkaPlayer
             string hotkey = menuItem.Name;
 
             settings.SaveSetting("Hotkey" + hotkey, clip);
+
+            string pathToPlay = Path.GetDirectoryName(menuItem.Tag.ToString());
+            lastPlayed = pathToPlay.Substring(pathToPlay.LastIndexOf("\\") + 1) + " - " + Path.GetFileNameWithoutExtension(menuItem.Tag.ToString());
+            labelLastPlayed.Text = "Hotkey F" + hotkey + " updated with: " + lastPlayed;
+
             ReadSettings();
         }
 
@@ -488,6 +552,66 @@ namespace PatkaPlayer
         {
             Application.Exit();
         }
+
+        private void panelFolders_MouseEnter(object sender, EventArgs e)
+        {
+            panelFolders.Focus();
+        }
+
+        private void panelButtons_MouseEnter(object sender, EventArgs e)
+        {
+            panelButtons.Focus();
+        }
+        
+        private void txtFilterFolder_Enter(object sender, EventArgs e)
+        {
+            txtFilterFolder.SelectAll();
+        }
+
+        private void txtFilterFile_Enter(object sender, EventArgs e)
+        {
+            txtFilterFile.SelectAll();
+        }
+
+        private void trackBarVolume_ValueChanged(object sender, EventArgs e)
+        {
+            labelVolume.Text = trackBarVolume.Value.ToString() + "%";
+            if (waveOutDevice != null) audioFileReader.Volume = (float)trackBarVolume.Value / 100;
+        }
+
+        private void trackBarVolume_MouseEnter(object sender, EventArgs e)
+        {
+            trackBarVolume.Focus();
+        }
+
+        private void trackBarVolume_MouseLeave(object sender, EventArgs e)
+        {
+            labelVolume.Focus();
+        }
+
+        private void pbPosition_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (waveOutDevice != null)
+            {
+
+                int mouseX = e.Location.X + 2;
+                if (mouseX < 0) mouseX = 0;
+                if (mouseX > pbPosition.Width) mouseX = pbPosition.Width;
+
+                double trackBarPercent = (((double)pbPosition.Value / (double)pbPosition.Maximum));
+                double mousePercent = (((double)mouseX / ((double)pbPosition.Width)));
+
+                pbPosition.Value = (int)(pbPosition.Maximum * mousePercent);
+                audioFileReader.SetPosition((double)pbPosition.Value / 1000);
+                if (!play)
+                {
+                    playpressed = true;
+                    if (sendkeyPlay && !play && sendKeystrokes) SendKeys.Send(sendkeyPlayString);
+                    playTrack();
+                }
+            }
+        }
+
 
 
 

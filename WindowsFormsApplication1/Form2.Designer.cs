@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmSettings));
             this.btnSet1 = new System.Windows.Forms.Button();
             this.txtSet1 = new System.Windows.Forms.TextBox();
             this.btnSet2 = new System.Windows.Forms.Button();
@@ -108,7 +107,6 @@
             this.txtPlayPreKey = new System.Windows.Forms.TextBox();
             this.txtPlayPreMod = new System.Windows.Forms.TextBox();
             this.checkGlobalKeyWarning = new System.Windows.Forms.CheckBox();
-            this.label28 = new System.Windows.Forms.Label();
             this.label20 = new System.Windows.Forms.Label();
             this.label27 = new System.Windows.Forms.Label();
             this.label26 = new System.Windows.Forms.Label();
@@ -122,7 +120,6 @@
             this.checkTrayIcon = new System.Windows.Forms.CheckBox();
             this.checkBalloonTimer = new System.Windows.Forms.CheckBox();
             this.checkBalloonPlay = new System.Windows.Forms.CheckBox();
-            this.groupBox13 = new System.Windows.Forms.GroupBox();
             this.groupBox12 = new System.Windows.Forms.GroupBox();
             this.label14 = new System.Windows.Forms.Label();
             this.label13 = new System.Windows.Forms.Label();
@@ -148,8 +145,17 @@
             this.numericMinMin2 = new System.Windows.Forms.NumericUpDown();
             this.label12 = new System.Windows.Forms.Label();
             this.numericMinHour2 = new System.Windows.Forms.NumericUpDown();
-            this.label16 = new System.Windows.Forms.Label();
             this.btnApply = new System.Windows.Forms.Button();
+            this.label19 = new System.Windows.Forms.Label();
+            this.txtKeystrokePlayKey = new System.Windows.Forms.TextBox();
+            this.txtKeystrokePlayMod = new System.Windows.Forms.TextBox();
+            this.txtKeystrokeStopKey = new System.Windows.Forms.TextBox();
+            this.txtKeystrokeStopMod = new System.Windows.Forms.TextBox();
+            this.label29 = new System.Windows.Forms.Label();
+            this.groupBox8 = new System.Windows.Forms.GroupBox();
+            this.label16 = new System.Windows.Forms.Label();
+            this.label17 = new System.Windows.Forms.Label();
+            this.checkSendKeystrokes = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             this.groupBox4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericMaxSec1)).BeginInit();
@@ -179,6 +185,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.numericMinSec2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericMinMin2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericMinHour2)).BeginInit();
+            this.groupBox8.SuspendLayout();
             this.SuspendLayout();
             // 
             // btnSet1
@@ -925,9 +932,9 @@
             // 
             // tabSettings
             // 
+            this.tabSettings.Controls.Add(this.groupBox8);
             this.tabSettings.Controls.Add(this.groupBox5);
             this.tabSettings.Controls.Add(this.groupBox14);
-            this.tabSettings.Controls.Add(this.groupBox13);
             this.tabSettings.Controls.Add(this.groupBox12);
             this.tabSettings.Controls.Add(this.groupBox6);
             this.tabSettings.Location = new System.Drawing.Point(4, 22);
@@ -940,6 +947,7 @@
             // 
             // groupBox5
             // 
+            this.groupBox5.Controls.Add(this.checkGlobalKeyWarning);
             this.groupBox5.Controls.Add(this.txtStopTimerKey);
             this.groupBox5.Controls.Add(this.txtStopTimerMod);
             this.groupBox5.Controls.Add(this.txtTimer2Key);
@@ -954,8 +962,6 @@
             this.groupBox5.Controls.Add(this.txtRandomMod);
             this.groupBox5.Controls.Add(this.txtPlayPreKey);
             this.groupBox5.Controls.Add(this.txtPlayPreMod);
-            this.groupBox5.Controls.Add(this.checkGlobalKeyWarning);
-            this.groupBox5.Controls.Add(this.label28);
             this.groupBox5.Controls.Add(this.label20);
             this.groupBox5.Controls.Add(this.label27);
             this.groupBox5.Controls.Add(this.label26);
@@ -967,14 +973,14 @@
             this.groupBox5.Controls.Add(this.label15);
             this.groupBox5.Location = new System.Drawing.Point(240, 6);
             this.groupBox5.Name = "groupBox5";
-            this.groupBox5.Size = new System.Drawing.Size(404, 444);
+            this.groupBox5.Size = new System.Drawing.Size(404, 279);
             this.groupBox5.TabIndex = 48;
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "Hotkeys";
             // 
             // txtStopTimerKey
             // 
-            this.txtStopTimerKey.Location = new System.Drawing.Point(253, 199);
+            this.txtStopTimerKey.Location = new System.Drawing.Point(253, 196);
             this.txtStopTimerKey.Name = "txtStopTimerKey";
             this.txtStopTimerKey.Size = new System.Drawing.Size(100, 20);
             this.txtStopTimerKey.TabIndex = 58;
@@ -988,7 +994,7 @@
             // 
             // txtStopTimerMod
             // 
-            this.txtStopTimerMod.Location = new System.Drawing.Point(147, 199);
+            this.txtStopTimerMod.Location = new System.Drawing.Point(147, 196);
             this.txtStopTimerMod.Name = "txtStopTimerMod";
             this.txtStopTimerMod.Size = new System.Drawing.Size(100, 20);
             this.txtStopTimerMod.TabIndex = 57;
@@ -1002,7 +1008,7 @@
             // 
             // txtTimer2Key
             // 
-            this.txtTimer2Key.Location = new System.Drawing.Point(253, 173);
+            this.txtTimer2Key.Location = new System.Drawing.Point(253, 170);
             this.txtTimer2Key.Name = "txtTimer2Key";
             this.txtTimer2Key.Size = new System.Drawing.Size(100, 20);
             this.txtTimer2Key.TabIndex = 55;
@@ -1016,7 +1022,7 @@
             // 
             // txtTimer2Mod
             // 
-            this.txtTimer2Mod.Location = new System.Drawing.Point(147, 173);
+            this.txtTimer2Mod.Location = new System.Drawing.Point(147, 170);
             this.txtTimer2Mod.Name = "txtTimer2Mod";
             this.txtTimer2Mod.Size = new System.Drawing.Size(100, 20);
             this.txtTimer2Mod.TabIndex = 54;
@@ -1030,7 +1036,7 @@
             // 
             // txtTimer1Key
             // 
-            this.txtTimer1Key.Location = new System.Drawing.Point(253, 147);
+            this.txtTimer1Key.Location = new System.Drawing.Point(253, 144);
             this.txtTimer1Key.Name = "txtTimer1Key";
             this.txtTimer1Key.Size = new System.Drawing.Size(100, 20);
             this.txtTimer1Key.TabIndex = 52;
@@ -1044,7 +1050,7 @@
             // 
             // txtTimer1Mod
             // 
-            this.txtTimer1Mod.Location = new System.Drawing.Point(147, 147);
+            this.txtTimer1Mod.Location = new System.Drawing.Point(147, 144);
             this.txtTimer1Mod.Name = "txtTimer1Mod";
             this.txtTimer1Mod.Size = new System.Drawing.Size(100, 20);
             this.txtTimer1Mod.TabIndex = 51;
@@ -1058,7 +1064,7 @@
             // 
             // txtReplayKey
             // 
-            this.txtReplayKey.Location = new System.Drawing.Point(253, 121);
+            this.txtReplayKey.Location = new System.Drawing.Point(253, 118);
             this.txtReplayKey.Name = "txtReplayKey";
             this.txtReplayKey.Size = new System.Drawing.Size(100, 20);
             this.txtReplayKey.TabIndex = 49;
@@ -1072,7 +1078,7 @@
             // 
             // txtReplayMod
             // 
-            this.txtReplayMod.Location = new System.Drawing.Point(147, 121);
+            this.txtReplayMod.Location = new System.Drawing.Point(147, 118);
             this.txtReplayMod.Name = "txtReplayMod";
             this.txtReplayMod.Size = new System.Drawing.Size(100, 20);
             this.txtReplayMod.TabIndex = 48;
@@ -1086,7 +1092,7 @@
             // 
             // txtStopKey
             // 
-            this.txtStopKey.Location = new System.Drawing.Point(253, 95);
+            this.txtStopKey.Location = new System.Drawing.Point(253, 92);
             this.txtStopKey.Name = "txtStopKey";
             this.txtStopKey.Size = new System.Drawing.Size(100, 20);
             this.txtStopKey.TabIndex = 46;
@@ -1100,7 +1106,7 @@
             // 
             // txtStopMod
             // 
-            this.txtStopMod.Location = new System.Drawing.Point(147, 95);
+            this.txtStopMod.Location = new System.Drawing.Point(147, 92);
             this.txtStopMod.Name = "txtStopMod";
             this.txtStopMod.Size = new System.Drawing.Size(100, 20);
             this.txtStopMod.TabIndex = 45;
@@ -1114,7 +1120,7 @@
             // 
             // txtRandomKey
             // 
-            this.txtRandomKey.Location = new System.Drawing.Point(253, 69);
+            this.txtRandomKey.Location = new System.Drawing.Point(253, 66);
             this.txtRandomKey.Name = "txtRandomKey";
             this.txtRandomKey.Size = new System.Drawing.Size(100, 20);
             this.txtRandomKey.TabIndex = 43;
@@ -1128,7 +1134,7 @@
             // 
             // txtRandomMod
             // 
-            this.txtRandomMod.Location = new System.Drawing.Point(147, 69);
+            this.txtRandomMod.Location = new System.Drawing.Point(147, 66);
             this.txtRandomMod.Name = "txtRandomMod";
             this.txtRandomMod.Size = new System.Drawing.Size(100, 20);
             this.txtRandomMod.TabIndex = 42;
@@ -1143,7 +1149,7 @@
             // txtPlayPreKey
             // 
             this.txtPlayPreKey.Enabled = false;
-            this.txtPlayPreKey.Location = new System.Drawing.Point(253, 43);
+            this.txtPlayPreKey.Location = new System.Drawing.Point(253, 40);
             this.txtPlayPreKey.Name = "txtPlayPreKey";
             this.txtPlayPreKey.Size = new System.Drawing.Size(100, 20);
             this.txtPlayPreKey.TabIndex = 40;
@@ -1152,7 +1158,7 @@
             // 
             // txtPlayPreMod
             // 
-            this.txtPlayPreMod.Location = new System.Drawing.Point(147, 43);
+            this.txtPlayPreMod.Location = new System.Drawing.Point(147, 40);
             this.txtPlayPreMod.Name = "txtPlayPreMod";
             this.txtPlayPreMod.Size = new System.Drawing.Size(100, 20);
             this.txtPlayPreMod.TabIndex = 39;
@@ -1167,25 +1173,18 @@
             // checkGlobalKeyWarning
             // 
             this.checkGlobalKeyWarning.AutoSize = true;
-            this.checkGlobalKeyWarning.Location = new System.Drawing.Point(16, 358);
+            this.checkGlobalKeyWarning.Location = new System.Drawing.Point(16, 248);
             this.checkGlobalKeyWarning.Name = "checkGlobalKeyWarning";
             this.checkGlobalKeyWarning.Size = new System.Drawing.Size(319, 17);
             this.checkGlobalKeyWarning.TabIndex = 38;
             this.checkGlobalKeyWarning.Text = "Show a warning if global hotkey is used by another application";
+            this.checkGlobalKeyWarning.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
             this.checkGlobalKeyWarning.UseVisualStyleBackColor = true;
             this.checkGlobalKeyWarning.CheckStateChanged += new System.EventHandler(this.valueChanged);
             // 
-            // label28
-            // 
-            this.label28.Location = new System.Drawing.Point(13, 243);
-            this.label28.Name = "label28";
-            this.label28.Size = new System.Drawing.Size(383, 113);
-            this.label28.TabIndex = 3;
-            this.label28.Text = resources.GetString("label28.Text");
-            // 
             // label20
             // 
-            this.label20.Location = new System.Drawing.Point(147, 19);
+            this.label20.Location = new System.Drawing.Point(147, 16);
             this.label20.Name = "label20";
             this.label20.Size = new System.Drawing.Size(100, 18);
             this.label20.TabIndex = 37;
@@ -1195,7 +1194,7 @@
             // label27
             // 
             this.label27.AutoSize = true;
-            this.label27.Location = new System.Drawing.Point(13, 202);
+            this.label27.Location = new System.Drawing.Point(13, 199);
             this.label27.Name = "label27";
             this.label27.Size = new System.Drawing.Size(57, 13);
             this.label27.TabIndex = 22;
@@ -1204,7 +1203,7 @@
             // label26
             // 
             this.label26.AutoSize = true;
-            this.label26.Location = new System.Drawing.Point(13, 176);
+            this.label26.Location = new System.Drawing.Point(13, 173);
             this.label26.Name = "label26";
             this.label26.Size = new System.Drawing.Size(66, 13);
             this.label26.TabIndex = 21;
@@ -1213,7 +1212,7 @@
             // label25
             // 
             this.label25.AutoSize = true;
-            this.label25.Location = new System.Drawing.Point(13, 150);
+            this.label25.Location = new System.Drawing.Point(13, 147);
             this.label25.Name = "label25";
             this.label25.Size = new System.Drawing.Size(66, 13);
             this.label25.TabIndex = 20;
@@ -1222,7 +1221,7 @@
             // label24
             // 
             this.label24.AutoSize = true;
-            this.label24.Location = new System.Drawing.Point(13, 124);
+            this.label24.Location = new System.Drawing.Point(13, 121);
             this.label24.Name = "label24";
             this.label24.Size = new System.Drawing.Size(43, 13);
             this.label24.TabIndex = 13;
@@ -1231,7 +1230,7 @@
             // label23
             // 
             this.label23.AutoSize = true;
-            this.label23.Location = new System.Drawing.Point(13, 98);
+            this.label23.Location = new System.Drawing.Point(13, 95);
             this.label23.Name = "label23";
             this.label23.Size = new System.Drawing.Size(32, 13);
             this.label23.TabIndex = 10;
@@ -1240,7 +1239,7 @@
             // label22
             // 
             this.label22.AutoSize = true;
-            this.label22.Location = new System.Drawing.Point(13, 72);
+            this.label22.Location = new System.Drawing.Point(13, 69);
             this.label22.Name = "label22";
             this.label22.Size = new System.Drawing.Size(68, 13);
             this.label22.TabIndex = 5;
@@ -1248,7 +1247,7 @@
             // 
             // label21
             // 
-            this.label21.Location = new System.Drawing.Point(253, 19);
+            this.label21.Location = new System.Drawing.Point(253, 16);
             this.label21.Name = "label21";
             this.label21.Size = new System.Drawing.Size(100, 18);
             this.label21.TabIndex = 3;
@@ -1258,7 +1257,7 @@
             // label15
             // 
             this.label15.AutoSize = true;
-            this.label15.Location = new System.Drawing.Point(13, 46);
+            this.label15.Location = new System.Drawing.Point(13, 43);
             this.label15.Name = "label15";
             this.label15.Size = new System.Drawing.Size(107, 13);
             this.label15.TabIndex = 0;
@@ -1308,15 +1307,6 @@
             this.checkBalloonPlay.Text = "Show balloon when playing clip";
             this.checkBalloonPlay.UseVisualStyleBackColor = true;
             this.checkBalloonPlay.CheckStateChanged += new System.EventHandler(this.valueChanged);
-            // 
-            // groupBox13
-            // 
-            this.groupBox13.Location = new System.Drawing.Point(6, 281);
-            this.groupBox13.Name = "groupBox13";
-            this.groupBox13.Size = new System.Drawing.Size(228, 169);
-            this.groupBox13.TabIndex = 46;
-            this.groupBox13.TabStop = false;
-            this.groupBox13.Visible = false;
             // 
             // groupBox12
             // 
@@ -1418,7 +1408,6 @@
             this.tabTimers.Controls.Add(this.groupBox10);
             this.tabTimers.Controls.Add(this.groupBox4);
             this.tabTimers.Controls.Add(this.groupBox11);
-            this.tabTimers.Controls.Add(this.label16);
             this.tabTimers.Controls.Add(this.groupBox7);
             this.tabTimers.Controls.Add(this.groupBox3);
             this.tabTimers.Location = new System.Drawing.Point(4, 22);
@@ -1632,14 +1621,6 @@
             this.numericMinHour2.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.numericMinHour2.ValueChanged += new System.EventHandler(this.valueChanged);
             // 
-            // label16
-            // 
-            this.label16.Location = new System.Drawing.Point(6, 175);
-            this.label16.Name = "label16";
-            this.label16.Size = new System.Drawing.Size(638, 79);
-            this.label16.TabIndex = 31;
-            this.label16.Text = resources.GetString("label16.Text");
-            // 
             // btnApply
             // 
             this.btnApply.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
@@ -1651,6 +1632,128 @@
             this.btnApply.Text = "Apply";
             this.btnApply.UseVisualStyleBackColor = true;
             this.btnApply.Click += new System.EventHandler(this.btnApply_Click);
+            // 
+            // label19
+            // 
+            this.label19.AutoSize = true;
+            this.label19.Location = new System.Drawing.Point(13, 46);
+            this.label19.Name = "label19";
+            this.label19.Size = new System.Drawing.Size(46, 13);
+            this.label19.TabIndex = 59;
+            this.label19.Text = "On play:";
+            // 
+            // txtKeystrokePlayKey
+            // 
+            this.txtKeystrokePlayKey.Location = new System.Drawing.Point(253, 43);
+            this.txtKeystrokePlayKey.Name = "txtKeystrokePlayKey";
+            this.txtKeystrokePlayKey.Size = new System.Drawing.Size(100, 20);
+            this.txtKeystrokePlayKey.TabIndex = 61;
+            this.txtKeystrokePlayKey.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.txtKeystrokePlayKey.Click += new System.EventHandler(this.txtKey_Click);
+            this.txtKeystrokePlayKey.DoubleClick += new System.EventHandler(this.txtKey_DoubleClick);
+            this.txtKeystrokePlayKey.Enter += new System.EventHandler(this.txtKey_Enter);
+            this.txtKeystrokePlayKey.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtKey_KeyDown);
+            this.txtKeystrokePlayKey.Leave += new System.EventHandler(this.txtKey_Leave);
+            this.txtKeystrokePlayKey.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.txtSendKey_PreviewKeyDown);
+            // 
+            // txtKeystrokePlayMod
+            // 
+            this.txtKeystrokePlayMod.Location = new System.Drawing.Point(147, 43);
+            this.txtKeystrokePlayMod.Name = "txtKeystrokePlayMod";
+            this.txtKeystrokePlayMod.Size = new System.Drawing.Size(100, 20);
+            this.txtKeystrokePlayMod.TabIndex = 60;
+            this.txtKeystrokePlayMod.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.txtKeystrokePlayMod.Click += new System.EventHandler(this.txtKey_Click);
+            this.txtKeystrokePlayMod.DoubleClick += new System.EventHandler(this.txtKey_DoubleClick);
+            this.txtKeystrokePlayMod.Enter += new System.EventHandler(this.txtKey_Enter);
+            this.txtKeystrokePlayMod.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtSendMod_KeyDown);
+            this.txtKeystrokePlayMod.KeyUp += new System.Windows.Forms.KeyEventHandler(this.txtMod_KeyUp);
+            this.txtKeystrokePlayMod.Leave += new System.EventHandler(this.txtKey_Leave);
+            // 
+            // txtKeystrokeStopKey
+            // 
+            this.txtKeystrokeStopKey.Location = new System.Drawing.Point(253, 69);
+            this.txtKeystrokeStopKey.Name = "txtKeystrokeStopKey";
+            this.txtKeystrokeStopKey.Size = new System.Drawing.Size(100, 20);
+            this.txtKeystrokeStopKey.TabIndex = 64;
+            this.txtKeystrokeStopKey.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.txtKeystrokeStopKey.Click += new System.EventHandler(this.txtKey_Click);
+            this.txtKeystrokeStopKey.DoubleClick += new System.EventHandler(this.txtKey_DoubleClick);
+            this.txtKeystrokeStopKey.Enter += new System.EventHandler(this.txtKey_Enter);
+            this.txtKeystrokeStopKey.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtKey_KeyDown);
+            this.txtKeystrokeStopKey.Leave += new System.EventHandler(this.txtKey_Leave);
+            this.txtKeystrokeStopKey.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.txtSendKey_PreviewKeyDown);
+            // 
+            // txtKeystrokeStopMod
+            // 
+            this.txtKeystrokeStopMod.Location = new System.Drawing.Point(147, 69);
+            this.txtKeystrokeStopMod.Name = "txtKeystrokeStopMod";
+            this.txtKeystrokeStopMod.Size = new System.Drawing.Size(100, 20);
+            this.txtKeystrokeStopMod.TabIndex = 63;
+            this.txtKeystrokeStopMod.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.txtKeystrokeStopMod.Click += new System.EventHandler(this.txtKey_Click);
+            this.txtKeystrokeStopMod.DoubleClick += new System.EventHandler(this.txtKey_DoubleClick);
+            this.txtKeystrokeStopMod.Enter += new System.EventHandler(this.txtKey_Enter);
+            this.txtKeystrokeStopMod.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtSendMod_KeyDown);
+            this.txtKeystrokeStopMod.KeyUp += new System.Windows.Forms.KeyEventHandler(this.txtMod_KeyUp);
+            this.txtKeystrokeStopMod.Leave += new System.EventHandler(this.txtKey_Leave);
+            // 
+            // label29
+            // 
+            this.label29.AutoSize = true;
+            this.label29.Location = new System.Drawing.Point(13, 72);
+            this.label29.Name = "label29";
+            this.label29.Size = new System.Drawing.Size(47, 13);
+            this.label29.TabIndex = 62;
+            this.label29.Text = "On stop:";
+            // 
+            // groupBox8
+            // 
+            this.groupBox8.Controls.Add(this.checkSendKeystrokes);
+            this.groupBox8.Controls.Add(this.label16);
+            this.groupBox8.Controls.Add(this.label17);
+            this.groupBox8.Controls.Add(this.txtKeystrokeStopKey);
+            this.groupBox8.Controls.Add(this.label19);
+            this.groupBox8.Controls.Add(this.txtKeystrokePlayMod);
+            this.groupBox8.Controls.Add(this.txtKeystrokeStopMod);
+            this.groupBox8.Controls.Add(this.txtKeystrokePlayKey);
+            this.groupBox8.Controls.Add(this.label29);
+            this.groupBox8.Location = new System.Drawing.Point(240, 291);
+            this.groupBox8.Name = "groupBox8";
+            this.groupBox8.Size = new System.Drawing.Size(404, 160);
+            this.groupBox8.TabIndex = 49;
+            this.groupBox8.TabStop = false;
+            this.groupBox8.Text = "Send Keystrokes";
+            // 
+            // label16
+            // 
+            this.label16.Location = new System.Drawing.Point(147, 18);
+            this.label16.Name = "label16";
+            this.label16.Size = new System.Drawing.Size(100, 18);
+            this.label16.TabIndex = 60;
+            this.label16.Text = "Modifier";
+            this.label16.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            // 
+            // label17
+            // 
+            this.label17.Location = new System.Drawing.Point(253, 18);
+            this.label17.Name = "label17";
+            this.label17.Size = new System.Drawing.Size(100, 18);
+            this.label17.TabIndex = 59;
+            this.label17.Text = "Key";
+            this.label17.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            // 
+            // checkSendKeystrokes
+            // 
+            this.checkSendKeystrokes.AutoSize = true;
+            this.checkSendKeystrokes.Location = new System.Drawing.Point(16, 127);
+            this.checkSendKeystrokes.Name = "checkSendKeystrokes";
+            this.checkSendKeystrokes.Size = new System.Drawing.Size(353, 17);
+            this.checkSendKeystrokes.TabIndex = 59;
+            this.checkSendKeystrokes.Text = "Send keystrokes (can be temporary toggled by clicking statusbar text)";
+            this.checkSendKeystrokes.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+            this.checkSendKeystrokes.UseVisualStyleBackColor = true;
+            this.checkSendKeystrokes.CheckStateChanged += new System.EventHandler(this.valueChanged);
             // 
             // frmSettings
             // 
@@ -1713,6 +1816,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.numericMinSec2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericMinMin2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericMinHour2)).EndInit();
+            this.groupBox8.ResumeLayout(false);
+            this.groupBox8.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1801,14 +1906,12 @@
         private System.Windows.Forms.GroupBox groupBox12;
         private System.Windows.Forms.NumericUpDown numericTransparency;
         private System.Windows.Forms.Button btnApply;
-        private System.Windows.Forms.Label label16;
         private System.Windows.Forms.Button btnErase12;
         private System.Windows.Forms.TextBox txtSet12;
         private System.Windows.Forms.Button btnSet12;
         private System.Windows.Forms.Button btnErase11;
         private System.Windows.Forms.TextBox txtSet11;
         private System.Windows.Forms.Button btnSet11;
-        private System.Windows.Forms.GroupBox groupBox13;
         private System.Windows.Forms.GroupBox groupBox14;
         private System.Windows.Forms.CheckBox checkBalloonPlay;
         private System.Windows.Forms.CheckBox checkTrayIcon;
@@ -1826,7 +1929,6 @@
         private System.Windows.Forms.Label label15;
         private System.Windows.Forms.Label label20;
         private System.Windows.Forms.CheckBox checkGlobalKeyWarning;
-        private System.Windows.Forms.Label label28;
         private System.Windows.Forms.TextBox txtPlayPreKey;
         private System.Windows.Forms.TextBox txtPlayPreMod;
         private System.Windows.Forms.TextBox txtStopTimerKey;
@@ -1841,5 +1943,15 @@
         private System.Windows.Forms.TextBox txtStopMod;
         private System.Windows.Forms.TextBox txtRandomKey;
         private System.Windows.Forms.TextBox txtRandomMod;
+        private System.Windows.Forms.TextBox txtKeystrokeStopKey;
+        private System.Windows.Forms.TextBox txtKeystrokeStopMod;
+        private System.Windows.Forms.Label label29;
+        private System.Windows.Forms.TextBox txtKeystrokePlayKey;
+        private System.Windows.Forms.TextBox txtKeystrokePlayMod;
+        private System.Windows.Forms.Label label19;
+        private System.Windows.Forms.GroupBox groupBox8;
+        private System.Windows.Forms.Label label16;
+        private System.Windows.Forms.Label label17;
+        private System.Windows.Forms.CheckBox checkSendKeystrokes;
     }
 }

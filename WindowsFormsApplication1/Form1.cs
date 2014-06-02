@@ -13,14 +13,26 @@ using System.Configuration;
 using System.Windows;
 using System.Windows.Input;
 using System.Drawing.Drawing2D;
+using System.Windows.Forms.Design;
+using System.Runtime.InteropServices;
+
+using NAudio;
+using NAudio.Wave;
 
 namespace PatkaPlayer
 {
     public partial class frmPlayer : Form
     {
-        private Mp3Player _mp3Player;
+        IWavePlayer waveOutDevice;
+        AudioFileReader audioFileReader;
+        bool play = false;
+        bool playpressed = false;
+        bool pause = false;
+        bool stop = true;
+
         private string[] array1 = new string[] { };
         private List<string> randomSound = new List<string>();
+        private List<string> folderList = new List<string>();
 
         private string mp3Dir, hotkey1, hotkey2, hotkey3, hotkey4, hotkey5, hotkey6, hotkey7, hotkey8, hotkey9, hotkey10, hotkey11, hotkey12;
         private int timer1MinHour, timer1MinMin, timer1MinSec, timer1MaxHour, timer1MaxMin, timer1MaxSec, timer2MinHour, timer2MinMin, timer2MinSec, timer2MaxHour, timer2MaxMin, timer2MaxSec;
@@ -32,13 +44,16 @@ namespace PatkaPlayer
         private string dailyDate;
         private int dailyCount;
         private string hotkeyPlayPreMod, hotkeyRandomMod, hotkeyRandomKey, hotkeyStopMod, hotkeyStopKey, hotkeyReplayMod, hotkeyReplayKey, hotkeyTimer1Mod, hotkeyTimer1Key, hotkeyTimer2Mod, hotkeyTimer2Key, hotkeyStopTimerMod, hotkeyStopTimerKey;
-        private bool hotkeyWarning;
+        private string sendkeyPlayMod, sendkeyPlayKey, sendkeyStopMod, sendkeyStopKey, sendkeyPlayString, sendkeyStopString;
+        private bool sendkeyPlay, sendkeyStop;
+        private bool hotkeyWarning, sendKeystrokes;
 
         private bool timer1Started = false;
         private bool timer2Started = false;
         private string lastPlayed;
         private string filterFolder = "";
         private string filterFile = "";
+        private int numOfFolders;
         private int numOfButtons;
         private int lastRandomNumber = 0;
         private int lastRandomNumberAll = 0;
@@ -47,8 +62,6 @@ namespace PatkaPlayer
         private int playCount = 0;
         public int settingsPage;
         private bool tray = false;
-
-        //private bool minimized { get; set; }
 
         private ContextMenu contextButton;
         private MenuItem menuItemF1, menuItemF2, menuItemF3, menuItemF4, menuItemF5, menuItemF6, menuItemF7, menuItemF8, menuItemF9, menuItemF10, menuItemF11, menuItemF12;
@@ -61,9 +74,12 @@ namespace PatkaPlayer
         private Random randomA = new Random(); // random clip from all clips
         private Random randomF = new Random(); // random clip from filtered clips
        
-        private Bitmap buttonBack;
-        private Bitmap buttonBackHover;
-        private Bitmap buttonBackPress;
+        private Bitmap buttonBackButton;
+        private Bitmap buttonBackHoverButton;
+        private Bitmap buttonBackPressButton;
+        private Bitmap buttonBackFolder;
+        private Bitmap buttonBackHoverFolder;
+        private Bitmap buttonBackPressFolder;
 
         private string buttonColorShadow = "#e3e3e3";
         private string buttonColorCorner = "#92b3d3";
@@ -101,29 +117,46 @@ namespace PatkaPlayer
         KeyboardHook hook = new KeyboardHook();
         Settings settings = new Settings();
 
+        ProgressBarEx pbPosition = new ProgressBarEx();
+
         // default constructor
         public frmPlayer()
         {
             InitializeComponent();
 
-            //DoubleBuffered = true;
+            if (!File.Exists("naudio.dll"))
+            {
+                MessageBox.Show("Can't find NAudio.dll. It is required to run Pätkä Player.", "File not found", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                if (System.Windows.Forms.Application.MessageLoop)
+                {
+                  // Use this since we are a WinForms app
+                    System.Windows.Forms.Application.Exit();
+                }
+                else
+                {
+                  // Use this since we are a console app
+                  System.Environment.Exit(1);
+                }
 
-            labelVersion.Text = "v1.24";
+            }
+
+            labelVersion.Text = "v1.25";
 
             notifyIcon1.Visible = false;
             notifyIcon1.MouseUp += new MouseEventHandler(NotifyIcon1_Click);
 
-            this.MouseWheel += new MouseEventHandler(Form1_MouseWheel);
+            //this.MouseWheel += new MouseEventHandler(Form1_MouseWheel);
             this.ResizeEnd += new EventHandler(Form1_ResizeEnd);
             this.SizeChanged += new EventHandler(Form1_SizeChanged);
             this.Layout += new LayoutEventHandler(Form1_Layout);
             this.KeyUp += new KeyEventHandler(Form1_KeyEvent);
             txtFilterFolder.KeyDown += new KeyEventHandler(txtFilterFolder_KeyDown);
             txtFilterFile.KeyDown += new KeyEventHandler(txtFilterFile_KeyDown);
+
             hook.KeyPressed += new EventHandler<KeyPressedEventArgs>(hook_KeyPressed);
 
             timer.Tick += new System.EventHandler(timer_Tick);
-            timer.Interval = 1000;
+            timer.Interval = 100;
             timer.Start();
 
             timer1.Tick += new System.EventHandler(timer1_Tick);
@@ -137,13 +170,15 @@ namespace PatkaPlayer
 
             btnReplay.Enabled = false;
 
+            splitContainer1.SplitterWidth = 1;
+
             // correcting a bug in the "system" renderer (white bottom line in toolstrip)
             toolStripPlay.Renderer = new MySR();
-            toolStripSettings.Renderer = new MySR();
             toolStripFilters.Renderer = new MySR();
+            toolStripSettings.Renderer = new MySR();
 
-            txtFilterFolder.Size = new Size(130, 31);
-            txtFilterFile.Size = new Size(130, 31);
+            txtFilterFolder.Size = new Size(100, 31);
+            txtFilterFile.Size = new Size(100, 31);
 
             contextButton = new ContextMenu();
 
@@ -173,7 +208,21 @@ namespace PatkaPlayer
             menuItemF11.Click += new EventHandler(menuItemSet_Click);
             menuItemF12.Click += new EventHandler(menuItemSet_Click);
 
-            renderButtons();
+            renderButtons(150, 50, out buttonBackButton, out buttonBackHoverButton, out buttonBackPressButton);
+            renderButtons(296, 30, out buttonBackFolder, out buttonBackHoverFolder, out buttonBackPressFolder);
+
+            pbPosition.Left = 290;
+            pbPosition.Top = 10;
+            pbPosition.Width = 100;
+            pbPosition.Height = 18;
+            pbPosition.ForeColor = ColorTranslator.FromHtml("#8ab3da");
+            pbPosition.BackColor = ColorTranslator.FromHtml("#7fa9d2");
+            pbPosition.Value = 0;
+            pbPosition.Name = "progressPosition";
+            this.Controls.Add(pbPosition);
+
+            pbPosition.MouseDown += new MouseEventHandler(pbPosition_MouseDown);
+
             buttonLocations();
             InsertPanelButtons();
         }
@@ -181,13 +230,36 @@ namespace PatkaPlayer
         // reset toolstrip button locations
         private void buttonLocations()
         {
-            toolStripSettings.Left = toolStripContainer1.TopToolStripPanel.Width - toolStripSettings.Width;
-            toolStripFilters.Left = (toolStripContainer1.TopToolStripPanel.Width / 2 - toolStripFilters.Width / 2);
-            toolStripPlay.Left = 3;
+            /*
+            toolStripSettings.Left = this.Width - toolStripSettings.Width - 20;
+            toolStripFilters.Left = (this.Width / 2 - toolStripFilters.Width / 2);
+            toolStripPlay.Left = 4;
+            */
 
-            toolStripSettings.Top = 0;
-            toolStripFilters.Top = 0;
-            toolStripPlay.Top = 0;
+            toolStripSettings.Left = this.Width - toolStripSettings.Width - 20;
+            toolStripPlay.Left = 4;
+
+            int fL = trackBarVolume.Right + 45;
+            int fR = toolStripSettings.Left;
+
+            //toolStripFilters.Left = fL + (((fR - fL) / 2) - toolStripFilters.Width / 2);
+            toolStripFilters.Left = fR - toolStripFilters.Width - 20;
+
+            toolStripSettings.Top = 1;
+            toolStripFilters.Top = 1;
+            toolStripPlay.Top = 1;
+
+            if (panelFolders.VerticalScroll.Visible)
+            {
+                //splitContainer1.BackColor = Color.White;
+                splitContainer1.SplitterDistance = 329;
+            }
+            else
+            {
+                //splitContainer1.BackColor = Color.DarkGray;
+                splitContainer1.SplitterDistance = 312;
+            }
+
         }
 
         // read settings for adding sound buttons
@@ -198,12 +270,110 @@ namespace PatkaPlayer
             if (Directory.Exists(mp3Dir))
             {
                 array1 = Directory.GetFiles(@mp3Dir, "*.mp3", SearchOption.AllDirectories);
+                
+                addFolderPanel();
                 addPanel();
             }
             else if (mp3Dir != null) errorText("Selected audio folder does not exist. Go to the settings and reselect folder.");
             else errorText("No audio folder selected. Go to the settings and select a folder.");
         }
 
+        private void addFolderPanel()
+        {
+            panelFolders.SuspendLayout();
+            panelFolders.Controls.Clear();
+
+            string lastPath = "";
+            string currentPath = "";
+            string currentPathOnly = "";
+            numOfFolders = 0;
+
+            // show all button
+            Button allbutton = new Button();
+            allbutton.Text = "Show all folders";
+            allbutton.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            allbutton.Width = 296;
+            allbutton.Height = 30;
+            allbutton.Font = new Font("Segoe UI", 10);
+            allbutton.Tag = "";
+
+            allbutton.FlatStyle = FlatStyle.Flat;
+            allbutton.FlatAppearance.BorderSize = 0;
+            allbutton.ForeColor = ColorTranslator.FromHtml("#fff");
+            allbutton.BackColor = ColorTranslator.FromHtml("#ccc");
+            allbutton.BackgroundImage = buttonBackFolder;
+            allbutton.Margin = new Padding(3, 4, 3, 3);
+
+            allbutton.MouseEnter += new EventHandler(panelFolders_MouseEnter);
+            allbutton.MouseEnter += new EventHandler(FolderButton_MouseEnter);
+            allbutton.MouseLeave += new EventHandler(FolderButton_MouseLeave);
+            allbutton.MouseDown += new MouseEventHandler(FolderButton_MouseDown);
+            allbutton.MouseUp += new MouseEventHandler(FolderButton_MouseUp);
+
+            panelFolders.Controls.Add(allbutton);
+            panelFolders.SetFlowBreak(allbutton, true);
+
+            Panel allpanel = new Panel();
+            allpanel.AutoSize = false;
+            allpanel.Height = 1;
+            allpanel.Width = 276;
+            allpanel.BorderStyle = BorderStyle.None;
+            allpanel.BackColor = ColorTranslator.FromHtml("#aec8e8");
+            allpanel.Margin = new Padding(13, 6, 13, 6);
+
+            panelFolders.Controls.Add(allpanel);
+            panelFolders.SetFlowBreak(allpanel, true);
+
+            // loop for adding folder buttons
+            for (int i = 0; i < array1.Length; i++)
+            {
+
+                currentPath = Path.GetDirectoryName(array1[i]);
+
+                if (currentPath != lastPath)
+                {
+                    numOfFolders++;
+                    currentPathOnly = currentPath.Substring(currentPath.LastIndexOf("\\") + 1);
+
+                    // folder button
+                    Button lbutton = new Button();
+                    lbutton.Text = currentPathOnly;
+                    lbutton.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+                    lbutton.Width = 296;
+                    lbutton.Height = 30;
+                    lbutton.Font = new Font("Segoe UI", 10);
+                    lbutton.Tag = currentPathOnly;
+
+                    lbutton.FlatStyle = FlatStyle.Flat;
+                    lbutton.FlatAppearance.BorderSize = 0;
+                    lbutton.ForeColor = ColorTranslator.FromHtml("#fff");
+                    lbutton.BackColor = ColorTranslator.FromHtml("#ccc");
+                    lbutton.BackgroundImage = buttonBackFolder;
+
+                    lbutton.MouseEnter += new EventHandler(panelFolders_MouseEnter);
+                    lbutton.MouseEnter += new EventHandler(FolderButton_MouseEnter);
+                    lbutton.MouseLeave += new EventHandler(FolderButton_MouseLeave);
+                    lbutton.MouseDown += new MouseEventHandler(FolderButton_MouseDown);
+                    lbutton.MouseUp += new MouseEventHandler(FolderButton_MouseUp);
+
+                    panelFolders.Controls.Add(lbutton);
+                    panelFolders.SetFlowBreak(lbutton, true);
+
+                }
+
+                lastPath = currentPath;
+            }
+            
+            Label labelBottom = new Label();
+            labelBottom.AutoSize = false;
+            labelBottom.Height = 0;
+            labelBottom.Margin = new Padding(0, 0, 0, 11);
+            labelBottom.BorderStyle = BorderStyle.Fixed3D;
+            panelFolders.Controls.Add(labelBottom);
+            
+            panelFolders.ResumeLayout();
+        }
+        
         // add panel and sound buttons
         private void addPanel()
         {
@@ -227,8 +397,6 @@ namespace PatkaPlayer
             // loop for adding buttons
             for (int i = 0; i < array1.Length; i++)
             {
-                //panelButtons.Visible = false;
-                //panelButtons.SuspendLayout();
 
                 if (filterFolder != "") folderName = Path.GetDirectoryName(array1[i]).Substring(Path.GetDirectoryName(array1[i]).LastIndexOf("\\") + 1);
                 if (filterFile != "") fileName = Path.GetFileNameWithoutExtension(array1[i]);
@@ -236,14 +404,26 @@ namespace PatkaPlayer
                 if (filterFile != "" && fileName.IndexOf(filterFile, StringComparison.OrdinalIgnoreCase) == -1) continue;
                 if (filterFolder != "" && folderName.IndexOf(filterFolder, StringComparison.OrdinalIgnoreCase) == -1) continue;
 
+                currentPath = Path.GetDirectoryName(array1[i]);
+                currentPathOnly = currentPath.Substring(currentPath.LastIndexOf("\\") + 1);
+
+                bool found = true;
+                if (folderList.Count > 0)
+                {
+                    found = false;
+                    foreach (string f in folderList)
+                    {
+                        if (currentPathOnly == f) found = true;
+                    }
+                }
+                if (!found) continue;
+                //if (selectFolder != "" && currentPathOnly != selectFolder) continue;
+
                 numOfButtons++;
                 randomSound.Add(array1[i]);
-                currentPath = Path.GetDirectoryName(array1[i]);
 
                 if (currentPath != lastPath)
                 {
-                    currentPathOnly = currentPath.Substring(currentPath.LastIndexOf("\\") + 1);
-
                     // label for folder name
                     if (numOfButtons > 1)
                     {
@@ -255,11 +435,11 @@ namespace PatkaPlayer
                     Label folderLabel = new Label();
                     folderLabel.Text = currentPathOnly;
                     folderLabel.AutoSize = true;
-                    folderLabel.Font = new Font("Segoe UI", 13);
+                    folderLabel.Font = new Font("Segoe UI", 12);
                     folderLabel.ForeColor = ColorTranslator.FromHtml("#384b5d");
 
-                    if (numOfButtons > 1) folderLabel.Margin = new Padding(0, 20, 0, 0);
-                    else folderLabel.Margin = new Padding(0, 10, 0, 0);
+                    if (numOfButtons > 1) folderLabel.Margin = new Padding(0, 20, 0, 2);
+                    else folderLabel.Margin = new Padding(0, 10, 0, 2);
 
                     panelButtons.Controls.Add(folderLabel);
 
@@ -271,7 +451,7 @@ namespace PatkaPlayer
 
                     panelButtons.Controls.Add(dummyLabel);
                     panelButtons.SetFlowBreak(dummyLabel, true);
-                    
+
                 }
 
                 Button button = new Button();
@@ -286,8 +466,9 @@ namespace PatkaPlayer
                 button.FlatStyle = FlatStyle.Flat;
                 button.FlatAppearance.BorderSize = 0;
                 button.ForeColor = ColorTranslator.FromHtml("#fff");
-                button.BackgroundImage = buttonBack;
+                button.BackgroundImage = buttonBackButton;
 
+                button.MouseEnter += new EventHandler(panelButtons_MouseEnter);
                 button.MouseEnter += new EventHandler(SoundButton_MouseEnter);
                 button.MouseLeave += new EventHandler(SoundButton_MouseLeave);
                 button.MouseDown += new MouseEventHandler(SoundButton_MouseDown);
@@ -317,8 +498,7 @@ namespace PatkaPlayer
             }
 
             panelButtons.ResumeLayout();
-            timerTemp.Start();
-
+            buttonLocations();
         }
 
         // play file
@@ -331,11 +511,12 @@ namespace PatkaPlayer
 
             lastPlayed = pathToPlay.Substring(pathToPlay.LastIndexOf("\\") + 1) + " - " + Path.GetFileNameWithoutExtension(fileToPlay);
             labelLastPlayed.Text = lastPlayed;
-            
-            if (_mp3Player != null) _mp3Player.Dispose();
-            _mp3Player = new Mp3Player(fileToPlay);
 
-            _mp3Player.Play();
+            playpressed = true;
+            if (sendkeyPlay && !play && sendKeystrokes) SendKeys.Send(sendkeyPlayString);
+            closeTrack();
+            loadTrack(fileToPlay);
+            playTrack();
 
             if (logging)
             {
@@ -575,7 +756,7 @@ namespace PatkaPlayer
                             notifyIcon1.ShowBalloonTip(100);
                         }
                     }
-                    
+
                     labelTimer2.Text = "Timer 2: Off";
                     labelTimer2.ForeColor = ColorTranslator.FromHtml("#404040");
                     timer2Started = false;
@@ -639,10 +820,12 @@ namespace PatkaPlayer
             labelClipsPlayed.Text = "Play Count: " + playCount.ToString();
 
             this.Opacity = Convert.ToDouble(transNormal);
+            
+            readSendkeys();
             readHotkeys();
         }
 
-        private int getHotkeyNumber(string keyname)
+        private int getHotkeyModNumber(string keyname)
         {
             int i = 0;
                 if (keyname.IndexOf("Alt") != -1) i += 1;
@@ -651,7 +834,54 @@ namespace PatkaPlayer
                 if (keyname.IndexOf("Win") != -1) i += 8;
             return i;
         }
-        
+
+        private string getHotkeyModChars(string keyname)
+        {
+            string i = null;
+            if (keyname.IndexOf("Alt") != -1) i += "%";
+            if (keyname.IndexOf("Ctrl") != -1) i += "^";
+            if (keyname.IndexOf("Shift") != -1) i += "+";
+            return i;
+        }
+
+        private string getHotkeyChar(string i)
+        {
+            if (i == "D1") i = "1";
+            if (i == "D2") i = "2";
+            if (i == "D3") i = "3";
+            if (i == "D4") i = "4";
+            if (i == "D5") i = "5";
+            if (i == "D6") i = "6";
+            if (i == "D7") i = "7";
+            if (i == "D8") i = "8";
+            if (i == "D9") i = "9";
+            if (i == "D0") i = "0";
+            return i.ToLower();
+        }
+
+        private void readSendkeys()
+        {
+            // send keys
+            sendkeyPlayMod = settings.LoadSetting("SendkeyPlayMod");
+            sendkeyPlayKey = settings.LoadSetting("SendkeyPlayKey");
+            sendkeyStopMod = settings.LoadSetting("SendkeyStopMod");
+            sendkeyStopKey = settings.LoadSetting("SendkeyStopKey");
+            sendKeystrokes = Convert.ToBoolean(settings.LoadSetting("SendKeystrokes"));
+
+            if (sendkeyPlayMod != "" && sendkeyPlayKey != "") sendkeyPlay = true;
+            else sendkeyPlay = false;
+
+            if (sendkeyStopMod != "" && sendkeyStopKey != "") sendkeyStop = true;
+            else sendkeyStop = false;
+
+            if (!String.IsNullOrEmpty(sendkeyPlayMod)) sendkeyPlayString = getHotkeyModChars(sendkeyPlayMod) + getHotkeyChar(sendkeyPlayKey);
+            if (!String.IsNullOrEmpty(sendkeyStopMod)) sendkeyStopString = getHotkeyModChars(sendkeyStopMod) + getHotkeyChar(sendkeyStopKey);
+
+            if (sendKeystrokes) labelSendKeystrokes.Text = "Send Keystrokes: On";
+            else labelSendKeystrokes.Text = "Send Keystrokes: Off";
+
+        }
+
         private void readHotkeys()
         {
             // hotkeys
@@ -675,26 +905,26 @@ namespace PatkaPlayer
 
             if (!String.IsNullOrEmpty(hotkeyPlayPreMod))
             {
-                hook.RegisterHotKey((ModifierKeys)getHotkeyNumber(hotkeyPlayPreMod), Keys.F1);
-                hook.RegisterHotKey((ModifierKeys)getHotkeyNumber(hotkeyPlayPreMod), Keys.F2);
-                hook.RegisterHotKey((ModifierKeys)getHotkeyNumber(hotkeyPlayPreMod), Keys.F3);
-                hook.RegisterHotKey((ModifierKeys)getHotkeyNumber(hotkeyPlayPreMod), Keys.F4);
-                hook.RegisterHotKey((ModifierKeys)getHotkeyNumber(hotkeyPlayPreMod), Keys.F5);
-                hook.RegisterHotKey((ModifierKeys)getHotkeyNumber(hotkeyPlayPreMod), Keys.F6);
-                hook.RegisterHotKey((ModifierKeys)getHotkeyNumber(hotkeyPlayPreMod), Keys.F7);
-                hook.RegisterHotKey((ModifierKeys)getHotkeyNumber(hotkeyPlayPreMod), Keys.F8);
-                hook.RegisterHotKey((ModifierKeys)getHotkeyNumber(hotkeyPlayPreMod), Keys.F9);
-                hook.RegisterHotKey((ModifierKeys)getHotkeyNumber(hotkeyPlayPreMod), Keys.F10);
-                hook.RegisterHotKey((ModifierKeys)getHotkeyNumber(hotkeyPlayPreMod), Keys.F11);
-                hook.RegisterHotKey((ModifierKeys)getHotkeyNumber(hotkeyPlayPreMod), Keys.F12);
+                hook.RegisterHotKey((ModifierKeys)getHotkeyModNumber(hotkeyPlayPreMod), Keys.F1);
+                hook.RegisterHotKey((ModifierKeys)getHotkeyModNumber(hotkeyPlayPreMod), Keys.F2);
+                hook.RegisterHotKey((ModifierKeys)getHotkeyModNumber(hotkeyPlayPreMod), Keys.F3);
+                hook.RegisterHotKey((ModifierKeys)getHotkeyModNumber(hotkeyPlayPreMod), Keys.F4);
+                hook.RegisterHotKey((ModifierKeys)getHotkeyModNumber(hotkeyPlayPreMod), Keys.F5);
+                hook.RegisterHotKey((ModifierKeys)getHotkeyModNumber(hotkeyPlayPreMod), Keys.F6);
+                hook.RegisterHotKey((ModifierKeys)getHotkeyModNumber(hotkeyPlayPreMod), Keys.F7);
+                hook.RegisterHotKey((ModifierKeys)getHotkeyModNumber(hotkeyPlayPreMod), Keys.F8);
+                hook.RegisterHotKey((ModifierKeys)getHotkeyModNumber(hotkeyPlayPreMod), Keys.F9);
+                hook.RegisterHotKey((ModifierKeys)getHotkeyModNumber(hotkeyPlayPreMod), Keys.F10);
+                hook.RegisterHotKey((ModifierKeys)getHotkeyModNumber(hotkeyPlayPreMod), Keys.F11);
+                hook.RegisterHotKey((ModifierKeys)getHotkeyModNumber(hotkeyPlayPreMod), Keys.F12);
             }
 
-            if (!String.IsNullOrEmpty(hotkeyRandomMod)) hook.RegisterHotKey((ModifierKeys)getHotkeyNumber(hotkeyRandomMod), (Keys)Enum.Parse(typeof(Keys), hotkeyRandomKey));
-            if (!String.IsNullOrEmpty(hotkeyStopMod)) hook.RegisterHotKey((ModifierKeys)getHotkeyNumber(hotkeyStopMod), (Keys)Enum.Parse(typeof(Keys), hotkeyStopKey));
-            if (!String.IsNullOrEmpty(hotkeyReplayMod)) hook.RegisterHotKey((ModifierKeys)getHotkeyNumber(hotkeyReplayMod), (Keys)Enum.Parse(typeof(Keys), hotkeyReplayKey));
-            if (!String.IsNullOrEmpty(hotkeyTimer1Mod)) hook.RegisterHotKey((ModifierKeys)getHotkeyNumber(hotkeyTimer1Mod), (Keys)Enum.Parse(typeof(Keys), hotkeyTimer1Key));
-            if (!String.IsNullOrEmpty(hotkeyTimer2Mod)) hook.RegisterHotKey((ModifierKeys)getHotkeyNumber(hotkeyTimer2Mod), (Keys)Enum.Parse(typeof(Keys), hotkeyTimer2Key));
-            if (!String.IsNullOrEmpty(hotkeyStopTimerMod)) hook.RegisterHotKey((ModifierKeys)getHotkeyNumber(hotkeyStopTimerMod), (Keys)Enum.Parse(typeof(Keys), hotkeyStopTimerKey));
+            if (!String.IsNullOrEmpty(hotkeyRandomMod)) hook.RegisterHotKey((ModifierKeys)getHotkeyModNumber(hotkeyRandomMod), (Keys)Enum.Parse(typeof(Keys), hotkeyRandomKey));
+            if (!String.IsNullOrEmpty(hotkeyStopMod)) hook.RegisterHotKey((ModifierKeys)getHotkeyModNumber(hotkeyStopMod), (Keys)Enum.Parse(typeof(Keys), hotkeyStopKey));
+            if (!String.IsNullOrEmpty(hotkeyReplayMod)) hook.RegisterHotKey((ModifierKeys)getHotkeyModNumber(hotkeyReplayMod), (Keys)Enum.Parse(typeof(Keys), hotkeyReplayKey));
+            if (!String.IsNullOrEmpty(hotkeyTimer1Mod)) hook.RegisterHotKey((ModifierKeys)getHotkeyModNumber(hotkeyTimer1Mod), (Keys)Enum.Parse(typeof(Keys), hotkeyTimer1Key));
+            if (!String.IsNullOrEmpty(hotkeyTimer2Mod)) hook.RegisterHotKey((ModifierKeys)getHotkeyModNumber(hotkeyTimer2Mod), (Keys)Enum.Parse(typeof(Keys), hotkeyTimer2Key));
+            if (!String.IsNullOrEmpty(hotkeyStopTimerMod)) hook.RegisterHotKey((ModifierKeys)getHotkeyModNumber(hotkeyStopTimerMod), (Keys)Enum.Parse(typeof(Keys), hotkeyStopTimerKey));
 
             if (hotkeyWarning && hook.ShowErrors() != "") MessageBox.Show("Following global hotkeys are currently registered to another application, so they do not work with this instance of Pätkä Player.\n" + hook.ShowErrors(), "Global Hotkey Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
@@ -724,107 +954,232 @@ namespace PatkaPlayer
         }
 
         // background image for buttons
-        private void renderButtons()
+        private void renderButtons(int x, int y, out Bitmap buttonBack, out Bitmap buttonBackHover, out Bitmap buttonBackPress)
         {
             // button normal
-            buttonBack = new Bitmap(150, 50);
+            buttonBack = new Bitmap(x, y);
             Graphics g = Graphics.FromImage(buttonBack);
 
             SolidBrush brushBackShadow = new SolidBrush(ColorTranslator.FromHtml(buttonColorShadow));
-            g.FillRectangle(brushBackShadow, 0, 0, 150, 50);
+            g.FillRectangle(brushBackShadow, 0, 0, x, y);
 
             SolidBrush brushBackOuter = new SolidBrush(ColorTranslator.FromHtml(buttonColorBorder));
-            g.FillRectangle(brushBackOuter, 1, 1, 148, 48);
+            g.FillRectangle(brushBackOuter, 1, 1, x - 2, y - 2);
 
-            LinearGradientBrush gradBackInner = new LinearGradientBrush(new Point(0, 0), new Point(0, 48), ColorTranslator.FromHtml(buttonColorBorderGradientTop), ColorTranslator.FromHtml(buttonColorBorderGradientBottom));
-            g.FillRectangle(gradBackInner, 2, 2, 146, 46);
+            LinearGradientBrush gradBackInner = new LinearGradientBrush(new Point(0, 0), new Point(0, y - 2), ColorTranslator.FromHtml(buttonColorBorderGradientTop), ColorTranslator.FromHtml(buttonColorBorderGradientBottom));
+            g.FillRectangle(gradBackInner, 2, 2, x - 4, y - 4);
 
-            LinearGradientBrush gradUpper = new LinearGradientBrush(new Point(0, 0), new Point(0, 23), ColorTranslator.FromHtml(buttonColorBackGradientUpperTop), ColorTranslator.FromHtml(buttonColorBackGradientUpperBottom));
-            LinearGradientBrush gradLower = new LinearGradientBrush(new Point(0, 0), new Point(0, 23), ColorTranslator.FromHtml(buttonColorBackGradientLowerTop), ColorTranslator.FromHtml(buttonColorBackGradientLowerBottom));
+            LinearGradientBrush gradUpper = new LinearGradientBrush(new Point(0, 0), new Point(0, y / 2 - 1), ColorTranslator.FromHtml(buttonColorBackGradientUpperTop), ColorTranslator.FromHtml(buttonColorBackGradientUpperBottom));
+            LinearGradientBrush gradLower = new LinearGradientBrush(new Point(0, 0), new Point(0, y / 2 - 1), ColorTranslator.FromHtml(buttonColorBackGradientLowerTop), ColorTranslator.FromHtml(buttonColorBackGradientLowerBottom));
 
-            g.FillRectangle(gradUpper, 3, 3, 144, 23);
-            g.FillRectangle(gradLower, 3, 24, 144, 23);
+            g.FillRectangle(gradUpper, 3, 3, x - 6, y / 2 - 2);
+            g.FillRectangle(gradLower, 3, y / 2 - 1, x - 6, y / 2 - 2);
 
             SolidBrush brushCorner = new SolidBrush(ColorTranslator.FromHtml(buttonColorCorner));
             g.FillRectangle(brushCorner, 1, 1, 1, 1);
-            g.FillRectangle(brushCorner, 1, 48, 1, 1);
-            g.FillRectangle(brushCorner, 148, 1, 1, 1);
-            g.FillRectangle(brushCorner, 148, 48, 1, 1);
+            g.FillRectangle(brushCorner, 1, y - 2, 1, 1);
+            g.FillRectangle(brushCorner, x - 2, 1, 1, 1);
+            g.FillRectangle(brushCorner, x - 2, y - 2, 1, 1);
 
             SolidBrush brushCornerShadow = new SolidBrush(ColorTranslator.FromHtml(buttonColorCornerShadow));
             g.FillRectangle(brushCornerShadow, 0, 0, 1, 1);
-            g.FillRectangle(brushCornerShadow, 0, 49, 1, 1);
-            g.FillRectangle(brushCornerShadow, 149, 0, 1, 1);
-            g.FillRectangle(brushCornerShadow, 149, 49, 1, 1);
+            g.FillRectangle(brushCornerShadow, 0, y - 1, 1, 1);
+            g.FillRectangle(brushCornerShadow, x - 1, 0, 1, 1);
+            g.FillRectangle(brushCornerShadow, x - 1, y - 1, 1, 1);
 
             // button hover
-            buttonBackHover = new Bitmap(150, 50);
+            buttonBackHover = new Bitmap(x, y);
             Graphics gH = Graphics.FromImage(buttonBackHover);
 
             SolidBrush brushBackShadowH = new SolidBrush(ColorTranslator.FromHtml(buttonColorShadowH));
-            gH.FillRectangle(brushBackShadowH, 0, 0, 150, 50);
+            gH.FillRectangle(brushBackShadowH, 0, 0, x, y);
 
             SolidBrush brushBackOuterH = new SolidBrush(ColorTranslator.FromHtml(buttonColorBorderH));
-            gH.FillRectangle(brushBackOuterH, 1, 1, 148, 48);
+            gH.FillRectangle(brushBackOuterH, 1, 1, x - 2, y - 2);
 
-            LinearGradientBrush gradBackInnerH = new LinearGradientBrush(new Point(0, 0), new Point(0, 48), ColorTranslator.FromHtml(buttonColorBorderGradientTopH), ColorTranslator.FromHtml(buttonColorBorderGradientBottomH));
-            gH.FillRectangle(gradBackInnerH, 2, 2, 146, 46);
+            LinearGradientBrush gradBackInnerH = new LinearGradientBrush(new Point(0, 0), new Point(0, y - 2), ColorTranslator.FromHtml(buttonColorBorderGradientTopH), ColorTranslator.FromHtml(buttonColorBorderGradientBottomH));
+            gH.FillRectangle(gradBackInnerH, 2, 2, x - 4, y - 4);
 
-            LinearGradientBrush gradUpperH = new LinearGradientBrush(new Point(0, 0), new Point(0, 23), ColorTranslator.FromHtml(buttonColorBackGradientUpperTopH), ColorTranslator.FromHtml(buttonColorBackGradientUpperBottomH));
-            LinearGradientBrush gradLowerH = new LinearGradientBrush(new Point(0, 0), new Point(0, 23), ColorTranslator.FromHtml(buttonColorBackGradientLowerTopH), ColorTranslator.FromHtml(buttonColorBackGradientLowerBottomH));
+            LinearGradientBrush gradUpperH = new LinearGradientBrush(new Point(0, 0), new Point(0, y / 2 - 1), ColorTranslator.FromHtml(buttonColorBackGradientUpperTopH), ColorTranslator.FromHtml(buttonColorBackGradientUpperBottomH));
+            LinearGradientBrush gradLowerH = new LinearGradientBrush(new Point(0, 0), new Point(0, y / 2 - 1), ColorTranslator.FromHtml(buttonColorBackGradientLowerTopH), ColorTranslator.FromHtml(buttonColorBackGradientLowerBottomH));
 
-            gH.FillRectangle(gradUpperH, 3, 3, 144, 23);
-            gH.FillRectangle(gradLowerH, 3, 24, 144, 23);
+            gH.FillRectangle(gradUpperH, 3, 3, x - 6, y / 2 - 2);
+            gH.FillRectangle(gradLowerH, 3, y / 2 - 1, x - 6, y / 2 - 2);
 
             SolidBrush brushCornerH = new SolidBrush(ColorTranslator.FromHtml(buttonColorCornerH));
             gH.FillRectangle(brushCornerH, 1, 1, 1, 1);
-            gH.FillRectangle(brushCornerH, 1, 48, 1, 1);
-            gH.FillRectangle(brushCornerH, 148, 1, 1, 1);
-            gH.FillRectangle(brushCornerH, 148, 48, 1, 1);
+            gH.FillRectangle(brushCornerH, 1, y - 2, 1, 1);
+            gH.FillRectangle(brushCornerH, x - 2, 1, 1, 1);
+            gH.FillRectangle(brushCornerH, x - 2, y - 2, 1, 1);
 
             SolidBrush brushCornerShadowH = new SolidBrush(ColorTranslator.FromHtml(buttonColorCornerShadowH));
             gH.FillRectangle(brushCornerShadowH, 0, 0, 1, 1);
-            gH.FillRectangle(brushCornerShadowH, 0, 49, 1, 1);
-            gH.FillRectangle(brushCornerShadowH, 149, 0, 1, 1);
-            gH.FillRectangle(brushCornerShadowH, 149, 49, 1, 1);
+            gH.FillRectangle(brushCornerShadowH, 0, y - 1, 1, 1);
+            gH.FillRectangle(brushCornerShadowH, x - 1, 0, 1, 1);
+            gH.FillRectangle(brushCornerShadowH, x - 1, y - 1, 1, 1);
 
             // button press
-            buttonBackPress = new Bitmap(150, 50);
+            buttonBackPress = new Bitmap(x, y);
             Graphics gP = Graphics.FromImage(buttonBackPress);
 
             SolidBrush brushBackShadowP = new SolidBrush(ColorTranslator.FromHtml(buttonColorShadowP));
-            gP.FillRectangle(brushBackShadowP, 0, 0, 150, 50);
+            gP.FillRectangle(brushBackShadowP, 0, 0, x, y);
 
             SolidBrush brushBackOuterP = new SolidBrush(ColorTranslator.FromHtml(buttonColorBorderP));
-            gP.FillRectangle(brushBackOuterP, 1, 1, 148, 48);
+            gP.FillRectangle(brushBackOuterP, 1, 1, x - 2, y - 2);
 
-            LinearGradientBrush gradBackInnerP = new LinearGradientBrush(new Point(0, 0), new Point(0, 48), ColorTranslator.FromHtml(buttonColorBorderGradientTopP), ColorTranslator.FromHtml(buttonColorBorderGradientBottomP));
-            gP.FillRectangle(gradBackInnerP, 2, 2, 146, 46);
+            LinearGradientBrush gradBackInnerP = new LinearGradientBrush(new Point(0, 0), new Point(0, y - 2), ColorTranslator.FromHtml(buttonColorBorderGradientTopP), ColorTranslator.FromHtml(buttonColorBorderGradientBottomP));
+            gP.FillRectangle(gradBackInnerP, 2, 2, x - 4, y - 4);
 
-            LinearGradientBrush gradUpperP = new LinearGradientBrush(new Point(0, 0), new Point(0, 23), ColorTranslator.FromHtml(buttonColorBackGradientUpperTopP), ColorTranslator.FromHtml(buttonColorBackGradientUpperBottomP));
-            LinearGradientBrush gradLowerP = new LinearGradientBrush(new Point(0, 0), new Point(0, 23), ColorTranslator.FromHtml(buttonColorBackGradientLowerTopP), ColorTranslator.FromHtml(buttonColorBackGradientLowerBottomP));
+            LinearGradientBrush gradUpperP = new LinearGradientBrush(new Point(0, 0), new Point(0, y / 2 - 1), ColorTranslator.FromHtml(buttonColorBackGradientUpperTopP), ColorTranslator.FromHtml(buttonColorBackGradientUpperBottomP));
+            LinearGradientBrush gradLowerP = new LinearGradientBrush(new Point(0, 0), new Point(0, y / 2 - 1), ColorTranslator.FromHtml(buttonColorBackGradientLowerTopP), ColorTranslator.FromHtml(buttonColorBackGradientLowerBottomP));
 
-            gP.FillRectangle(gradUpperP, 3, 3, 144, 23);
-            gP.FillRectangle(gradLowerP, 3, 24, 144, 23);
+            gP.FillRectangle(gradUpperP, 3, 3, x - 6, y / 2 - 2);
+            gP.FillRectangle(gradLowerP, 3, y / 2 - 1, x - 6, y / 2 - 2);
 
             SolidBrush brushCornerP = new SolidBrush(ColorTranslator.FromHtml(buttonColorCornerP));
             gP.FillRectangle(brushCornerP, 1, 1, 1, 1);
-            gP.FillRectangle(brushCornerP, 1, 48, 1, 1);
-            gP.FillRectangle(brushCornerP, 148, 1, 1, 1);
-            gP.FillRectangle(brushCornerP, 148, 48, 1, 1);
+            gP.FillRectangle(brushCornerP, 1, y - 2, 1, 1);
+            gP.FillRectangle(brushCornerP, x - 2, 1, 1, 1);
+            gP.FillRectangle(brushCornerP, x - 2, y - 2, 1, 1);
 
             SolidBrush brushCornerShadowP = new SolidBrush(ColorTranslator.FromHtml(buttonColorCornerShadowP));
             gP.FillRectangle(brushCornerShadowP, 0, 0, 1, 1);
-            gP.FillRectangle(brushCornerShadowP, 0, 49, 1, 1);
-            gP.FillRectangle(brushCornerShadowP, 149, 0, 1, 1);
-            gP.FillRectangle(brushCornerShadowP, 149, 49, 1, 1);
+            gP.FillRectangle(brushCornerShadowP, 0, y - 1, 1, 1);
+            gP.FillRectangle(brushCornerShadowP, x - 1, 0, 1, 1);
+            gP.FillRectangle(brushCornerShadowP, x - 1, y - 1, 1, 1);
 
+        }
+
+        // catch click even if form is not active
+        protected override void WndProc(ref Message m)
+        {
+            int WM_PARENTNOTIFY = 0x0210;
+            if (!this.Focused && m.Msg == WM_PARENTNOTIFY)
+            {
+                this.Activate();
+            }
+            base.WndProc(ref m);
+        }
+
+        // double buffering entire form to prevent flickering
+        protected override CreateParams CreateParams
+        {
+            get
+            {
+                CreateParams cp = base.CreateParams;
+                cp.ExStyle |= 0x02000000;  // Turn on WS_EX_COMPOSITED
+                return cp;
+            }
         }
 
 
 
-
-
-
     } // class end
+
+    
+    // custom paint for ProgressBar as ProgressBarEx
+    public class ProgressBarEx : ProgressBar
+    {
+        public ProgressBarEx()
+        {
+            this.SetStyle(ControlStyles.UserPaint, true);
+        }
+
+        protected override void OnPaint(PaintEventArgs e)
+        {
+            SolidBrush brushFore = new SolidBrush(this.ForeColor);
+            SolidBrush brushBack = new SolidBrush(this.BackColor);
+
+            Rectangle rec = new Rectangle(0, 0, this.Width, this.Height);
+
+            /*
+            if (ProgressBarRenderer.IsSupported) ProgressBarRenderer.DrawHorizontalBar(e.Graphics, rec);
+
+            e.Graphics.FillRectangle(new SolidBrush(Color.White), 2, 2, rec.Width - 4, rec.Height - 4);
+
+            rec.Width = (int)(rec.Width * ((double)Value / Maximum)) - 4;
+            rec.Height = rec.Height - 4;
+
+            e.Graphics.FillRectangle(brushFore, 2, 2, rec.Width, rec.Height / 2);
+            e.Graphics.FillRectangle(brushBack, 2, 2 + rec.Height / 2, rec.Width, rec.Height / 2);
+            */
+
+            
+            e.Graphics.FillRectangle(new SolidBrush(SystemColors.ButtonFace), 0, 0, 1, 1);
+            e.Graphics.FillRectangle(new SolidBrush(SystemColors.ButtonFace), rec.Width - 1, 0, 1, 1);
+            e.Graphics.FillRectangle(new SolidBrush(SystemColors.ButtonFace), rec.Width - 1, rec.Height - 1, 1, 1);
+            e.Graphics.FillRectangle(new SolidBrush(SystemColors.ButtonFace), 0, rec.Height - 1, 1, 1);
+
+            e.Graphics.FillRectangle(new SolidBrush(SystemColors.ControlLight), 0, 0, rec.Width, rec.Height);
+            e.Graphics.FillRectangle(new SolidBrush(Color.White), 1, 1, rec.Width - 2, rec.Height - 2);
+
+            if (Value > 0)
+            {
+                rec.Width = (int)(rec.Width * ((double)Value / Maximum)) - 2;
+                rec.Height = rec.Height - 2;
+
+                // progressbar borders
+                e.Graphics.FillRectangle(new SolidBrush(ColorTranslator.FromHtml("#5582ac")), 1, 1, rec.Width, rec.Height);
+                e.Graphics.FillRectangle(new SolidBrush(ColorTranslator.FromHtml("#d0e5fb")), 2, 2, rec.Width - 2, rec.Height - 2);
+
+                // progressbar gradients
+                e.Graphics.FillRectangle(brushFore, 3, 3, rec.Width - 4, (rec.Height - 4) / 2);
+                e.Graphics.FillRectangle(brushBack, 3, rec.Height / 2 + 1, rec.Width - 4, (rec.Height - 3) / 2);
+
+                // progressbar corners
+                if (rec.Width > 1)
+                {
+                    e.Graphics.FillRectangle(new SolidBrush(ColorTranslator.FromHtml("#92b3d3")), 1, 1, 1, 1);
+                    e.Graphics.FillRectangle(new SolidBrush(ColorTranslator.FromHtml("#92b3d3")), rec.Width, 1, 1, 1);
+                    e.Graphics.FillRectangle(new SolidBrush(ColorTranslator.FromHtml("#92b3d3")), rec.Width, rec.Height, 1, 1);
+                    e.Graphics.FillRectangle(new SolidBrush(ColorTranslator.FromHtml("#92b3d3")), 1, rec.Height, 1, 1);
+                }
+            }
+            
+        }
+    }
+
+    public class NewProgressBar : ProgressBar
+    {
+        public NewProgressBar()
+        {
+            this.SetStyle(ControlStyles.UserPaint, true);
+        }
+
+        protected override void OnPaintBackground(PaintEventArgs pevent)
+        {
+            // None... Helps control the flicker.
+        }
+
+        protected override void OnPaint(PaintEventArgs e)
+        {
+            const int inset = 2; // A single inset value to control teh sizing of the inner rect.
+
+            using (Image offscreenImage = new Bitmap(this.Width, this.Height))
+            {
+                using (Graphics offscreen = Graphics.FromImage(offscreenImage))
+                {
+                    Rectangle rect = new Rectangle(0, 0, this.Width, this.Height);
+
+                    if (ProgressBarRenderer.IsSupported)
+                        ProgressBarRenderer.DrawHorizontalBar(offscreen, rect);
+
+                    rect.Inflate(new Size(-inset, -inset)); // Deflate inner rect.
+                    rect.Width = (int)(rect.Width * ((double)this.Value / this.Maximum));
+                    if (rect.Width == 0) rect.Width = 1; // Can't draw rec with width of 0.
+
+                    LinearGradientBrush brush = new LinearGradientBrush(rect, this.BackColor, this.ForeColor, LinearGradientMode.Vertical);
+                    offscreen.FillRectangle(brush, inset, inset, rect.Width, rect.Height);
+
+                    e.Graphics.DrawImage(offscreenImage, 0, 0);
+                    offscreenImage.Dispose();
+                }
+            }
+        }
+    }
+
+ 
+
+
 } // namespace end

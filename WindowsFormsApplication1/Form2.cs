@@ -114,6 +114,13 @@ namespace PatkaPlayer
             txtStopTimerMod.Text = settings.LoadSetting("HotkeyStopTimerMod");
             txtStopTimerKey.Text = settings.LoadSetting("HotkeyStopTimerKey");
             checkGlobalKeyWarning.Checked = Convert.ToBoolean(settings.LoadSetting("HotkeyWarning"));
+
+            // send keys
+            txtKeystrokePlayMod.Text = settings.LoadSetting("SendkeyPlayMod");
+            txtKeystrokePlayKey.Text = settings.LoadSetting("SendkeyPlayKey");
+            txtKeystrokeStopMod.Text = settings.LoadSetting("SendkeyStopMod");
+            txtKeystrokeStopKey.Text = settings.LoadSetting("SendkeyStopKey");
+            checkSendKeystrokes.Checked = Convert.ToBoolean(settings.LoadSetting("SendKeystrokes"));
         }
 
         // save config file
@@ -179,6 +186,13 @@ namespace PatkaPlayer
             settings.SaveSetting("HotkeyStopTimerMod", txtStopTimerMod.Text);
             settings.SaveSetting("HotkeyStopTimerKey", txtStopTimerKey.Text);
             settings.SaveSetting("HotkeyWarning", checkGlobalKeyWarning.Checked.ToString());
+
+            // send keys
+            settings.SaveSetting("SendkeyPlayMod", txtKeystrokePlayMod.Text);
+            settings.SaveSetting("SendkeyPlayKey", txtKeystrokePlayKey.Text);
+            settings.SaveSetting("SendkeyStopMod", txtKeystrokeStopMod.Text);
+            settings.SaveSetting("SendkeyStopKey", txtKeystrokeStopKey.Text);
+            settings.SaveSetting("SendKeystrokes", checkSendKeystrokes.Checked.ToString());
         }
 
         // OK button, saves config and reloads frmPlayer
@@ -469,6 +483,38 @@ namespace PatkaPlayer
             }
         }
 
+        private void txtSendKey_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
+        {
+            TextBox textBox = (TextBox)sender;
+            if (
+                e.KeyCode != Keys.Menu &&
+                e.KeyCode != Keys.ShiftKey &&
+                e.KeyCode != Keys.ControlKey &&
+                e.KeyCode != Keys.LWin &&
+                e.KeyCode != Keys.RWin &&
+                e.KeyCode != Keys.F1 &&
+                e.KeyCode != Keys.F2 &&
+                e.KeyCode != Keys.F3 &&
+                e.KeyCode != Keys.F4 &&
+                e.KeyCode != Keys.F5 &&
+                e.KeyCode != Keys.F6 &&
+                e.KeyCode != Keys.F7 &&
+                e.KeyCode != Keys.F8 &&
+                e.KeyCode != Keys.F9 &&
+                e.KeyCode != Keys.F10 &&
+                e.KeyCode != Keys.F11 &&
+                e.KeyCode != Keys.F12 &&
+                char.IsLetterOrDigit((char)e.KeyCode) &&
+                e.KeyCode.ToString().IndexOf("Oem") == -1 &&
+                e.KeyCode.ToString().IndexOf("NumPad") == -1
+                )
+            {
+                txtChanged = true;
+                textBox.Text = e.KeyCode.ToString();
+                txtVersion.Focus();
+            }
+        }
+
         private void txtMod_KeyDown(object sender, KeyEventArgs e)
         {
             TextBox textBox = (TextBox)sender;
@@ -497,6 +543,40 @@ namespace PatkaPlayer
                         break;
                 }
                 
+                if (!listMod.Contains(key)) listMod.Add(key);
+                listMod.Sort();
+
+                textBox.Text = "";
+                for (int i = 0; i < listMod.Count; i++)
+                {
+                    if (i > 0) textBox.Text += "+" + listMod[i];
+                    else textBox.Text = listMod[i];
+                }
+            }
+        }
+
+        private void txtSendMod_KeyDown(object sender, KeyEventArgs e)
+        {
+            TextBox textBox = (TextBox)sender;
+            e.SuppressKeyPress = true;
+
+            if (e.KeyCode == Keys.Menu || e.KeyCode == Keys.ShiftKey || e.KeyCode == Keys.ControlKey)
+            {
+                txtChanged = true;
+                string key = "";
+                switch (e.KeyCode)
+                {
+                    case Keys.Menu:
+                        key = "Alt";
+                        break;
+                    case Keys.ShiftKey:
+                        key = "Shift";
+                        break;
+                    case Keys.ControlKey:
+                        key = "Ctrl";
+                        break;
+                }
+
                 if (!listMod.Contains(key)) listMod.Add(key);
                 listMod.Sort();
 

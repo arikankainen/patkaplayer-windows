@@ -10,9 +10,9 @@ using System.Windows.Forms;
 
 namespace PatkaPlayer
 {
-    public partial class frmHelp : Form
+    public partial class frmPopup : Form
     {
-        public frmHelp()
+        public frmPopup()
         {
             InitializeComponent();
         }
