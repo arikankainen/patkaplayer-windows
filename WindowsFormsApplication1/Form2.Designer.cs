@@ -91,7 +91,21 @@
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabFolders = new System.Windows.Forms.TabPage();
             this.tabSettings = new System.Windows.Forms.TabPage();
+            this.groupBox13 = new System.Windows.Forms.GroupBox();
+            this.label18 = new System.Windows.Forms.Label();
+            this.comboLatency = new System.Windows.Forms.ComboBox();
+            this.groupBox8 = new System.Windows.Forms.GroupBox();
+            this.checkSendKeystrokes = new System.Windows.Forms.CheckBox();
+            this.label16 = new System.Windows.Forms.Label();
+            this.label17 = new System.Windows.Forms.Label();
+            this.txtKeystrokeStopKey = new System.Windows.Forms.TextBox();
+            this.label19 = new System.Windows.Forms.Label();
+            this.txtKeystrokePlayMod = new System.Windows.Forms.TextBox();
+            this.txtKeystrokeStopMod = new System.Windows.Forms.TextBox();
+            this.txtKeystrokePlayKey = new System.Windows.Forms.TextBox();
+            this.label29 = new System.Windows.Forms.Label();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
+            this.checkGlobalKeyWarning = new System.Windows.Forms.CheckBox();
             this.txtStopTimerKey = new System.Windows.Forms.TextBox();
             this.txtStopTimerMod = new System.Windows.Forms.TextBox();
             this.txtTimer2Key = new System.Windows.Forms.TextBox();
@@ -106,7 +120,6 @@
             this.txtRandomMod = new System.Windows.Forms.TextBox();
             this.txtPlayPreKey = new System.Windows.Forms.TextBox();
             this.txtPlayPreMod = new System.Windows.Forms.TextBox();
-            this.checkGlobalKeyWarning = new System.Windows.Forms.CheckBox();
             this.label20 = new System.Windows.Forms.Label();
             this.label27 = new System.Windows.Forms.Label();
             this.label26 = new System.Windows.Forms.Label();
@@ -146,16 +159,6 @@
             this.label12 = new System.Windows.Forms.Label();
             this.numericMinHour2 = new System.Windows.Forms.NumericUpDown();
             this.btnApply = new System.Windows.Forms.Button();
-            this.label19 = new System.Windows.Forms.Label();
-            this.txtKeystrokePlayKey = new System.Windows.Forms.TextBox();
-            this.txtKeystrokePlayMod = new System.Windows.Forms.TextBox();
-            this.txtKeystrokeStopKey = new System.Windows.Forms.TextBox();
-            this.txtKeystrokeStopMod = new System.Windows.Forms.TextBox();
-            this.label29 = new System.Windows.Forms.Label();
-            this.groupBox8 = new System.Windows.Forms.GroupBox();
-            this.label16 = new System.Windows.Forms.Label();
-            this.label17 = new System.Windows.Forms.Label();
-            this.checkSendKeystrokes = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             this.groupBox4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericMaxSec1)).BeginInit();
@@ -170,6 +173,8 @@
             this.tabControl1.SuspendLayout();
             this.tabFolders.SuspendLayout();
             this.tabSettings.SuspendLayout();
+            this.groupBox13.SuspendLayout();
+            this.groupBox8.SuspendLayout();
             this.groupBox5.SuspendLayout();
             this.groupBox14.SuspendLayout();
             this.groupBox12.SuspendLayout();
@@ -185,7 +190,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.numericMinSec2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericMinMin2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericMinHour2)).BeginInit();
-            this.groupBox8.SuspendLayout();
             this.SuspendLayout();
             // 
             // btnSet1
@@ -932,6 +936,7 @@
             // 
             // tabSettings
             // 
+            this.tabSettings.Controls.Add(this.groupBox13);
             this.tabSettings.Controls.Add(this.groupBox8);
             this.tabSettings.Controls.Add(this.groupBox5);
             this.tabSettings.Controls.Add(this.groupBox14);
@@ -944,6 +949,169 @@
             this.tabSettings.TabIndex = 2;
             this.tabSettings.Text = "Settings";
             this.tabSettings.UseVisualStyleBackColor = true;
+            // 
+            // groupBox13
+            // 
+            this.groupBox13.Controls.Add(this.label18);
+            this.groupBox13.Controls.Add(this.comboLatency);
+            this.groupBox13.Location = new System.Drawing.Point(6, 281);
+            this.groupBox13.Name = "groupBox13";
+            this.groupBox13.Size = new System.Drawing.Size(228, 68);
+            this.groupBox13.TabIndex = 34;
+            this.groupBox13.TabStop = false;
+            this.groupBox13.Text = "Latency";
+            // 
+            // label18
+            // 
+            this.label18.AutoSize = true;
+            this.label18.Location = new System.Drawing.Point(146, 32);
+            this.label18.Name = "label18";
+            this.label18.Size = new System.Drawing.Size(63, 13);
+            this.label18.TabIndex = 1;
+            this.label18.Text = "milliseconds";
+            // 
+            // comboLatency
+            // 
+            this.comboLatency.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboLatency.FormattingEnabled = true;
+            this.comboLatency.Items.AddRange(new object[] {
+            "100",
+            "200",
+            "300",
+            "400",
+            "500",
+            "600",
+            "700",
+            "800",
+            "900",
+            "1000"});
+            this.comboLatency.Location = new System.Drawing.Point(15, 27);
+            this.comboLatency.Name = "comboLatency";
+            this.comboLatency.Size = new System.Drawing.Size(121, 21);
+            this.comboLatency.TabIndex = 0;
+            this.comboLatency.SelectedIndexChanged += new System.EventHandler(this.valueChanged);
+            // 
+            // groupBox8
+            // 
+            this.groupBox8.Controls.Add(this.checkSendKeystrokes);
+            this.groupBox8.Controls.Add(this.label16);
+            this.groupBox8.Controls.Add(this.label17);
+            this.groupBox8.Controls.Add(this.txtKeystrokeStopKey);
+            this.groupBox8.Controls.Add(this.label19);
+            this.groupBox8.Controls.Add(this.txtKeystrokePlayMod);
+            this.groupBox8.Controls.Add(this.txtKeystrokeStopMod);
+            this.groupBox8.Controls.Add(this.txtKeystrokePlayKey);
+            this.groupBox8.Controls.Add(this.label29);
+            this.groupBox8.Location = new System.Drawing.Point(240, 291);
+            this.groupBox8.Name = "groupBox8";
+            this.groupBox8.Size = new System.Drawing.Size(404, 160);
+            this.groupBox8.TabIndex = 49;
+            this.groupBox8.TabStop = false;
+            this.groupBox8.Text = "Send Keystrokes";
+            // 
+            // checkSendKeystrokes
+            // 
+            this.checkSendKeystrokes.AutoSize = true;
+            this.checkSendKeystrokes.Location = new System.Drawing.Point(16, 127);
+            this.checkSendKeystrokes.Name = "checkSendKeystrokes";
+            this.checkSendKeystrokes.Size = new System.Drawing.Size(353, 17);
+            this.checkSendKeystrokes.TabIndex = 59;
+            this.checkSendKeystrokes.Text = "Send keystrokes (can be temporary toggled by clicking statusbar text)";
+            this.checkSendKeystrokes.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+            this.checkSendKeystrokes.UseVisualStyleBackColor = true;
+            this.checkSendKeystrokes.CheckStateChanged += new System.EventHandler(this.valueChanged);
+            // 
+            // label16
+            // 
+            this.label16.Location = new System.Drawing.Point(147, 18);
+            this.label16.Name = "label16";
+            this.label16.Size = new System.Drawing.Size(100, 18);
+            this.label16.TabIndex = 60;
+            this.label16.Text = "Modifier";
+            this.label16.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            // 
+            // label17
+            // 
+            this.label17.Location = new System.Drawing.Point(253, 18);
+            this.label17.Name = "label17";
+            this.label17.Size = new System.Drawing.Size(100, 18);
+            this.label17.TabIndex = 59;
+            this.label17.Text = "Key";
+            this.label17.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            // 
+            // txtKeystrokeStopKey
+            // 
+            this.txtKeystrokeStopKey.Location = new System.Drawing.Point(253, 69);
+            this.txtKeystrokeStopKey.Name = "txtKeystrokeStopKey";
+            this.txtKeystrokeStopKey.Size = new System.Drawing.Size(100, 20);
+            this.txtKeystrokeStopKey.TabIndex = 64;
+            this.txtKeystrokeStopKey.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.txtKeystrokeStopKey.Click += new System.EventHandler(this.txtKey_Click);
+            this.txtKeystrokeStopKey.DoubleClick += new System.EventHandler(this.txtKey_DoubleClick);
+            this.txtKeystrokeStopKey.Enter += new System.EventHandler(this.txtKey_Enter);
+            this.txtKeystrokeStopKey.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtKey_KeyDown);
+            this.txtKeystrokeStopKey.Leave += new System.EventHandler(this.txtKey_Leave);
+            this.txtKeystrokeStopKey.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.txtSendKey_PreviewKeyDown);
+            // 
+            // label19
+            // 
+            this.label19.AutoSize = true;
+            this.label19.Location = new System.Drawing.Point(13, 46);
+            this.label19.Name = "label19";
+            this.label19.Size = new System.Drawing.Size(46, 13);
+            this.label19.TabIndex = 59;
+            this.label19.Text = "On play:";
+            // 
+            // txtKeystrokePlayMod
+            // 
+            this.txtKeystrokePlayMod.Location = new System.Drawing.Point(147, 43);
+            this.txtKeystrokePlayMod.Name = "txtKeystrokePlayMod";
+            this.txtKeystrokePlayMod.Size = new System.Drawing.Size(100, 20);
+            this.txtKeystrokePlayMod.TabIndex = 60;
+            this.txtKeystrokePlayMod.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.txtKeystrokePlayMod.Click += new System.EventHandler(this.txtKey_Click);
+            this.txtKeystrokePlayMod.DoubleClick += new System.EventHandler(this.txtKey_DoubleClick);
+            this.txtKeystrokePlayMod.Enter += new System.EventHandler(this.txtKey_Enter);
+            this.txtKeystrokePlayMod.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtSendMod_KeyDown);
+            this.txtKeystrokePlayMod.KeyUp += new System.Windows.Forms.KeyEventHandler(this.txtMod_KeyUp);
+            this.txtKeystrokePlayMod.Leave += new System.EventHandler(this.txtKey_Leave);
+            // 
+            // txtKeystrokeStopMod
+            // 
+            this.txtKeystrokeStopMod.Location = new System.Drawing.Point(147, 69);
+            this.txtKeystrokeStopMod.Name = "txtKeystrokeStopMod";
+            this.txtKeystrokeStopMod.Size = new System.Drawing.Size(100, 20);
+            this.txtKeystrokeStopMod.TabIndex = 63;
+            this.txtKeystrokeStopMod.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.txtKeystrokeStopMod.Click += new System.EventHandler(this.txtKey_Click);
+            this.txtKeystrokeStopMod.DoubleClick += new System.EventHandler(this.txtKey_DoubleClick);
+            this.txtKeystrokeStopMod.Enter += new System.EventHandler(this.txtKey_Enter);
+            this.txtKeystrokeStopMod.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtSendMod_KeyDown);
+            this.txtKeystrokeStopMod.KeyUp += new System.Windows.Forms.KeyEventHandler(this.txtMod_KeyUp);
+            this.txtKeystrokeStopMod.Leave += new System.EventHandler(this.txtKey_Leave);
+            // 
+            // txtKeystrokePlayKey
+            // 
+            this.txtKeystrokePlayKey.Location = new System.Drawing.Point(253, 43);
+            this.txtKeystrokePlayKey.Name = "txtKeystrokePlayKey";
+            this.txtKeystrokePlayKey.Size = new System.Drawing.Size(100, 20);
+            this.txtKeystrokePlayKey.TabIndex = 61;
+            this.txtKeystrokePlayKey.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.txtKeystrokePlayKey.Click += new System.EventHandler(this.txtKey_Click);
+            this.txtKeystrokePlayKey.DoubleClick += new System.EventHandler(this.txtKey_DoubleClick);
+            this.txtKeystrokePlayKey.Enter += new System.EventHandler(this.txtKey_Enter);
+            this.txtKeystrokePlayKey.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtKey_KeyDown);
+            this.txtKeystrokePlayKey.Leave += new System.EventHandler(this.txtKey_Leave);
+            this.txtKeystrokePlayKey.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.txtSendKey_PreviewKeyDown);
+            // 
+            // label29
+            // 
+            this.label29.AutoSize = true;
+            this.label29.Location = new System.Drawing.Point(13, 72);
+            this.label29.Name = "label29";
+            this.label29.Size = new System.Drawing.Size(47, 13);
+            this.label29.TabIndex = 62;
+            this.label29.Text = "On stop:";
             // 
             // groupBox5
             // 
@@ -977,6 +1145,18 @@
             this.groupBox5.TabIndex = 48;
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "Hotkeys";
+            // 
+            // checkGlobalKeyWarning
+            // 
+            this.checkGlobalKeyWarning.AutoSize = true;
+            this.checkGlobalKeyWarning.Location = new System.Drawing.Point(16, 248);
+            this.checkGlobalKeyWarning.Name = "checkGlobalKeyWarning";
+            this.checkGlobalKeyWarning.Size = new System.Drawing.Size(319, 17);
+            this.checkGlobalKeyWarning.TabIndex = 38;
+            this.checkGlobalKeyWarning.Text = "Show a warning if global hotkey is used by another application";
+            this.checkGlobalKeyWarning.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+            this.checkGlobalKeyWarning.UseVisualStyleBackColor = true;
+            this.checkGlobalKeyWarning.CheckStateChanged += new System.EventHandler(this.valueChanged);
             // 
             // txtStopTimerKey
             // 
@@ -1169,18 +1349,6 @@
             this.txtPlayPreMod.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtMod_KeyDown);
             this.txtPlayPreMod.KeyUp += new System.Windows.Forms.KeyEventHandler(this.txtMod_KeyUp);
             this.txtPlayPreMod.Leave += new System.EventHandler(this.txtKey_Leave);
-            // 
-            // checkGlobalKeyWarning
-            // 
-            this.checkGlobalKeyWarning.AutoSize = true;
-            this.checkGlobalKeyWarning.Location = new System.Drawing.Point(16, 248);
-            this.checkGlobalKeyWarning.Name = "checkGlobalKeyWarning";
-            this.checkGlobalKeyWarning.Size = new System.Drawing.Size(319, 17);
-            this.checkGlobalKeyWarning.TabIndex = 38;
-            this.checkGlobalKeyWarning.Text = "Show a warning if global hotkey is used by another application";
-            this.checkGlobalKeyWarning.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
-            this.checkGlobalKeyWarning.UseVisualStyleBackColor = true;
-            this.checkGlobalKeyWarning.CheckStateChanged += new System.EventHandler(this.valueChanged);
             // 
             // label20
             // 
@@ -1633,128 +1801,6 @@
             this.btnApply.UseVisualStyleBackColor = true;
             this.btnApply.Click += new System.EventHandler(this.btnApply_Click);
             // 
-            // label19
-            // 
-            this.label19.AutoSize = true;
-            this.label19.Location = new System.Drawing.Point(13, 46);
-            this.label19.Name = "label19";
-            this.label19.Size = new System.Drawing.Size(46, 13);
-            this.label19.TabIndex = 59;
-            this.label19.Text = "On play:";
-            // 
-            // txtKeystrokePlayKey
-            // 
-            this.txtKeystrokePlayKey.Location = new System.Drawing.Point(253, 43);
-            this.txtKeystrokePlayKey.Name = "txtKeystrokePlayKey";
-            this.txtKeystrokePlayKey.Size = new System.Drawing.Size(100, 20);
-            this.txtKeystrokePlayKey.TabIndex = 61;
-            this.txtKeystrokePlayKey.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.txtKeystrokePlayKey.Click += new System.EventHandler(this.txtKey_Click);
-            this.txtKeystrokePlayKey.DoubleClick += new System.EventHandler(this.txtKey_DoubleClick);
-            this.txtKeystrokePlayKey.Enter += new System.EventHandler(this.txtKey_Enter);
-            this.txtKeystrokePlayKey.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtKey_KeyDown);
-            this.txtKeystrokePlayKey.Leave += new System.EventHandler(this.txtKey_Leave);
-            this.txtKeystrokePlayKey.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.txtSendKey_PreviewKeyDown);
-            // 
-            // txtKeystrokePlayMod
-            // 
-            this.txtKeystrokePlayMod.Location = new System.Drawing.Point(147, 43);
-            this.txtKeystrokePlayMod.Name = "txtKeystrokePlayMod";
-            this.txtKeystrokePlayMod.Size = new System.Drawing.Size(100, 20);
-            this.txtKeystrokePlayMod.TabIndex = 60;
-            this.txtKeystrokePlayMod.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.txtKeystrokePlayMod.Click += new System.EventHandler(this.txtKey_Click);
-            this.txtKeystrokePlayMod.DoubleClick += new System.EventHandler(this.txtKey_DoubleClick);
-            this.txtKeystrokePlayMod.Enter += new System.EventHandler(this.txtKey_Enter);
-            this.txtKeystrokePlayMod.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtSendMod_KeyDown);
-            this.txtKeystrokePlayMod.KeyUp += new System.Windows.Forms.KeyEventHandler(this.txtMod_KeyUp);
-            this.txtKeystrokePlayMod.Leave += new System.EventHandler(this.txtKey_Leave);
-            // 
-            // txtKeystrokeStopKey
-            // 
-            this.txtKeystrokeStopKey.Location = new System.Drawing.Point(253, 69);
-            this.txtKeystrokeStopKey.Name = "txtKeystrokeStopKey";
-            this.txtKeystrokeStopKey.Size = new System.Drawing.Size(100, 20);
-            this.txtKeystrokeStopKey.TabIndex = 64;
-            this.txtKeystrokeStopKey.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.txtKeystrokeStopKey.Click += new System.EventHandler(this.txtKey_Click);
-            this.txtKeystrokeStopKey.DoubleClick += new System.EventHandler(this.txtKey_DoubleClick);
-            this.txtKeystrokeStopKey.Enter += new System.EventHandler(this.txtKey_Enter);
-            this.txtKeystrokeStopKey.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtKey_KeyDown);
-            this.txtKeystrokeStopKey.Leave += new System.EventHandler(this.txtKey_Leave);
-            this.txtKeystrokeStopKey.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.txtSendKey_PreviewKeyDown);
-            // 
-            // txtKeystrokeStopMod
-            // 
-            this.txtKeystrokeStopMod.Location = new System.Drawing.Point(147, 69);
-            this.txtKeystrokeStopMod.Name = "txtKeystrokeStopMod";
-            this.txtKeystrokeStopMod.Size = new System.Drawing.Size(100, 20);
-            this.txtKeystrokeStopMod.TabIndex = 63;
-            this.txtKeystrokeStopMod.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.txtKeystrokeStopMod.Click += new System.EventHandler(this.txtKey_Click);
-            this.txtKeystrokeStopMod.DoubleClick += new System.EventHandler(this.txtKey_DoubleClick);
-            this.txtKeystrokeStopMod.Enter += new System.EventHandler(this.txtKey_Enter);
-            this.txtKeystrokeStopMod.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtSendMod_KeyDown);
-            this.txtKeystrokeStopMod.KeyUp += new System.Windows.Forms.KeyEventHandler(this.txtMod_KeyUp);
-            this.txtKeystrokeStopMod.Leave += new System.EventHandler(this.txtKey_Leave);
-            // 
-            // label29
-            // 
-            this.label29.AutoSize = true;
-            this.label29.Location = new System.Drawing.Point(13, 72);
-            this.label29.Name = "label29";
-            this.label29.Size = new System.Drawing.Size(47, 13);
-            this.label29.TabIndex = 62;
-            this.label29.Text = "On stop:";
-            // 
-            // groupBox8
-            // 
-            this.groupBox8.Controls.Add(this.checkSendKeystrokes);
-            this.groupBox8.Controls.Add(this.label16);
-            this.groupBox8.Controls.Add(this.label17);
-            this.groupBox8.Controls.Add(this.txtKeystrokeStopKey);
-            this.groupBox8.Controls.Add(this.label19);
-            this.groupBox8.Controls.Add(this.txtKeystrokePlayMod);
-            this.groupBox8.Controls.Add(this.txtKeystrokeStopMod);
-            this.groupBox8.Controls.Add(this.txtKeystrokePlayKey);
-            this.groupBox8.Controls.Add(this.label29);
-            this.groupBox8.Location = new System.Drawing.Point(240, 291);
-            this.groupBox8.Name = "groupBox8";
-            this.groupBox8.Size = new System.Drawing.Size(404, 160);
-            this.groupBox8.TabIndex = 49;
-            this.groupBox8.TabStop = false;
-            this.groupBox8.Text = "Send Keystrokes";
-            // 
-            // label16
-            // 
-            this.label16.Location = new System.Drawing.Point(147, 18);
-            this.label16.Name = "label16";
-            this.label16.Size = new System.Drawing.Size(100, 18);
-            this.label16.TabIndex = 60;
-            this.label16.Text = "Modifier";
-            this.label16.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
-            // 
-            // label17
-            // 
-            this.label17.Location = new System.Drawing.Point(253, 18);
-            this.label17.Name = "label17";
-            this.label17.Size = new System.Drawing.Size(100, 18);
-            this.label17.TabIndex = 59;
-            this.label17.Text = "Key";
-            this.label17.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
-            // 
-            // checkSendKeystrokes
-            // 
-            this.checkSendKeystrokes.AutoSize = true;
-            this.checkSendKeystrokes.Location = new System.Drawing.Point(16, 127);
-            this.checkSendKeystrokes.Name = "checkSendKeystrokes";
-            this.checkSendKeystrokes.Size = new System.Drawing.Size(353, 17);
-            this.checkSendKeystrokes.TabIndex = 59;
-            this.checkSendKeystrokes.Text = "Send keystrokes (can be temporary toggled by clicking statusbar text)";
-            this.checkSendKeystrokes.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
-            this.checkSendKeystrokes.UseVisualStyleBackColor = true;
-            this.checkSendKeystrokes.CheckStateChanged += new System.EventHandler(this.valueChanged);
-            // 
             // frmSettings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1794,6 +1840,10 @@
             this.tabControl1.ResumeLayout(false);
             this.tabFolders.ResumeLayout(false);
             this.tabSettings.ResumeLayout(false);
+            this.groupBox13.ResumeLayout(false);
+            this.groupBox13.PerformLayout();
+            this.groupBox8.ResumeLayout(false);
+            this.groupBox8.PerformLayout();
             this.groupBox5.ResumeLayout(false);
             this.groupBox5.PerformLayout();
             this.groupBox14.ResumeLayout(false);
@@ -1816,8 +1866,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.numericMinSec2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericMinMin2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericMinHour2)).EndInit();
-            this.groupBox8.ResumeLayout(false);
-            this.groupBox8.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1953,5 +2001,8 @@
         private System.Windows.Forms.Label label16;
         private System.Windows.Forms.Label label17;
         private System.Windows.Forms.CheckBox checkSendKeystrokes;
+        private System.Windows.Forms.GroupBox groupBox13;
+        private System.Windows.Forms.Label label18;
+        private System.Windows.Forms.ComboBox comboLatency;
     }
 }

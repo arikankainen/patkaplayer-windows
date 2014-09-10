@@ -47,6 +47,9 @@ namespace PatkaPlayer
         private string sendkeyPlayMod, sendkeyPlayKey, sendkeyStopMod, sendkeyStopKey, sendkeyPlayString, sendkeyStopString;
         private bool sendkeyPlay, sendkeyStop;
         private bool hotkeyWarning, sendKeystrokes;
+        private int latency;
+
+        private bool sendMessages = true;
 
         private bool timer1Started = false;
         private bool timer2Started = false;
@@ -140,7 +143,7 @@ namespace PatkaPlayer
 
             }
 
-            labelVersion.Text = "v1.25";
+            labelVersion.Text = "v1.26";
 
             notifyIcon1.Visible = false;
             notifyIcon1.MouseUp += new MouseEventHandler(NotifyIcon1_Click);
@@ -152,6 +155,11 @@ namespace PatkaPlayer
             this.KeyUp += new KeyEventHandler(Form1_KeyEvent);
             txtFilterFolder.KeyDown += new KeyEventHandler(txtFilterFolder_KeyDown);
             txtFilterFile.KeyDown += new KeyEventHandler(txtFilterFile_KeyDown);
+
+            //this.ContextMenu = contextMenu1;
+            contextMenu1.Popup += new EventHandler(contextMenu1_Popup);
+            contextMenu1.Collapse += new EventHandler(contextMenu1_Collapse);
+            
 
             hook.KeyPressed += new EventHandler<KeyPressedEventArgs>(hook_KeyPressed);
 
@@ -212,9 +220,9 @@ namespace PatkaPlayer
             renderButtons(296, 30, out buttonBackFolder, out buttonBackHoverFolder, out buttonBackPressFolder);
 
             pbPosition.Left = 290;
-            pbPosition.Top = 10;
-            pbPosition.Width = 100;
-            pbPosition.Height = 18;
+            pbPosition.Top = 9;
+            pbPosition.Width = 120;
+            pbPosition.Height = 20;
             pbPosition.ForeColor = ColorTranslator.FromHtml("#8ab3da");
             pbPosition.BackColor = ColorTranslator.FromHtml("#7fa9d2");
             pbPosition.Value = 0;
@@ -222,6 +230,7 @@ namespace PatkaPlayer
             this.Controls.Add(pbPosition);
 
             pbPosition.MouseDown += new MouseEventHandler(pbPosition_MouseDown);
+            pbPosition.MouseMove += new MouseEventHandler(pbPosition_MouseMove);
 
             buttonLocations();
             InsertPanelButtons();
@@ -514,8 +523,9 @@ namespace PatkaPlayer
 
             playpressed = true;
             if (sendkeyPlay && !play && sendKeystrokes) SendKeys.Send(sendkeyPlayString);
+            if (!play && sendMessages) sendMessagePause();
             closeTrack();
-            loadTrack(fileToPlay);
+            loadTrack(fileToPlay, latency);
             playTrack();
 
             if (logging)
@@ -746,6 +756,7 @@ namespace PatkaPlayer
                 else
                 {
                     notifyIcon1.Icon = PatkaPlayer.Properties.Resources.patka_taskbar;
+                    
                     timer2.Stop();
 
                     if (tray || trayIcon)
@@ -811,6 +822,10 @@ namespace PatkaPlayer
             
             // misc
             transNormal = Convert.ToDecimal(settings.LoadSetting("Transparency") ?? "1");
+            latency = Convert.ToInt32(settings.LoadSetting("Latency"));
+            if (latency < 50) latency = 200;
+            if (latency > 900) latency = 200;
+
 
             // loading complete, setting things
             if (trayIcon) notifyIcon1.Visible = true;
@@ -1051,6 +1066,16 @@ namespace PatkaPlayer
 
         }
 
+        private void sendMessagePlay()
+        {
+            NativeMethods.PostMessage((IntPtr)NativeMethods.HWND_BROADCAST, NativeMethods.WM_AK_PLAYPLAYER, IntPtr.Zero, IntPtr.Zero);
+        }
+
+        private void sendMessagePause()
+        {
+            NativeMethods.PostMessage((IntPtr)NativeMethods.HWND_BROADCAST, NativeMethods.WM_AK_PAUSEPLAYER, IntPtr.Zero, IntPtr.Zero);
+        }
+
         // catch click even if form is not active
         protected override void WndProc(ref Message m)
         {
@@ -1059,6 +1084,12 @@ namespace PatkaPlayer
             {
                 this.Activate();
             }
+
+            if (m.Msg == NativeMethods.WM_AK_TRACKCHANGED)
+            {
+                btnRandom.PerformClick();
+            }
+            
             base.WndProc(ref m);
         }
 
@@ -1077,7 +1108,6 @@ namespace PatkaPlayer
 
     } // class end
 
-    
     // custom paint for ProgressBar as ProgressBarEx
     public class ProgressBarEx : ProgressBar
     {
@@ -1086,14 +1116,15 @@ namespace PatkaPlayer
             this.SetStyle(ControlStyles.UserPaint, true);
         }
 
+        protected override void OnPaintBackground(PaintEventArgs e)
+        {
+            // none, helps for flicker
+        }
+
         protected override void OnPaint(PaintEventArgs e)
         {
-            SolidBrush brushFore = new SolidBrush(this.ForeColor);
-            SolidBrush brushBack = new SolidBrush(this.BackColor);
-
-            Rectangle rec = new Rectangle(0, 0, this.Width, this.Height);
-
             /*
+            Rectangle rec = new Rectangle(0, 0, this.Width, this.Height);
             if (ProgressBarRenderer.IsSupported) ProgressBarRenderer.DrawHorizontalBar(e.Graphics, rec);
 
             e.Graphics.FillRectangle(new SolidBrush(Color.White), 2, 2, rec.Width - 4, rec.Height - 4);
@@ -1105,81 +1136,49 @@ namespace PatkaPlayer
             e.Graphics.FillRectangle(brushBack, 2, 2 + rec.Height / 2, rec.Width, rec.Height / 2);
             */
 
-            
-            e.Graphics.FillRectangle(new SolidBrush(SystemColors.ButtonFace), 0, 0, 1, 1);
-            e.Graphics.FillRectangle(new SolidBrush(SystemColors.ButtonFace), rec.Width - 1, 0, 1, 1);
-            e.Graphics.FillRectangle(new SolidBrush(SystemColors.ButtonFace), rec.Width - 1, rec.Height - 1, 1, 1);
-            e.Graphics.FillRectangle(new SolidBrush(SystemColors.ButtonFace), 0, rec.Height - 1, 1, 1);
-
-            e.Graphics.FillRectangle(new SolidBrush(SystemColors.ControlLight), 0, 0, rec.Width, rec.Height);
-            e.Graphics.FillRectangle(new SolidBrush(Color.White), 1, 1, rec.Width - 2, rec.Height - 2);
-
-            if (Value > 0)
-            {
-                rec.Width = (int)(rec.Width * ((double)Value / Maximum)) - 2;
-                rec.Height = rec.Height - 2;
-
-                // progressbar borders
-                e.Graphics.FillRectangle(new SolidBrush(ColorTranslator.FromHtml("#5582ac")), 1, 1, rec.Width, rec.Height);
-                e.Graphics.FillRectangle(new SolidBrush(ColorTranslator.FromHtml("#d0e5fb")), 2, 2, rec.Width - 2, rec.Height - 2);
-
-                // progressbar gradients
-                e.Graphics.FillRectangle(brushFore, 3, 3, rec.Width - 4, (rec.Height - 4) / 2);
-                e.Graphics.FillRectangle(brushBack, 3, rec.Height / 2 + 1, rec.Width - 4, (rec.Height - 3) / 2);
-
-                // progressbar corners
-                if (rec.Width > 1)
-                {
-                    e.Graphics.FillRectangle(new SolidBrush(ColorTranslator.FromHtml("#92b3d3")), 1, 1, 1, 1);
-                    e.Graphics.FillRectangle(new SolidBrush(ColorTranslator.FromHtml("#92b3d3")), rec.Width, 1, 1, 1);
-                    e.Graphics.FillRectangle(new SolidBrush(ColorTranslator.FromHtml("#92b3d3")), rec.Width, rec.Height, 1, 1);
-                    e.Graphics.FillRectangle(new SolidBrush(ColorTranslator.FromHtml("#92b3d3")), 1, rec.Height, 1, 1);
-                }
-            }
-            
-        }
-    }
-
-    public class NewProgressBar : ProgressBar
-    {
-        public NewProgressBar()
-        {
-            this.SetStyle(ControlStyles.UserPaint, true);
-        }
-
-        protected override void OnPaintBackground(PaintEventArgs pevent)
-        {
-            // None... Helps control the flicker.
-        }
-
-        protected override void OnPaint(PaintEventArgs e)
-        {
-            const int inset = 2; // A single inset value to control teh sizing of the inner rect.
-
             using (Image offscreenImage = new Bitmap(this.Width, this.Height))
             {
                 using (Graphics offscreen = Graphics.FromImage(offscreenImage))
                 {
-                    Rectangle rect = new Rectangle(0, 0, this.Width, this.Height);
+                    Rectangle rec = new Rectangle(0, 0, this.Width, this.Height);
 
-                    if (ProgressBarRenderer.IsSupported)
-                        ProgressBarRenderer.DrawHorizontalBar(offscreen, rect);
+                    offscreen.FillRectangle(new SolidBrush(SystemColors.ButtonFace), 0, 0, 1, 1);
+                    offscreen.FillRectangle(new SolidBrush(SystemColors.ButtonFace), rec.Width - 1, 0, 1, 1);
+                    offscreen.FillRectangle(new SolidBrush(SystemColors.ButtonFace), rec.Width - 1, rec.Height - 1, 1, 1);
+                    offscreen.FillRectangle(new SolidBrush(SystemColors.ButtonFace), 0, rec.Height - 1, 1, 1);
 
-                    rect.Inflate(new Size(-inset, -inset)); // Deflate inner rect.
-                    rect.Width = (int)(rect.Width * ((double)this.Value / this.Maximum));
-                    if (rect.Width == 0) rect.Width = 1; // Can't draw rec with width of 0.
+                    offscreen.FillRectangle(new SolidBrush(SystemColors.ControlLight), 0, 0, rec.Width, rec.Height);
+                    offscreen.FillRectangle(new SolidBrush(Color.White), 1, 1, rec.Width - 2, rec.Height - 2);
 
-                    LinearGradientBrush brush = new LinearGradientBrush(rect, this.BackColor, this.ForeColor, LinearGradientMode.Vertical);
-                    offscreen.FillRectangle(brush, inset, inset, rect.Width, rect.Height);
+                    if (Value > 0)
+                    {
+                        rec.Width = (int)(rec.Width * ((double)Value / Maximum)) - 2;
+                        rec.Height = rec.Height - 2;
+
+                        // progressbar gradients
+                        offscreen.FillRectangle(new SolidBrush(ColorTranslator.FromHtml("#aac9e7")), 2, 2, rec.Width - 2, (rec.Height - 2) / 2);
+                        offscreen.FillRectangle(new SolidBrush(ColorTranslator.FromHtml("#9dbddc")), 2, rec.Height / 2 + 1, rec.Width - 2, (rec.Height - 1) / 2);
+
+                        // progressbar corners
+                        if (rec.Width > 1000)
+                        {
+                            offscreen.FillRectangle(new SolidBrush(ColorTranslator.FromHtml("#92b3d3")), 1, 1, 1, 1);
+                            offscreen.FillRectangle(new SolidBrush(ColorTranslator.FromHtml("#92b3d3")), rec.Width, 1, 1, 1);
+                            offscreen.FillRectangle(new SolidBrush(ColorTranslator.FromHtml("#92b3d3")), rec.Width, rec.Height, 1, 1);
+                            offscreen.FillRectangle(new SolidBrush(ColorTranslator.FromHtml("#92b3d3")), 1, rec.Height, 1, 1);
+                        }
+                    }
 
                     e.Graphics.DrawImage(offscreenImage, 0, 0);
                     offscreenImage.Dispose();
                 }
             }
+
+
+            
         }
     }
 
- 
 
 
 } // namespace end

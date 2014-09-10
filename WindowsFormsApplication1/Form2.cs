@@ -98,6 +98,8 @@ namespace PatkaPlayer
             
             // misc
             numericTransparency.Value = Convert.ToDecimal(settings.LoadSetting("Transparency") ?? "1");
+            comboLatency.Text = settings.LoadSetting("Latency");
+            if (comboLatency.Text == "") comboLatency.Text = "200";
 
             // hotkeys
             txtPlayPreMod.Text = settings.LoadSetting("HotkeyPlayPreMod");
@@ -170,6 +172,7 @@ namespace PatkaPlayer
 
             // misc
             settings.SaveSetting("Transparency", numericTransparency.Value.ToString());
+            settings.SaveSetting("Latency", comboLatency.Text);
 
             // hotkeys
             settings.SaveSetting("HotkeyPlayPreMod", txtPlayPreMod.Text);

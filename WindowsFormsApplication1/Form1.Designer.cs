@@ -292,7 +292,7 @@
             this.labelSpacer.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.labelSpacer.Name = "labelSpacer";
             this.labelSpacer.Padding = new System.Windows.Forms.Padding(5, 0, 10, 0);
-            this.labelSpacer.Size = new System.Drawing.Size(561, 19);
+            this.labelSpacer.Size = new System.Drawing.Size(592, 19);
             this.labelSpacer.Spring = true;
             // 
             // labelVersion
@@ -519,7 +519,7 @@
             this.toolStripLabel4.Margin = new System.Windows.Forms.Padding(0, 3, 0, 2);
             this.toolStripLabel4.Name = "toolStripLabel4";
             this.toolStripLabel4.Padding = new System.Windows.Forms.Padding(3, 7, 3, 7);
-            this.toolStripLabel4.Size = new System.Drawing.Size(60, 30);
+            this.toolStripLabel4.Size = new System.Drawing.Size(60, 29);
             this.toolStripLabel4.Text = "File Filter";
             // 
             // trackBarVolume
@@ -550,7 +550,7 @@
             // 
             this.labelPosition.AutoSize = true;
             this.labelPosition.ForeColor = System.Drawing.SystemColors.GrayText;
-            this.labelPosition.Location = new System.Drawing.Point(400, 13);
+            this.labelPosition.Location = new System.Drawing.Point(420, 13);
             this.labelPosition.Name = "labelPosition";
             this.labelPosition.Size = new System.Drawing.Size(72, 13);
             this.labelPosition.TabIndex = 23;

@@ -22,12 +22,16 @@ namespace PatkaPlayer
     public partial class frmPlayer
     {
 
-        private void loadTrack(string file)
+        private void loadTrack(string file, int latency)
         {
 
             if (waveOutDevice == null)
             {
-                waveOutDevice = new WaveOut() { DesiredLatency = 500 };
+                waveOutDevice = new WaveOut() 
+                { 
+                    DesiredLatency = latency,
+                    NumberOfBuffers = 2
+                };
 
                 audioFileReader = new AudioFileReader(file);
                 waveOutDevice.Init(audioFileReader);
@@ -65,6 +69,8 @@ namespace PatkaPlayer
             if (waveOutDevice != null)
             {
                 if (sendkeyStop && playpressed == false && sendKeystrokes && stop == false) SendKeys.Send(sendkeyStopString);
+                if (playpressed == false && sendMessages && stop == false) sendMessagePlay();
+
                 waveOutDevice.Stop();
                 audioFileReader.SetPosition((double)0);
                 pbPosition.Value = 0;

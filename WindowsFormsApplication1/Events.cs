@@ -607,12 +607,50 @@ namespace PatkaPlayer
                 {
                     playpressed = true;
                     if (sendkeyPlay && !play && sendKeystrokes) SendKeys.Send(sendkeyPlayString);
+                    if (!play && sendMessages) sendMessagePause();
+
                     playTrack();
                 }
             }
         }
 
+        private void pbPosition_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (waveOutDevice != null)
+            {
+                if (e.Button == MouseButtons.Left)
+                {
+                    int mouseX = e.Location.X + 2;
+                    if (mouseX < 0) mouseX = 0;
+                    if (mouseX > pbPosition.Width) mouseX = pbPosition.Width;
 
+                    double trackBarPercent = (((double)pbPosition.Value / (double)pbPosition.Maximum));
+                    double mousePercent = (((double)mouseX / ((double)pbPosition.Width)));
+
+                    pbPosition.Value = (int)(pbPosition.Maximum * mousePercent);
+                    audioFileReader.SetPosition((double)pbPosition.Value / 1000);
+                    if (!play)
+                    {
+                        playpressed = true;
+                        if (sendkeyPlay && !play && sendKeystrokes) SendKeys.Send(sendkeyPlayString);
+                        if (!play && sendMessages) sendMessagePause();
+
+                        playTrack();
+                    }
+                }
+            }
+        }
+
+        private void contextMenu1_Popup(object sender, EventArgs e)
+        {
+            //btnDropdown.Checked = true;
+        }
+
+        private void contextMenu1_Collapse(object sender, EventArgs e)
+        {
+            //btnDropdown.Checked = false;
+            //MessageBox.Show("You are in the ContextMenu.Collapse event.");
+        }
 
 
 

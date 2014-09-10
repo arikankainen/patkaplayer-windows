@@ -104,6 +104,7 @@
       <DependentUpon>Form3.cs</DependentUpon>
     </Compile>
     <Compile Include="KeyboardHook.cs" />
+    <Compile Include="NativeMethods.cs" />
     <Compile Include="NAudio-PlayerControls.cs">
       <SubType>Form</SubType>
     </Compile>
