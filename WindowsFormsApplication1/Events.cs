@@ -81,10 +81,12 @@ namespace PatkaPlayer
                 pbPosition.Maximum = Convert.ToInt32(audioFileReader.TotalTime.TotalMilliseconds);
                 pbPosition.Value = Convert.ToInt32(audioFileReader.CurrentTime.TotalMilliseconds);
 
-                if (Convert.ToInt32(audioFileReader.TotalTime.ToString(@"mm")) > 0)
-                    labelPosition.Text = audioFileReader.CurrentTime.ToString(@"mm\:ss\:ff") + " / " + audioFileReader.TotalTime.ToString(@"mm\:ss\:ff");
-                
-                else labelPosition.Text = audioFileReader.CurrentTime.ToString(@"ss\:ff") + " / " + audioFileReader.TotalTime.ToString(@"ss\:ff");
+                //if (waveOutDevice.PlaybackState == NAudio.Wave.PlaybackState.Stopped) play = false;
+
+                //if (Convert.ToInt32(audioFileReader.TotalTime.ToString(@"mm")) > 0)
+                    labelPosition.Text = audioFileReader.CurrentTime.ToString(@"mm\:ss\.ff") + " / " + audioFileReader.TotalTime.ToString(@"mm\:ss\.ff");
+
+                //else labelPosition.Text = audioFileReader.CurrentTime.ToString(@"ss\:ff") + " / " + audioFileReader.TotalTime.ToString(@"ss\:ff");
             }
         }
 
@@ -226,7 +228,8 @@ namespace PatkaPlayer
         // keyup event, hotkeys
         private void Form1_KeyEvent(object sender, KeyEventArgs e)
         {
-            if (txtFilterFolder.Selected == true || txtFilterFile.Selected == true) return;
+            //if (txtFilterFolder.Selected == true || txtFilterFile.Selected == true) return;
+            if (txtFilterFolder.Focused == true || txtFilterFile.Focused == true) return;
 
             string key = e.KeyCode.ToString();
 
@@ -603,6 +606,7 @@ namespace PatkaPlayer
 
                 pbPosition.Value = (int)(pbPosition.Maximum * mousePercent);
                 audioFileReader.SetPosition((double)pbPosition.Value / 1000);
+
                 if (!play)
                 {
                     playpressed = true;
@@ -636,6 +640,7 @@ namespace PatkaPlayer
                         if (!play && sendMessages) sendMessagePause();
 
                         playTrack();
+                        
                     }
                 }
             }

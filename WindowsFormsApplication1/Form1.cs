@@ -36,6 +36,7 @@ namespace PatkaPlayer
 
         private string mp3Dir, hotkey1, hotkey2, hotkey3, hotkey4, hotkey5, hotkey6, hotkey7, hotkey8, hotkey9, hotkey10, hotkey11, hotkey12;
         private int timer1MinHour, timer1MinMin, timer1MinSec, timer1MaxHour, timer1MaxMin, timer1MaxSec, timer2MinHour, timer2MinMin, timer2MinSec, timer2MaxHour, timer2MaxMin, timer2MaxSec;
+        private string timer1Text, timer2Text;
         private decimal transNormal = 1;
         private bool timer1ClipsAll = true;
         private bool timer2ClipsAll = true;
@@ -143,7 +144,7 @@ namespace PatkaPlayer
 
             }
 
-            labelVersion.Text = "v1.26";
+            labelVersion.Text = "v1.27";
 
             notifyIcon1.Visible = false;
             notifyIcon1.MouseUp += new MouseEventHandler(NotifyIcon1_Click);
@@ -182,11 +183,10 @@ namespace PatkaPlayer
 
             // correcting a bug in the "system" renderer (white bottom line in toolstrip)
             toolStripPlay.Renderer = new MySR();
-            toolStripFilters.Renderer = new MySR();
             toolStripSettings.Renderer = new MySR();
 
-            txtFilterFolder.Size = new Size(100, 31);
-            txtFilterFile.Size = new Size(100, 31);
+            //txtFilterFolder.Size = new Size(100, 31);
+            //txtFilterFile.Size = new Size(100, 31);
 
             contextButton = new ContextMenu();
 
@@ -217,16 +217,51 @@ namespace PatkaPlayer
             menuItemF12.Click += new EventHandler(menuItemSet_Click);
 
             renderButtons(150, 50, out buttonBackButton, out buttonBackHoverButton, out buttonBackPressButton);
+
+            buttonColorShadow = "#e3e3e3";
+            buttonColorCorner = "#91c396";
+            buttonColorCornerShadow = "#ffffff";
+            buttonColorBorder = "#599b5f";
+            buttonColorBorderGradientTop = "#c9eacd";
+            buttonColorBorderGradientBottom = "#b7e1bc";
+            buttonColorBackGradientUpperTop = "#97d19e";
+            buttonColorBackGradientUpperBottom = "#8ac790";
+            buttonColorBackGradientLowerTop = "#7abc80";
+            buttonColorBackGradientLowerBottom = "#7bbd81";
+
+            buttonColorShadowH = "#e3e3e3";
+            buttonColorCornerH = "#7ab88d";
+            buttonColorCornerShadowH = "#ffffff";
+            buttonColorBorderH = "#408958";
+            buttonColorBorderGradientTopH = "#bce8ca";
+            buttonColorBorderGradientBottomH = "#a6dfb9";
+            buttonColorBackGradientUpperTopH = "#7fc998";
+            buttonColorBackGradientUpperBottomH = "#72bd89";
+            buttonColorBackGradientLowerTopH = "#61b079";
+            buttonColorBackGradientLowerBottomH = "#62b17a";
+
+            buttonColorShadowP = "#e3e3e3";
+            buttonColorCornerP = "#5582b3";
+            buttonColorCornerShadowP = "#ffffff";
+            buttonColorBorderP = "#3b6897";
+            buttonColorBorderGradientTopP = "#a7c9ed";
+            buttonColorBorderGradientBottomP = "#c1dcf8";
+            buttonColorBackGradientUpperTopP = "#6e9dcc";
+            buttonColorBackGradientUpperBottomP = "#80acdd";
+            buttonColorBackGradientLowerTopP = "#6e9dcc";
+            buttonColorBackGradientLowerBottomP = "#80acdd";
+
             renderButtons(296, 30, out buttonBackFolder, out buttonBackHoverFolder, out buttonBackPressFolder);
 
-            pbPosition.Left = 290;
-            pbPosition.Top = 9;
-            pbPosition.Width = 120;
-            pbPosition.Height = 20;
+            pbPosition.Left = 330;
+            pbPosition.Top = 21;
+            pbPosition.Width = 357;
+            pbPosition.Height = 23;
             pbPosition.ForeColor = ColorTranslator.FromHtml("#8ab3da");
             pbPosition.BackColor = ColorTranslator.FromHtml("#7fa9d2");
             pbPosition.Value = 0;
             pbPosition.Name = "progressPosition";
+            pbPosition.ProgressText = "";
             this.Controls.Add(pbPosition);
 
             pbPosition.MouseDown += new MouseEventHandler(pbPosition_MouseDown);
@@ -239,33 +274,21 @@ namespace PatkaPlayer
         // reset toolstrip button locations
         private void buttonLocations()
         {
-            /*
-            toolStripSettings.Left = this.Width - toolStripSettings.Width - 20;
-            toolStripFilters.Left = (this.Width / 2 - toolStripFilters.Width / 2);
-            toolStripPlay.Left = 4;
-            */
-
             toolStripSettings.Left = this.Width - toolStripSettings.Width - 20;
             toolStripPlay.Left = 4;
 
             int fL = trackBarVolume.Right + 45;
             int fR = toolStripSettings.Left;
 
-            //toolStripFilters.Left = fL + (((fR - fL) / 2) - toolStripFilters.Width / 2);
-            toolStripFilters.Left = fR - toolStripFilters.Width - 20;
-
-            toolStripSettings.Top = 1;
-            toolStripFilters.Top = 1;
-            toolStripPlay.Top = 1;
+            toolStripSettings.Top = 14;
+            toolStripPlay.Top = 14;
 
             if (panelFolders.VerticalScroll.Visible)
             {
-                //splitContainer1.BackColor = Color.White;
                 splitContainer1.SplitterDistance = 329;
             }
             else
             {
-                //splitContainer1.BackColor = Color.DarkGray;
                 splitContainer1.SplitterDistance = 312;
             }
 
@@ -513,6 +536,17 @@ namespace PatkaPlayer
         // play file
         private void playFile(string fileToPlay)
         {
+            int comboLatencyInt;
+            
+            try
+            {
+                comboLatencyInt = Convert.ToInt32(comboLatency.Text);
+            }
+            catch
+            {
+                comboLatencyInt = latency;
+            }
+            
             string pathToPlay = Path.GetDirectoryName(fileToPlay);
 
             btnReplay.Tag = fileToPlay;
@@ -520,11 +554,17 @@ namespace PatkaPlayer
 
             lastPlayed = pathToPlay.Substring(pathToPlay.LastIndexOf("\\") + 1) + " - " + Path.GetFileNameWithoutExtension(fileToPlay);
             labelLastPlayed.Text = lastPlayed;
+            pbPosition.ProgressText = lastPlayed;
 
             playpressed = true;
             if (sendkeyPlay && !play && sendKeystrokes) SendKeys.Send(sendkeyPlayString);
             if (!play && sendMessages) sendMessagePause();
             closeTrack();
+
+            if (comboLatencyInt < 100) latency = 100;
+            else if (comboLatencyInt > 900) latency = 900;
+            else latency = comboLatencyInt;
+
             loadTrack(fileToPlay, latency);
             playTrack();
 
@@ -689,12 +729,12 @@ namespace PatkaPlayer
                         }
                     }
 
-                    labelTimer1.Text = "Timer 1: On";
+                    labelTimer1.Text = "Timer 1: On" + timer1Text;
                     labelTimer1.ForeColor = ColorTranslator.FromHtml("#dd0000");
                     timer1Started = true;
                     timer2Started = false;
 
-                    labelTimer2.Text = "Timer 2: Off";
+                    labelTimer2.Text = "Timer 2: Off" + timer2Text;
                     labelTimer2.ForeColor = ColorTranslator.FromHtml("#404040");
                     timer2Started = false;
                 }
@@ -712,7 +752,7 @@ namespace PatkaPlayer
                         }
                     }
 
-                    labelTimer1.Text = "Timer 1: Off";
+                    labelTimer1.Text = "Timer 1: Off" + timer1Text;
                     labelTimer1.ForeColor = ColorTranslator.FromHtml("#404040");
                     timer1Started = false;
                 }
@@ -745,11 +785,11 @@ namespace PatkaPlayer
                         }
                     }
 
-                    labelTimer2.Text = "Timer 2: On";
+                    labelTimer2.Text = "Timer 2: On" + timer2Text;
                     labelTimer2.ForeColor = ColorTranslator.FromHtml("#dd0000");
                     timer2Started = true;
 
-                    labelTimer1.Text = "Timer 1: Off";
+                    labelTimer1.Text = "Timer 1: Off" + timer1Text;
                     labelTimer1.ForeColor = ColorTranslator.FromHtml("#404040");
                     timer1Started = false;
                 }
@@ -768,7 +808,7 @@ namespace PatkaPlayer
                         }
                     }
 
-                    labelTimer2.Text = "Timer 2: Off";
+                    labelTimer2.Text = "Timer 2: Off" + timer2Text;
                     labelTimer2.ForeColor = ColorTranslator.FromHtml("#404040");
                     timer2Started = false;
                 }
@@ -825,7 +865,7 @@ namespace PatkaPlayer
             latency = Convert.ToInt32(settings.LoadSetting("Latency"));
             if (latency < 50) latency = 200;
             if (latency > 900) latency = 200;
-
+            comboLatency.Text = latency.ToString();
 
             // loading complete, setting things
             if (trayIcon) notifyIcon1.Visible = true;
@@ -838,6 +878,40 @@ namespace PatkaPlayer
             
             readSendkeys();
             readHotkeys();
+
+            timer1Text = " (";
+            timer1Text += (timer1MinHour < 10) ? "0" + timer1MinHour.ToString() : timer1MinHour.ToString();
+            timer1Text += ":";
+            timer1Text += (timer1MinMin < 10) ? "0" + timer1MinMin.ToString() : timer1MinMin.ToString();
+            timer1Text += ":";
+            timer1Text += (timer1MinSec < 10) ? "0" + timer1MinSec.ToString() : timer1MinSec.ToString();
+            timer1Text += " - ";
+            timer1Text += (timer1MaxHour < 10) ? "0" + timer1MaxHour.ToString() : timer1MaxHour.ToString();
+            timer1Text += ":";
+            timer1Text += (timer1MaxMin < 10) ? "0" + timer1MaxMin.ToString() : timer1MaxMin.ToString();
+            timer1Text += ":";
+            timer1Text += (timer1MaxSec < 10) ? "0" + timer1MaxSec.ToString() : timer1MaxSec.ToString();
+            timer1Text += ")";
+
+            timer2Text = " (";
+            timer2Text += (timer2MinHour < 10) ? "0" + timer2MinHour.ToString() : timer2MinHour.ToString();
+            timer2Text += ":";
+            timer2Text += (timer2MinMin < 10) ? "0" + timer2MinMin.ToString() : timer2MinMin.ToString();
+            timer2Text += ":";
+            timer2Text += (timer2MinSec < 10) ? "0" + timer2MinSec.ToString() : timer2MinSec.ToString();
+            timer2Text += " - ";
+            timer2Text += (timer2MaxHour < 10) ? "0" + timer2MaxHour.ToString() : timer2MaxHour.ToString();
+            timer2Text += ":";
+            timer2Text += (timer2MaxMin < 10) ? "0" + timer2MaxMin.ToString() : timer2MaxMin.ToString();
+            timer2Text += ":";
+            timer2Text += (timer2MaxSec < 10) ? "0" + timer2MaxSec.ToString() : timer2MaxSec.ToString();
+            timer2Text += ")";
+
+            if (timer1Started) labelTimer1.Text = "Timer 1: On" + timer1Text;
+            else labelTimer1.Text = "Timer 1: Off" + timer1Text;
+
+            if (timer2Started) labelTimer2.Text = "Timer 2: On" + timer2Text;
+            else labelTimer2.Text = "Timer 2: Off" + timer2Text;
         }
 
         private int getHotkeyModNumber(string keyname)
@@ -1106,11 +1180,18 @@ namespace PatkaPlayer
 
 
 
+
+
+
+
+
     } // class end
 
     // custom paint for ProgressBar as ProgressBarEx
     public class ProgressBarEx : ProgressBar
     {
+        public string ProgressText { get; set; }
+
         public ProgressBarEx()
         {
             this.SetStyle(ControlStyles.UserPaint, true);
@@ -1147,7 +1228,8 @@ namespace PatkaPlayer
                     offscreen.FillRectangle(new SolidBrush(SystemColors.ButtonFace), rec.Width - 1, rec.Height - 1, 1, 1);
                     offscreen.FillRectangle(new SolidBrush(SystemColors.ButtonFace), 0, rec.Height - 1, 1, 1);
 
-                    offscreen.FillRectangle(new SolidBrush(SystemColors.ControlLight), 0, 0, rec.Width, rec.Height);
+                    //offscreen.FillRectangle(new SolidBrush(SystemColors.ControlLight), 0, 0, rec.Width, rec.Height);
+                    offscreen.FillRectangle(new SolidBrush(Color.FromArgb(255, 170, 170, 170)), 0, 0, rec.Width, rec.Height);
                     offscreen.FillRectangle(new SolidBrush(Color.White), 1, 1, rec.Width - 2, rec.Height - 2);
 
                     if (Value > 0)
@@ -1156,17 +1238,20 @@ namespace PatkaPlayer
                         rec.Height = rec.Height - 2;
 
                         // progressbar gradients
-                        offscreen.FillRectangle(new SolidBrush(ColorTranslator.FromHtml("#aac9e7")), 2, 2, rec.Width - 2, (rec.Height - 2) / 2);
-                        offscreen.FillRectangle(new SolidBrush(ColorTranslator.FromHtml("#9dbddc")), 2, rec.Height / 2 + 1, rec.Width - 2, (rec.Height - 1) / 2);
+                        //offscreen.FillRectangle(new SolidBrush(ColorTranslator.FromHtml("#aac9e7")), 2, 2, rec.Width - 2, (rec.Height - 2) / 2);
+                        //offscreen.FillRectangle(new SolidBrush(ColorTranslator.FromHtml("#9dbddc")), 2, rec.Height / 2 + 1, rec.Width - 2, (rec.Height - 1) / 2);
+                        offscreen.FillRectangle(new SolidBrush(ColorTranslator.FromHtml("#ddd")), 2, 2, rec.Width - 2, (rec.Height - 2) / 2);
+                        offscreen.FillRectangle(new SolidBrush(ColorTranslator.FromHtml("#ccc")), 2, rec.Height / 2 + 1, rec.Width - 2, (rec.Height - 1) / 2);
 
-                        // progressbar corners
-                        if (rec.Width > 1000)
-                        {
-                            offscreen.FillRectangle(new SolidBrush(ColorTranslator.FromHtml("#92b3d3")), 1, 1, 1, 1);
-                            offscreen.FillRectangle(new SolidBrush(ColorTranslator.FromHtml("#92b3d3")), rec.Width, 1, 1, 1);
-                            offscreen.FillRectangle(new SolidBrush(ColorTranslator.FromHtml("#92b3d3")), rec.Width, rec.Height, 1, 1);
-                            offscreen.FillRectangle(new SolidBrush(ColorTranslator.FromHtml("#92b3d3")), 1, rec.Height, 1, 1);
-                        }
+                    }
+
+                    using (Font f = new Font("Segoe UI", 8))
+                    {
+                        SizeF len = offscreen.MeasureString(ProgressText, f);
+                        Point location = new Point(Convert.ToInt32((Width / 2) - len.Width / 2), 5);
+
+                        //offscreen.DrawString(ProgressText, f, Brushes.Black, new PointF(3, 5));
+                        offscreen.DrawString(ProgressText, f, Brushes.Black, location);
                     }
 
                     e.Graphics.DrawImage(offscreenImage, 0, 0);

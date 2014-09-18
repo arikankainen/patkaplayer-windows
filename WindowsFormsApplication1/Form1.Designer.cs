@@ -69,16 +69,25 @@
             this.toolStripSettings = new System.Windows.Forms.ToolStrip();
             this.btnDropdown = new System.Windows.Forms.ToolStripButton();
             this.toolStripButton5 = new System.Windows.Forms.ToolStripButton();
-            this.panelToolbarLine = new System.Windows.Forms.Panel();
-            this.toolStripFilters = new System.Windows.Forms.ToolStrip();
-            this.toolStripLabel3 = new System.Windows.Forms.ToolStripLabel();
-            this.txtFilterFolder = new System.Windows.Forms.ToolStripTextBox();
             this.btnClearFilters = new System.Windows.Forms.ToolStripButton();
-            this.txtFilterFile = new System.Windows.Forms.ToolStripTextBox();
-            this.toolStripLabel4 = new System.Windows.Forms.ToolStripLabel();
+            this.panelToolbarLine = new System.Windows.Forms.Panel();
             this.trackBarVolume = new System.Windows.Forms.TrackBar();
             this.labelVolume = new System.Windows.Forms.Label();
+            this.comboLatency = new System.Windows.Forms.ComboBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.txtFilterFolder = new System.Windows.Forms.TextBox();
+            this.txtFilterFile = new System.Windows.Forms.TextBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this.panelFilterFolderGray = new System.Windows.Forms.Panel();
+            this.panelFilterFolderWhite = new System.Windows.Forms.Panel();
+            this.panelLatencyGray = new System.Windows.Forms.Panel();
+            this.panelFilterFileGray = new System.Windows.Forms.Panel();
+            this.panelFilterFileWhite = new System.Windows.Forms.Panel();
+            this.label7 = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
             this.labelPosition = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
             this.statusStrip2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -86,8 +95,12 @@
             this.splitContainer1.SuspendLayout();
             this.toolStripPlay.SuspendLayout();
             this.toolStripSettings.SuspendLayout();
-            this.toolStripFilters.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackBarVolume)).BeginInit();
+            this.panelFilterFolderGray.SuspendLayout();
+            this.panelFilterFolderWhite.SuspendLayout();
+            this.panelLatencyGray.SuspendLayout();
+            this.panelFilterFileGray.SuspendLayout();
+            this.panelFilterFileWhite.SuspendLayout();
             this.SuspendLayout();
             // 
             // BottomToolStripPanel
@@ -200,7 +213,7 @@
             this.panelButtons.Location = new System.Drawing.Point(0, 0);
             this.panelButtons.Name = "panelButtons";
             this.panelButtons.Padding = new System.Windows.Forms.Padding(5, 0, 5, 5);
-            this.panelButtons.Size = new System.Drawing.Size(804, 583);
+            this.panelButtons.Size = new System.Drawing.Size(804, 571);
             this.panelButtons.TabIndex = 12;
             this.panelButtons.MouseEnter += new System.EventHandler(this.panelButtons_MouseEnter);
             // 
@@ -273,6 +286,7 @@
             this.labelSendKeystrokes.Padding = new System.Windows.Forms.Padding(5, 0, 10, 0);
             this.labelSendKeystrokes.Size = new System.Drawing.Size(134, 19);
             this.labelSendKeystrokes.Text = "Send Keystrokes: Off";
+            this.labelSendKeystrokes.Visible = false;
             this.labelSendKeystrokes.MouseUp += new System.Windows.Forms.MouseEventHandler(this.labelSendKeystrokes_MouseUp);
             // 
             // labelLastPlayed
@@ -284,6 +298,7 @@
             this.labelLastPlayed.Padding = new System.Windows.Forms.Padding(5, 0, 10, 0);
             this.labelLastPlayed.Size = new System.Drawing.Size(31, 19);
             this.labelLastPlayed.Text = "-";
+            this.labelLastPlayed.Visible = false;
             this.labelLastPlayed.Click += new System.EventHandler(this.labelLastPlayed_Click);
             // 
             // labelSpacer
@@ -292,7 +307,7 @@
             this.labelSpacer.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.labelSpacer.Name = "labelSpacer";
             this.labelSpacer.Padding = new System.Windows.Forms.Padding(5, 0, 10, 0);
-            this.labelSpacer.Size = new System.Drawing.Size(592, 19);
+            this.labelSpacer.Size = new System.Drawing.Size(561, 19);
             this.labelSpacer.Spring = true;
             // 
             // labelVersion
@@ -312,7 +327,7 @@
             this.splitContainer1.BackColor = System.Drawing.Color.DarkGray;
             this.splitContainer1.FixedPanel = System.Windows.Forms.FixedPanel.Panel1;
             this.splitContainer1.IsSplitterFixed = true;
-            this.splitContainer1.Location = new System.Drawing.Point(0, 39);
+            this.splitContainer1.Location = new System.Drawing.Point(0, 51);
             this.splitContainer1.Name = "splitContainer1";
             // 
             // splitContainer1.Panel1
@@ -325,7 +340,7 @@
             // 
             this.splitContainer1.Panel2.BackColor = System.Drawing.SystemColors.ControlLightLight;
             this.splitContainer1.Panel2.Controls.Add(this.panelButtons);
-            this.splitContainer1.Size = new System.Drawing.Size(1138, 583);
+            this.splitContainer1.Size = new System.Drawing.Size(1138, 571);
             this.splitContainer1.SplitterDistance = 329;
             this.splitContainer1.TabIndex = 15;
             // 
@@ -338,7 +353,7 @@
             this.panelFolders.Location = new System.Drawing.Point(0, 0);
             this.panelFolders.Name = "panelFolders";
             this.panelFolders.Padding = new System.Windows.Forms.Padding(5);
-            this.panelFolders.Size = new System.Drawing.Size(328, 583);
+            this.panelFolders.Size = new System.Drawing.Size(328, 571);
             this.panelFolders.TabIndex = 0;
             this.panelFolders.MouseEnter += new System.EventHandler(this.panelFolders_MouseEnter);
             // 
@@ -351,7 +366,7 @@
             this.btnRandom,
             this.btnStop,
             this.btnReplay});
-            this.toolStripPlay.Location = new System.Drawing.Point(2, 1);
+            this.toolStripPlay.Location = new System.Drawing.Point(2, 14);
             this.toolStripPlay.Name = "toolStripPlay";
             this.toolStripPlay.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
             this.toolStripPlay.Size = new System.Drawing.Size(91, 35);
@@ -403,11 +418,12 @@
             this.toolStripSettings.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
             this.toolStripSettings.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.btnDropdown,
-            this.toolStripButton5});
-            this.toolStripSettings.Location = new System.Drawing.Point(1073, 1);
+            this.toolStripButton5,
+            this.btnClearFilters});
+            this.toolStripSettings.Location = new System.Drawing.Point(1013, 14);
             this.toolStripSettings.Name = "toolStripSettings";
             this.toolStripSettings.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
-            this.toolStripSettings.Size = new System.Drawing.Size(62, 35);
+            this.toolStripSettings.Size = new System.Drawing.Size(122, 35);
             this.toolStripSettings.TabIndex = 17;
             // 
             // btnDropdown
@@ -439,96 +455,38 @@
             this.toolStripButton5.ToolTipText = "Hide to Tray";
             this.toolStripButton5.Click += new System.EventHandler(this.btnHide_Click);
             // 
-            // panelToolbarLine
-            // 
-            this.panelToolbarLine.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.panelToolbarLine.BackColor = System.Drawing.Color.Gray;
-            this.panelToolbarLine.Location = new System.Drawing.Point(0, 38);
-            this.panelToolbarLine.Name = "panelToolbarLine";
-            this.panelToolbarLine.Size = new System.Drawing.Size(1137, 1);
-            this.panelToolbarLine.TabIndex = 18;
-            // 
-            // toolStripFilters
-            // 
-            this.toolStripFilters.AutoSize = false;
-            this.toolStripFilters.Dock = System.Windows.Forms.DockStyle.None;
-            this.toolStripFilters.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
-            this.toolStripFilters.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripLabel3,
-            this.txtFilterFolder,
-            this.btnClearFilters,
-            this.txtFilterFile,
-            this.toolStripLabel4});
-            this.toolStripFilters.Location = new System.Drawing.Point(647, 4);
-            this.toolStripFilters.Name = "toolStripFilters";
-            this.toolStripFilters.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
-            this.toolStripFilters.Size = new System.Drawing.Size(372, 35);
-            this.toolStripFilters.TabIndex = 19;
-            // 
-            // toolStripLabel3
-            // 
-            this.toolStripLabel3.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.toolStripLabel3.ForeColor = System.Drawing.SystemColors.GrayText;
-            this.toolStripLabel3.Margin = new System.Windows.Forms.Padding(0, 3, 0, 2);
-            this.toolStripLabel3.Name = "toolStripLabel3";
-            this.toolStripLabel3.Padding = new System.Windows.Forms.Padding(3, 7, 3, 7);
-            this.toolStripLabel3.Size = new System.Drawing.Size(74, 30);
-            this.toolStripLabel3.Text = "Folder Filter";
-            // 
-            // txtFilterFolder
-            // 
-            this.txtFilterFolder.AutoSize = false;
-            this.txtFilterFolder.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(82)))), ((int)(((byte)(110)))), ((int)(((byte)(136)))));
-            this.txtFilterFolder.Margin = new System.Windows.Forms.Padding(1, 3, 1, 0);
-            this.txtFilterFolder.Name = "txtFilterFolder";
-            this.txtFilterFolder.Overflow = System.Windows.Forms.ToolStripItemOverflow.Never;
-            this.txtFilterFolder.Padding = new System.Windows.Forms.Padding(3, 7, 3, 7);
-            this.txtFilterFolder.Size = new System.Drawing.Size(100, 31);
-            this.txtFilterFolder.Click += new System.EventHandler(this.txtFilterFolder_Enter);
-            // 
             // btnClearFilters
             // 
+            this.btnClearFilters.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
             this.btnClearFilters.AutoToolTip = false;
             this.btnClearFilters.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
             this.btnClearFilters.Enabled = false;
             this.btnClearFilters.Image = ((System.Drawing.Image)(resources.GetObject("btnClearFilters.Image")));
             this.btnClearFilters.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.btnClearFilters.Margin = new System.Windows.Forms.Padding(0, 3, 0, 2);
+            this.btnClearFilters.Margin = new System.Windows.Forms.Padding(0, 3, 20, 2);
             this.btnClearFilters.Name = "btnClearFilters";
             this.btnClearFilters.Padding = new System.Windows.Forms.Padding(5);
             this.btnClearFilters.Size = new System.Drawing.Size(30, 30);
             this.btnClearFilters.Text = "Clear Filters";
             this.btnClearFilters.Click += new System.EventHandler(this.btnClearFilters_Click);
             // 
-            // txtFilterFile
+            // panelToolbarLine
             // 
-            this.txtFilterFile.AutoSize = false;
-            this.txtFilterFile.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(82)))), ((int)(((byte)(110)))), ((int)(((byte)(136)))));
-            this.txtFilterFile.Margin = new System.Windows.Forms.Padding(1, 3, 1, 0);
-            this.txtFilterFile.Name = "txtFilterFile";
-            this.txtFilterFile.Overflow = System.Windows.Forms.ToolStripItemOverflow.Never;
-            this.txtFilterFile.Padding = new System.Windows.Forms.Padding(3, 7, 3, 7);
-            this.txtFilterFile.Size = new System.Drawing.Size(100, 31);
-            this.txtFilterFile.Click += new System.EventHandler(this.txtFilterFile_Enter);
-            // 
-            // toolStripLabel4
-            // 
-            this.toolStripLabel4.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.toolStripLabel4.ForeColor = System.Drawing.SystemColors.GrayText;
-            this.toolStripLabel4.Margin = new System.Windows.Forms.Padding(0, 3, 0, 2);
-            this.toolStripLabel4.Name = "toolStripLabel4";
-            this.toolStripLabel4.Padding = new System.Windows.Forms.Padding(3, 7, 3, 7);
-            this.toolStripLabel4.Size = new System.Drawing.Size(60, 29);
-            this.toolStripLabel4.Text = "File Filter";
+            this.panelToolbarLine.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.panelToolbarLine.BackColor = System.Drawing.Color.Gray;
+            this.panelToolbarLine.Location = new System.Drawing.Point(0, 50);
+            this.panelToolbarLine.Name = "panelToolbarLine";
+            this.panelToolbarLine.Size = new System.Drawing.Size(1137, 1);
+            this.panelToolbarLine.TabIndex = 18;
             // 
             // trackBarVolume
             // 
             this.trackBarVolume.LargeChange = 0;
-            this.trackBarVolume.Location = new System.Drawing.Point(118, 9);
+            this.trackBarVolume.Location = new System.Drawing.Point(120, 20);
             this.trackBarVolume.Maximum = 100;
             this.trackBarVolume.Name = "trackBarVolume";
-            this.trackBarVolume.Size = new System.Drawing.Size(111, 45);
+            this.trackBarVolume.Size = new System.Drawing.Size(173, 45);
             this.trackBarVolume.TabIndex = 20;
             this.trackBarVolume.TickStyle = System.Windows.Forms.TickStyle.None;
             this.trackBarVolume.Value = 100;
@@ -539,22 +497,189 @@
             // labelVolume
             // 
             this.labelVolume.AutoSize = true;
-            this.labelVolume.ForeColor = System.Drawing.SystemColors.GrayText;
-            this.labelVolume.Location = new System.Drawing.Point(226, 13);
+            this.labelVolume.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelVolume.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.labelVolume.Location = new System.Drawing.Point(212, 7);
             this.labelVolume.Name = "labelVolume";
-            this.labelVolume.Size = new System.Drawing.Size(33, 13);
+            this.labelVolume.Size = new System.Drawing.Size(34, 13);
             this.labelVolume.TabIndex = 21;
             this.labelVolume.Text = "100%";
             // 
+            // comboLatency
+            // 
+            this.comboLatency.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.comboLatency.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboLatency.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.comboLatency.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.comboLatency.FormattingEnabled = true;
+            this.comboLatency.Items.AddRange(new object[] {
+            "100",
+            "200",
+            "300",
+            "400",
+            "500",
+            "600",
+            "700",
+            "800",
+            "900"});
+            this.comboLatency.Location = new System.Drawing.Point(1, 1);
+            this.comboLatency.Name = "comboLatency";
+            this.comboLatency.Size = new System.Drawing.Size(46, 21);
+            this.comboLatency.TabIndex = 24;
+            // 
+            // label1
+            // 
+            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.label1.AutoSize = true;
+            this.label1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.label1.Location = new System.Drawing.Point(745, 25);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(20, 13);
+            this.label1.TabIndex = 25;
+            this.label1.Text = "ms";
+            // 
+            // txtFilterFolder
+            // 
+            this.txtFilterFolder.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtFilterFolder.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.txtFilterFolder.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.txtFilterFolder.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.txtFilterFolder.Location = new System.Drawing.Point(4, 4);
+            this.txtFilterFolder.Name = "txtFilterFolder";
+            this.txtFilterFolder.Size = new System.Drawing.Size(94, 13);
+            this.txtFilterFolder.TabIndex = 27;
+            this.txtFilterFolder.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.txtFilterFolder.Click += new System.EventHandler(this.txtFilterFolder_Enter);
+            // 
+            // txtFilterFile
+            // 
+            this.txtFilterFile.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtFilterFile.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.txtFilterFile.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.txtFilterFile.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.txtFilterFile.Location = new System.Drawing.Point(3, 4);
+            this.txtFilterFile.Name = "txtFilterFile";
+            this.txtFilterFile.Size = new System.Drawing.Size(96, 13);
+            this.txtFilterFile.TabIndex = 28;
+            this.txtFilterFile.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.txtFilterFile.Click += new System.EventHandler(this.txtFilterFile_Enter);
+            // 
+            // label2
+            // 
+            this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.label2.AutoSize = true;
+            this.label2.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.label2.Location = new System.Drawing.Point(939, 7);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(52, 13);
+            this.label2.TabIndex = 29;
+            this.label2.Text = "File filter";
+            // 
+            // label3
+            // 
+            this.label3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.label3.AutoSize = true;
+            this.label3.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label3.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.label3.Location = new System.Drawing.Point(821, 7);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(67, 13);
+            this.label3.TabIndex = 30;
+            this.label3.Text = "Folder filter";
+            // 
+            // panelFilterFolderGray
+            // 
+            this.panelFilterFolderGray.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(170)))), ((int)(((byte)(170)))), ((int)(((byte)(170)))));
+            this.panelFilterFolderGray.Controls.Add(this.panelFilterFolderWhite);
+            this.panelFilterFolderGray.Location = new System.Drawing.Point(801, 21);
+            this.panelFilterFolderGray.Name = "panelFilterFolderGray";
+            this.panelFilterFolderGray.Size = new System.Drawing.Size(104, 23);
+            this.panelFilterFolderGray.TabIndex = 0;
+            // 
+            // panelFilterFolderWhite
+            // 
+            this.panelFilterFolderWhite.BackColor = System.Drawing.Color.White;
+            this.panelFilterFolderWhite.Controls.Add(this.txtFilterFolder);
+            this.panelFilterFolderWhite.Location = new System.Drawing.Point(1, 1);
+            this.panelFilterFolderWhite.Name = "panelFilterFolderWhite";
+            this.panelFilterFolderWhite.Size = new System.Drawing.Size(102, 21);
+            this.panelFilterFolderWhite.TabIndex = 1;
+            // 
+            // panelLatencyGray
+            // 
+            this.panelLatencyGray.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(170)))), ((int)(((byte)(170)))), ((int)(((byte)(170)))));
+            this.panelLatencyGray.Controls.Add(this.comboLatency);
+            this.panelLatencyGray.Location = new System.Drawing.Point(695, 21);
+            this.panelLatencyGray.Name = "panelLatencyGray";
+            this.panelLatencyGray.Size = new System.Drawing.Size(48, 23);
+            this.panelLatencyGray.TabIndex = 1;
+            // 
+            // panelFilterFileGray
+            // 
+            this.panelFilterFileGray.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(170)))), ((int)(((byte)(170)))), ((int)(((byte)(170)))));
+            this.panelFilterFileGray.Controls.Add(this.panelFilterFileWhite);
+            this.panelFilterFileGray.Location = new System.Drawing.Point(913, 21);
+            this.panelFilterFileGray.Name = "panelFilterFileGray";
+            this.panelFilterFileGray.Size = new System.Drawing.Size(104, 23);
+            this.panelFilterFileGray.TabIndex = 2;
+            // 
+            // panelFilterFileWhite
+            // 
+            this.panelFilterFileWhite.BackColor = System.Drawing.Color.White;
+            this.panelFilterFileWhite.Controls.Add(this.txtFilterFile);
+            this.panelFilterFileWhite.Location = new System.Drawing.Point(1, 1);
+            this.panelFilterFileWhite.Name = "panelFilterFileWhite";
+            this.panelFilterFileWhite.Size = new System.Drawing.Size(102, 21);
+            this.panelFilterFileWhite.TabIndex = 1;
+            // 
+            // label7
+            // 
+            this.label7.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.label7.AutoSize = true;
+            this.label7.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label7.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.label7.Location = new System.Drawing.Point(163, 7);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(49, 13);
+            this.label7.TabIndex = 34;
+            this.label7.Text = "Volume:";
+            // 
+            // label6
+            // 
+            this.label6.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.label6.AutoSize = true;
+            this.label6.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label6.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.label6.Location = new System.Drawing.Point(442, 7);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(33, 13);
+            this.label6.TabIndex = 35;
+            this.label6.Text = "Time:";
+            // 
             // labelPosition
             // 
+            this.labelPosition.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.labelPosition.AutoSize = true;
-            this.labelPosition.ForeColor = System.Drawing.SystemColors.GrayText;
-            this.labelPosition.Location = new System.Drawing.Point(420, 13);
+            this.labelPosition.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelPosition.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.labelPosition.Location = new System.Drawing.Point(475, 7);
             this.labelPosition.Name = "labelPosition";
-            this.labelPosition.Size = new System.Drawing.Size(72, 13);
-            this.labelPosition.TabIndex = 23;
-            this.labelPosition.Text = "00:00 / 00:00";
+            this.labelPosition.Size = new System.Drawing.Size(101, 13);
+            this.labelPosition.TabIndex = 36;
+            this.labelPosition.Text = "00:00.00 / 00:00.00";
+            // 
+            // label4
+            // 
+            this.label4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.label4.AutoSize = true;
+            this.label4.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label4.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.label4.Location = new System.Drawing.Point(697, 7);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(45, 13);
+            this.label4.TabIndex = 31;
+            this.label4.Text = "Latency";
             // 
             // frmPlayer
             // 
@@ -563,8 +688,16 @@
             this.AutoScroll = true;
             this.ClientSize = new System.Drawing.Size(1137, 645);
             this.Controls.Add(this.labelPosition);
+            this.Controls.Add(this.label6);
+            this.Controls.Add(this.label7);
+            this.Controls.Add(this.label4);
+            this.Controls.Add(this.panelFilterFileGray);
+            this.Controls.Add(this.panelLatencyGray);
+            this.Controls.Add(this.panelFilterFolderGray);
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.label1);
             this.Controls.Add(this.labelVolume);
-            this.Controls.Add(this.toolStripFilters);
             this.Controls.Add(this.panelToolbarLine);
             this.Controls.Add(this.toolStripSettings);
             this.Controls.Add(this.statusStrip2);
@@ -573,7 +706,7 @@
             this.Controls.Add(this.trackBarVolume);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.KeyPreview = true;
-            this.MinimumSize = new System.Drawing.Size(997, 99);
+            this.MinimumSize = new System.Drawing.Size(1153, 99);
             this.Name = "frmPlayer";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Pätkä Player";
@@ -587,9 +720,14 @@
             this.toolStripPlay.PerformLayout();
             this.toolStripSettings.ResumeLayout(false);
             this.toolStripSettings.PerformLayout();
-            this.toolStripFilters.ResumeLayout(false);
-            this.toolStripFilters.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackBarVolume)).EndInit();
+            this.panelFilterFolderGray.ResumeLayout(false);
+            this.panelFilterFolderWhite.ResumeLayout(false);
+            this.panelFilterFolderWhite.PerformLayout();
+            this.panelLatencyGray.ResumeLayout(false);
+            this.panelFilterFileGray.ResumeLayout(false);
+            this.panelFilterFileWhite.ResumeLayout(false);
+            this.panelFilterFileWhite.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -631,16 +769,25 @@
         private System.Windows.Forms.ToolStripButton toolStripButton5;
         private System.Windows.Forms.ToolStripButton btnDropdown;
         private System.Windows.Forms.Panel panelToolbarLine;
-        private System.Windows.Forms.ToolStrip toolStripFilters;
-        private System.Windows.Forms.ToolStripLabel toolStripLabel3;
-        private System.Windows.Forms.ToolStripTextBox txtFilterFolder;
-        private System.Windows.Forms.ToolStripButton btnClearFilters;
-        private System.Windows.Forms.ToolStripTextBox txtFilterFile;
-        private System.Windows.Forms.ToolStripLabel toolStripLabel4;
         private System.Windows.Forms.TrackBar trackBarVolume;
         private System.Windows.Forms.Label labelVolume;
-        private System.Windows.Forms.Label labelPosition;
         private System.Windows.Forms.ToolStripStatusLabel labelTimer2;
+        private System.Windows.Forms.ComboBox comboLatency;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.TextBox txtFilterFolder;
+        private System.Windows.Forms.TextBox txtFilterFile;
+        private System.Windows.Forms.ToolStripButton btnClearFilters;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Panel panelFilterFolderGray;
+        private System.Windows.Forms.Panel panelLatencyGray;
+        private System.Windows.Forms.Panel panelFilterFolderWhite;
+        private System.Windows.Forms.Panel panelFilterFileGray;
+        private System.Windows.Forms.Panel panelFilterFileWhite;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Label labelPosition;
+        private System.Windows.Forms.Label label4;
     }
 }
 
