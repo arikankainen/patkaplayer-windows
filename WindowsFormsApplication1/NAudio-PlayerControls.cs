@@ -103,6 +103,7 @@ namespace PatkaPlayer
         private void waveOutDevice_PlaybackStopped(object sender, StoppedEventArgs e)
         {
             stopTrack();
+            if (checkRepeat.Checked && randompressed) playRandom();
         }
 
 

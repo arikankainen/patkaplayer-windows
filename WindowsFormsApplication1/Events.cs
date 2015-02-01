@@ -87,6 +87,7 @@ namespace PatkaPlayer
                     labelPosition.Text = audioFileReader.CurrentTime.ToString(@"mm\:ss\.ff") + " / " + audioFileReader.TotalTime.ToString(@"mm\:ss\.ff");
 
                 //else labelPosition.Text = audioFileReader.CurrentTime.ToString(@"ss\:ff") + " / " + audioFileReader.TotalTime.ToString(@"ss\:ff");
+
             }
         }
 
@@ -95,6 +96,11 @@ namespace PatkaPlayer
         {
             labelVolume.Focus();
             timerTemp.Stop();
+        }
+
+        private void frmPlayer_Shown(object sender, EventArgs e)
+        {
+            labelVolume.Focus();
         }
 
         // timer 1, plays clips
@@ -214,6 +220,7 @@ namespace PatkaPlayer
         // random button
         private void btnRandom_Click(object sender, EventArgs e)
         {
+            randompressed = true;
             if (array1.Length > 0) playRandom();
         }
 
@@ -263,6 +270,7 @@ namespace PatkaPlayer
         private void btnStop_Click(object sender, EventArgs e)
         {
             playpressed = false;
+            randompressed = false;
             stopTrack();
         }
 
@@ -448,7 +456,7 @@ namespace PatkaPlayer
         // sets focus to panelbuttons on mousescroll
         private void Form1_MouseWheel(object sender, MouseEventArgs e)
         {
-            panelButtons.Focus();
+            //panelButtons.Focus();
         }
 
         // window size changes
@@ -558,12 +566,12 @@ namespace PatkaPlayer
 
         private void panelFolders_MouseEnter(object sender, EventArgs e)
         {
-            panelFolders.Focus();
+            //panelFolders.Focus();
         }
 
         private void panelButtons_MouseEnter(object sender, EventArgs e)
         {
-            panelButtons.Focus();
+            //panelButtons.Focus();
         }
         
         private void txtFilterFolder_Enter(object sender, EventArgs e)
@@ -584,12 +592,12 @@ namespace PatkaPlayer
 
         private void trackBarVolume_MouseEnter(object sender, EventArgs e)
         {
-            trackBarVolume.Focus();
+            //trackBarVolume.Focus();
         }
 
         private void trackBarVolume_MouseLeave(object sender, EventArgs e)
         {
-            labelVolume.Focus();
+            //labelVolume.Focus();
         }
 
         private void pbPosition_MouseDown(object sender, MouseEventArgs e)
@@ -633,6 +641,7 @@ namespace PatkaPlayer
 
                     pbPosition.Value = (int)(pbPosition.Maximum * mousePercent);
                     audioFileReader.SetPosition((double)pbPosition.Value / 1000);
+
                     if (!play)
                     {
                         playpressed = true;
@@ -655,6 +664,25 @@ namespace PatkaPlayer
         {
             //btnDropdown.Checked = false;
             //MessageBox.Show("You are in the ContextMenu.Collapse event.");
+        }
+
+        private void comboLatency_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            int comboLatencyInt;
+            
+            try
+            {
+                comboLatencyInt = Convert.ToInt32(comboLatency.Text);
+            }
+            catch
+            {
+                comboLatencyInt = latency;
+            }
+
+            latency = comboLatencyInt;
+
+            closeTrack();
+            if (btnReplay.Tag.ToString() != "") loadTrack(btnReplay.Tag.ToString(), latency * 2);
         }
 
 

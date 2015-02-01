@@ -21,7 +21,7 @@ using NAudio.Wave;
 
 namespace PatkaPlayer
 {
-    public partial class frmPlayer : Form
+    public partial class frmPlayer : Form, IMessageFilter
     {
         IWavePlayer waveOutDevice;
         AudioFileReader audioFileReader;
@@ -29,6 +29,7 @@ namespace PatkaPlayer
         bool playpressed = false;
         bool pause = false;
         bool stop = true;
+        bool randompressed = false;
 
         private string[] array1 = new string[] { };
         private List<string> randomSound = new List<string>();
@@ -127,6 +128,7 @@ namespace PatkaPlayer
         public frmPlayer()
         {
             InitializeComponent();
+            Application.AddMessageFilter(this);
 
             if (!File.Exists("naudio.dll"))
             {
@@ -144,7 +146,7 @@ namespace PatkaPlayer
 
             }
 
-            labelVersion.Text = "v1.27";
+            labelVersion.Text = "v1.28";
 
             notifyIcon1.Visible = false;
             notifyIcon1.MouseUp += new MouseEventHandler(NotifyIcon1_Click);
@@ -219,37 +221,37 @@ namespace PatkaPlayer
             renderButtons(150, 50, out buttonBackButton, out buttonBackHoverButton, out buttonBackPressButton);
 
             buttonColorShadow = "#e3e3e3";
-            buttonColorCorner = "#91c396";
+            buttonColorCorner = "#7fb895";
             buttonColorCornerShadow = "#ffffff";
-            buttonColorBorder = "#599b5f";
-            buttonColorBorderGradientTop = "#c9eacd";
-            buttonColorBorderGradientBottom = "#b7e1bc";
-            buttonColorBackGradientUpperTop = "#97d19e";
-            buttonColorBackGradientUpperBottom = "#8ac790";
-            buttonColorBackGradientLowerTop = "#7abc80";
-            buttonColorBackGradientLowerBottom = "#7bbd81";
+            buttonColorBorder = "#4a9667";
+            buttonColorBorderGradientTop = "#b4dac4";
+            buttonColorBorderGradientBottom = "#a3d3b7";
+            buttonColorBackGradientUpperTop = "#83c69d";
+            buttonColorBackGradientUpperBottom = "#77bd92";
+            buttonColorBackGradientLowerTop = "#68b384";
+            buttonColorBackGradientLowerBottom = "#69b485";
 
             buttonColorShadowH = "#e3e3e3";
-            buttonColorCornerH = "#7ab88d";
+            buttonColorCornerH = "#69ac84";
             buttonColorCornerShadowH = "#ffffff";
-            buttonColorBorderH = "#408958";
-            buttonColorBorderGradientTopH = "#bce8ca";
-            buttonColorBorderGradientBottomH = "#a6dfb9";
-            buttonColorBackGradientUpperTopH = "#7fc998";
-            buttonColorBackGradientUpperBottomH = "#72bd89";
-            buttonColorBackGradientLowerTopH = "#61b079";
-            buttonColorBackGradientLowerBottomH = "#62b17a";
+            buttonColorBorderH = "#338353";
+            buttonColorBorderGradientTopH = "#a6d7b9";
+            buttonColorBorderGradientBottomH = "#92cfab";
+            buttonColorBackGradientUpperTopH = "#6dbe90";
+            buttonColorBackGradientUpperBottomH = "#61b281";
+            buttonColorBackGradientLowerTopH = "#51a773";
+            buttonColorBackGradientLowerBottomH = "#52a874";
 
             buttonColorShadowP = "#e3e3e3";
-            buttonColorCornerP = "#5582b3";
+            buttonColorCornerP = "#4a9c6d";
             buttonColorCornerShadowP = "#ffffff";
-            buttonColorBorderP = "#3b6897";
-            buttonColorBorderGradientTopP = "#a7c9ed";
-            buttonColorBorderGradientBottomP = "#c1dcf8";
-            buttonColorBackGradientUpperTopP = "#6e9dcc";
-            buttonColorBackGradientUpperBottomP = "#80acdd";
-            buttonColorBackGradientLowerTopP = "#6e9dcc";
-            buttonColorBackGradientLowerBottomP = "#80acdd";
+            buttonColorBorderP = "#338353";
+            buttonColorBorderGradientTopP = "#93cfac";
+            buttonColorBorderGradientBottomP = "#a7d7ba";
+            buttonColorBackGradientUpperTopP = "#63b484";
+            buttonColorBackGradientUpperBottomP = "#6fc091";
+            buttonColorBackGradientLowerTopP = "#61b281";
+            buttonColorBackGradientLowerBottomP = "#6ebf91";
 
             renderButtons(296, 30, out buttonBackFolder, out buttonBackHoverFolder, out buttonBackPressFolder);
 
@@ -269,6 +271,7 @@ namespace PatkaPlayer
 
             buttonLocations();
             InsertPanelButtons();
+
         }
 
         // reset toolstrip button locations
@@ -350,7 +353,8 @@ namespace PatkaPlayer
             allpanel.Height = 1;
             allpanel.Width = 276;
             allpanel.BorderStyle = BorderStyle.None;
-            allpanel.BackColor = ColorTranslator.FromHtml("#aec8e8");
+            //allpanel.BackColor = ColorTranslator.FromHtml("#aec8e8");
+            allpanel.BackColor = ColorTranslator.FromHtml("#bbb");
             allpanel.Margin = new Padding(13, 6, 13, 6);
 
             panelFolders.Controls.Add(allpanel);
@@ -531,6 +535,8 @@ namespace PatkaPlayer
 
             panelButtons.ResumeLayout();
             buttonLocations();
+            labelVolume.Focus();
+
         }
 
         // play file
@@ -546,7 +552,9 @@ namespace PatkaPlayer
             {
                 comboLatencyInt = latency;
             }
-            
+
+            latency = comboLatencyInt;
+
             string pathToPlay = Path.GetDirectoryName(fileToPlay);
 
             btnReplay.Tag = fileToPlay;
@@ -561,11 +569,7 @@ namespace PatkaPlayer
             if (!play && sendMessages) sendMessagePause();
             closeTrack();
 
-            if (comboLatencyInt < 100) latency = 100;
-            else if (comboLatencyInt > 900) latency = 900;
-            else latency = comboLatencyInt;
-
-            loadTrack(fileToPlay, latency);
+            loadTrack(fileToPlay, latency * 2);
             playTrack();
 
             if (logging)
@@ -1178,9 +1182,30 @@ namespace PatkaPlayer
             }
         }
 
+        // mouse scrolls control under mouse
+        public bool PreFilterMessage(ref Message m)
+        {
+            const int WM_MOUSEWHEEL = 0x20a;
 
+            if (m.Msg == WM_MOUSEWHEEL)
+            {
+                // find the control at screen position m.LParam
+                Point pos = new Point(m.LParam.ToInt32() & 0xffff, m.LParam.ToInt32() >> 16);
+                IntPtr hWnd = WindowFromPoint(pos);
+                if (hWnd != IntPtr.Zero && hWnd != m.HWnd && Control.FromHandle(hWnd) != null)
+                {
+                    SendMessage(hWnd, m.Msg, m.WParam, m.LParam);
+                    return true;
+                }
+            }
+            return false;
+        }
 
-
+        // P/Invoke declarations / mouse scrolls control under mouse
+        [DllImport("user32.dll")]
+        private static extern IntPtr WindowFromPoint(Point pt);
+        [DllImport("user32.dll")]
+        private static extern IntPtr SendMessage(IntPtr hWnd, int msg, IntPtr wp, IntPtr lp);
 
 
 
@@ -1229,7 +1254,7 @@ namespace PatkaPlayer
                     offscreen.FillRectangle(new SolidBrush(SystemColors.ButtonFace), 0, rec.Height - 1, 1, 1);
 
                     //offscreen.FillRectangle(new SolidBrush(SystemColors.ControlLight), 0, 0, rec.Width, rec.Height);
-                    offscreen.FillRectangle(new SolidBrush(Color.FromArgb(255, 170, 170, 170)), 0, 0, rec.Width, rec.Height);
+                    offscreen.FillRectangle(new SolidBrush(Color.FromArgb(255, 200, 200, 200)), 0, 0, rec.Width, rec.Height);
                     offscreen.FillRectangle(new SolidBrush(Color.White), 1, 1, rec.Width - 2, rec.Height - 2);
 
                     if (Value > 0)
@@ -1240,8 +1265,8 @@ namespace PatkaPlayer
                         // progressbar gradients
                         //offscreen.FillRectangle(new SolidBrush(ColorTranslator.FromHtml("#aac9e7")), 2, 2, rec.Width - 2, (rec.Height - 2) / 2);
                         //offscreen.FillRectangle(new SolidBrush(ColorTranslator.FromHtml("#9dbddc")), 2, rec.Height / 2 + 1, rec.Width - 2, (rec.Height - 1) / 2);
-                        offscreen.FillRectangle(new SolidBrush(ColorTranslator.FromHtml("#ddd")), 2, 2, rec.Width - 2, (rec.Height - 2) / 2);
-                        offscreen.FillRectangle(new SolidBrush(ColorTranslator.FromHtml("#ccc")), 2, rec.Height / 2 + 1, rec.Width - 2, (rec.Height - 1) / 2);
+                        offscreen.FillRectangle(new SolidBrush(ColorTranslator.FromHtml("#f2c0c0")), 2, 2, rec.Width - 2, (rec.Height - 2) / 2);
+                        offscreen.FillRectangle(new SolidBrush(ColorTranslator.FromHtml("#e6b3b3")), 2, rec.Height / 2 + 1, rec.Width - 2, (rec.Height - 1) / 2);
 
                     }
 
@@ -1251,7 +1276,7 @@ namespace PatkaPlayer
                         Point location = new Point(Convert.ToInt32((Width / 2) - len.Width / 2), 5);
 
                         //offscreen.DrawString(ProgressText, f, Brushes.Black, new PointF(3, 5));
-                        offscreen.DrawString(ProgressText, f, Brushes.Black, location);
+                        offscreen.DrawString(ProgressText, f, Brushes.DarkRed, location);
                     }
 
                     e.Graphics.DrawImage(offscreenImage, 0, 0);

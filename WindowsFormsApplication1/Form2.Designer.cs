@@ -975,16 +975,19 @@
             this.comboLatency.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboLatency.FormattingEnabled = true;
             this.comboLatency.Items.AddRange(new object[] {
-            "100",
-            "200",
-            "300",
-            "400",
-            "500",
-            "600",
-            "700",
-            "800",
+            "2000",
+            "1500",
+            "1000",
             "900",
-            "1000"});
+            "800",
+            "700",
+            "600",
+            "500",
+            "400",
+            "300",
+            "200",
+            "100",
+            "50"});
             this.comboLatency.Location = new System.Drawing.Point(15, 27);
             this.comboLatency.Name = "comboLatency";
             this.comboLatency.Size = new System.Drawing.Size(121, 21);
@@ -1007,7 +1010,7 @@
             this.groupBox8.Size = new System.Drawing.Size(404, 160);
             this.groupBox8.TabIndex = 49;
             this.groupBox8.TabStop = false;
-            this.groupBox8.Text = "Send Keystrokes";
+            this.groupBox8.Text = "Send keystrokes";
             // 
             // checkSendKeystrokes
             // 
