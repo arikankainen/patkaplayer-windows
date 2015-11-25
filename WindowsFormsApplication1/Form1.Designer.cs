@@ -481,10 +481,10 @@
             // trackBarVolume
             // 
             this.trackBarVolume.LargeChange = 0;
-            this.trackBarVolume.Location = new System.Drawing.Point(137, 10);
+            this.trackBarVolume.Location = new System.Drawing.Point(203, 10);
             this.trackBarVolume.Maximum = 100;
             this.trackBarVolume.Name = "trackBarVolume";
-            this.trackBarVolume.Size = new System.Drawing.Size(133, 45);
+            this.trackBarVolume.Size = new System.Drawing.Size(67, 45);
             this.trackBarVolume.TabIndex = 20;
             this.trackBarVolume.TickStyle = System.Windows.Forms.TickStyle.None;
             this.trackBarVolume.Value = 100;
@@ -641,11 +641,12 @@
             // checkRepeat
             // 
             this.checkRepeat.AutoSize = true;
-            this.checkRepeat.Location = new System.Drawing.Point(106, 14);
+            this.checkRepeat.Location = new System.Drawing.Point(701, 14);
             this.checkRepeat.Name = "checkRepeat";
             this.checkRepeat.Size = new System.Drawing.Size(15, 14);
             this.checkRepeat.TabIndex = 37;
             this.checkRepeat.UseVisualStyleBackColor = true;
+            this.checkRepeat.Visible = false;
             // 
             // timerKeyDown
             // 

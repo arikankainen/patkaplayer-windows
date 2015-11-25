@@ -252,6 +252,8 @@ namespace PatkaPlayer
 
             renderButtons(150, 50, out buttonBackButton, out buttonBackHoverButton, out buttonBackPressButton);
 
+            /* 
+            // green
             buttonColorShadow = "#e3e3e3";
             buttonColorCorner = "#7fb895";
             buttonColorCornerShadow = "#ffffff";
@@ -284,6 +286,7 @@ namespace PatkaPlayer
             buttonColorBackGradientUpperBottomP = "#6fc091";
             buttonColorBackGradientLowerTopP = "#61b281";
             buttonColorBackGradientLowerBottomP = "#6ebf91";
+            */
 
             renderButtons(296, 30, out buttonBackFolder, out buttonBackHoverFolder, out buttonBackPressFolder);
 
@@ -1302,18 +1305,23 @@ namespace PatkaPlayer
                         rec.Height = rec.Height - 2;
 
                         // progressbar gradients
-                        
+
                         // blue
                         //offscreen.FillRectangle(new SolidBrush(ColorTranslator.FromHtml("#aac9e7")), 2, 2, rec.Width - 2, (rec.Height - 2) / 2);
                         //offscreen.FillRectangle(new SolidBrush(ColorTranslator.FromHtml("#9dbddc")), 2, rec.Height / 2 + 1, rec.Width - 2, (rec.Height - 1) / 2);
-                        
+
                         // red
-                        offscreen.FillRectangle(new SolidBrush(ColorTranslator.FromHtml("#f2c0c0")), 2, 2, rec.Width - 2, (rec.Height - 2) / 2);
-                        offscreen.FillRectangle(new SolidBrush(ColorTranslator.FromHtml("#e6b3b3")), 2, rec.Height / 2 + 1, rec.Width - 2, (rec.Height - 1) / 2);
+                        //offscreen.FillRectangle(new SolidBrush(ColorTranslator.FromHtml("#f2c0c0")), 2, 2, rec.Width - 2, (rec.Height - 2) / 2);
+                        //offscreen.FillRectangle(new SolidBrush(ColorTranslator.FromHtml("#e6b3b3")), 2, rec.Height / 2 + 1, rec.Width - 2, (rec.Height - 1) / 2);
 
                         // gray
                         //offscreen.FillRectangle(new SolidBrush(ColorTranslator.FromHtml("#ccc")), 2, 2, rec.Width - 2, (rec.Height - 2) / 2);
                         //offscreen.FillRectangle(new SolidBrush(ColorTranslator.FromHtml("#bbb")), 2, rec.Height / 2 + 1, rec.Width - 2, (rec.Height - 1) / 2);
+
+                        //green
+                        offscreen.FillRectangle(new SolidBrush(ColorTranslator.FromHtml("#50d350")), 2, 2, rec.Width - 2, (rec.Height - 2) / 2);
+                        offscreen.FillRectangle(new SolidBrush(ColorTranslator.FromHtml("#2dc82d")), 2, rec.Height / 2 + 1, rec.Width - 2, (rec.Height - 1) / 2);
+
 
                     }
 

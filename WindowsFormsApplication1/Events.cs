@@ -635,7 +635,8 @@ namespace PatkaPlayer
 
                 int mouseX = e.Location.X + 2;
                 if (mouseX < 0) mouseX = 0;
-                if (mouseX > pbPosition.Width) mouseX = pbPosition.Width;
+                //if (mouseX > pbPosition.Width) mouseX = pbPosition.Width;
+                if (mouseX > pbPosition.Width - 7) mouseX = pbPosition.Width - 7;
 
                 double trackBarPercent = (((double)pbPosition.Value / (double)pbPosition.Maximum));
                 double mousePercent = (((double)mouseX / ((double)pbPosition.Width)));
@@ -662,7 +663,7 @@ namespace PatkaPlayer
                 {
                     int mouseX = e.Location.X + 2;
                     if (mouseX < 0) mouseX = 0;
-                    if (mouseX > pbPosition.Width) mouseX = pbPosition.Width;
+                    if (mouseX > pbPosition.Width - 7) mouseX = pbPosition.Width - 7;
 
                     double trackBarPercent = (((double)pbPosition.Value / (double)pbPosition.Maximum));
                     double mousePercent = (((double)mouseX / ((double)pbPosition.Width)));
