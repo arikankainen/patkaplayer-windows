@@ -84,11 +84,8 @@
             this.panelLatencyGray = new System.Windows.Forms.Panel();
             this.panelFilterFileGray = new System.Windows.Forms.Panel();
             this.panelFilterFileWhite = new System.Windows.Forms.Panel();
-            this.label7 = new System.Windows.Forms.Label();
-            this.label6 = new System.Windows.Forms.Label();
-            this.labelPosition = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
             this.checkRepeat = new System.Windows.Forms.CheckBox();
+            this.timerKeyDown = new System.Windows.Forms.Timer(this.components);
             this.statusStrip2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -214,7 +211,7 @@
             this.panelButtons.Location = new System.Drawing.Point(0, 0);
             this.panelButtons.Name = "panelButtons";
             this.panelButtons.Padding = new System.Windows.Forms.Padding(5, 0, 5, 5);
-            this.panelButtons.Size = new System.Drawing.Size(804, 555);
+            this.panelButtons.Size = new System.Drawing.Size(804, 565);
             this.panelButtons.TabIndex = 12;
             this.panelButtons.MouseEnter += new System.EventHandler(this.panelButtons_MouseEnter);
             // 
@@ -299,7 +296,6 @@
             this.labelLastPlayed.Padding = new System.Windows.Forms.Padding(5, 0, 10, 0);
             this.labelLastPlayed.Size = new System.Drawing.Size(31, 19);
             this.labelLastPlayed.Text = "-";
-            this.labelLastPlayed.Visible = false;
             this.labelLastPlayed.Click += new System.EventHandler(this.labelLastPlayed_Click);
             // 
             // labelSpacer
@@ -308,7 +304,7 @@
             this.labelSpacer.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.labelSpacer.Name = "labelSpacer";
             this.labelSpacer.Padding = new System.Windows.Forms.Padding(5, 0, 10, 0);
-            this.labelSpacer.Size = new System.Drawing.Size(757, 19);
+            this.labelSpacer.Size = new System.Drawing.Size(726, 19);
             this.labelSpacer.Spring = true;
             // 
             // labelVersion
@@ -328,7 +324,7 @@
             this.splitContainer1.BackColor = System.Drawing.Color.DarkGray;
             this.splitContainer1.FixedPanel = System.Windows.Forms.FixedPanel.Panel1;
             this.splitContainer1.IsSplitterFixed = true;
-            this.splitContainer1.Location = new System.Drawing.Point(0, 51);
+            this.splitContainer1.Location = new System.Drawing.Point(0, 41);
             this.splitContainer1.Name = "splitContainer1";
             // 
             // splitContainer1.Panel1
@@ -341,7 +337,7 @@
             // 
             this.splitContainer1.Panel2.BackColor = System.Drawing.SystemColors.ControlLightLight;
             this.splitContainer1.Panel2.Controls.Add(this.panelButtons);
-            this.splitContainer1.Size = new System.Drawing.Size(1138, 555);
+            this.splitContainer1.Size = new System.Drawing.Size(1138, 565);
             this.splitContainer1.SplitterDistance = 329;
             this.splitContainer1.TabIndex = 15;
             // 
@@ -354,7 +350,7 @@
             this.panelFolders.Location = new System.Drawing.Point(0, 0);
             this.panelFolders.Name = "panelFolders";
             this.panelFolders.Padding = new System.Windows.Forms.Padding(5);
-            this.panelFolders.Size = new System.Drawing.Size(328, 555);
+            this.panelFolders.Size = new System.Drawing.Size(328, 565);
             this.panelFolders.TabIndex = 0;
             this.panelFolders.MouseEnter += new System.EventHandler(this.panelFolders_MouseEnter);
             // 
@@ -367,7 +363,7 @@
             this.btnRandom,
             this.btnStop,
             this.btnReplay});
-            this.toolStripPlay.Location = new System.Drawing.Point(2, 14);
+            this.toolStripPlay.Location = new System.Drawing.Point(2, 2);
             this.toolStripPlay.Name = "toolStripPlay";
             this.toolStripPlay.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
             this.toolStripPlay.Size = new System.Drawing.Size(91, 35);
@@ -421,7 +417,7 @@
             this.btnDropdown,
             this.toolStripButton5,
             this.btnClearFilters});
-            this.toolStripSettings.Location = new System.Drawing.Point(1013, 14);
+            this.toolStripSettings.Location = new System.Drawing.Point(1013, 2);
             this.toolStripSettings.Name = "toolStripSettings";
             this.toolStripSettings.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
             this.toolStripSettings.Size = new System.Drawing.Size(122, 35);
@@ -477,7 +473,7 @@
             this.panelToolbarLine.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.panelToolbarLine.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(150)))), ((int)(((byte)(150)))), ((int)(((byte)(150)))));
-            this.panelToolbarLine.Location = new System.Drawing.Point(0, 50);
+            this.panelToolbarLine.Location = new System.Drawing.Point(0, 40);
             this.panelToolbarLine.Name = "panelToolbarLine";
             this.panelToolbarLine.Size = new System.Drawing.Size(1137, 1);
             this.panelToolbarLine.TabIndex = 18;
@@ -485,10 +481,10 @@
             // trackBarVolume
             // 
             this.trackBarVolume.LargeChange = 0;
-            this.trackBarVolume.Location = new System.Drawing.Point(120, 20);
+            this.trackBarVolume.Location = new System.Drawing.Point(137, 10);
             this.trackBarVolume.Maximum = 100;
             this.trackBarVolume.Name = "trackBarVolume";
-            this.trackBarVolume.Size = new System.Drawing.Size(173, 45);
+            this.trackBarVolume.Size = new System.Drawing.Size(133, 45);
             this.trackBarVolume.TabIndex = 20;
             this.trackBarVolume.TickStyle = System.Windows.Forms.TickStyle.None;
             this.trackBarVolume.Value = 100;
@@ -501,7 +497,7 @@
             this.labelVolume.AutoSize = true;
             this.labelVolume.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelVolume.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.labelVolume.Location = new System.Drawing.Point(212, 6);
+            this.labelVolume.Location = new System.Drawing.Point(276, 14);
             this.labelVolume.Name = "labelVolume";
             this.labelVolume.Size = new System.Drawing.Size(34, 13);
             this.labelVolume.TabIndex = 21;
@@ -537,10 +533,11 @@
             // label1
             // 
             this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Segoe UI", 8.25F);
             this.label1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.label1.Location = new System.Drawing.Point(750, 25);
+            this.label1.Location = new System.Drawing.Point(674, 13);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(20, 13);
+            this.label1.Size = new System.Drawing.Size(21, 13);
             this.label1.TabIndex = 25;
             this.label1.Text = "ms";
             // 
@@ -576,11 +573,11 @@
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.label2.Location = new System.Drawing.Point(938, 6);
+            this.label2.Location = new System.Drawing.Point(882, 14);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(54, 13);
+            this.label2.Size = new System.Drawing.Size(25, 13);
             this.label2.TabIndex = 29;
-            this.label2.Text = "File Filter";
+            this.label2.Text = "File";
             // 
             // label3
             // 
@@ -588,18 +585,18 @@
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label3.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.label3.Location = new System.Drawing.Point(820, 6);
+            this.label3.Location = new System.Drawing.Point(723, 14);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(69, 13);
+            this.label3.Size = new System.Drawing.Size(40, 13);
             this.label3.TabIndex = 30;
-            this.label3.Text = "Folder Filter";
+            this.label3.Text = "Folder";
             // 
             // panelFilterFolderGray
             // 
             this.panelFilterFolderGray.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.panelFilterFolderGray.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(200)))), ((int)(((byte)(200)))));
             this.panelFilterFolderGray.Controls.Add(this.panelFilterFolderWhite);
-            this.panelFilterFolderGray.Location = new System.Drawing.Point(801, 21);
+            this.panelFilterFolderGray.Location = new System.Drawing.Point(764, 9);
             this.panelFilterFolderGray.Name = "panelFilterFolderGray";
             this.panelFilterFolderGray.Size = new System.Drawing.Size(104, 23);
             this.panelFilterFolderGray.TabIndex = 0;
@@ -617,7 +614,7 @@
             // 
             this.panelLatencyGray.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(200)))), ((int)(((byte)(200)))));
             this.panelLatencyGray.Controls.Add(this.comboLatency);
-            this.panelLatencyGray.Location = new System.Drawing.Point(695, 21);
+            this.panelLatencyGray.Location = new System.Drawing.Point(619, 9);
             this.panelLatencyGray.Name = "panelLatencyGray";
             this.panelLatencyGray.Size = new System.Drawing.Size(53, 23);
             this.panelLatencyGray.TabIndex = 1;
@@ -627,7 +624,7 @@
             this.panelFilterFileGray.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.panelFilterFileGray.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(200)))), ((int)(((byte)(200)))));
             this.panelFilterFileGray.Controls.Add(this.panelFilterFileWhite);
-            this.panelFilterFileGray.Location = new System.Drawing.Point(913, 21);
+            this.panelFilterFileGray.Location = new System.Drawing.Point(913, 9);
             this.panelFilterFileGray.Name = "panelFilterFileGray";
             this.panelFilterFileGray.Size = new System.Drawing.Size(104, 23);
             this.panelFilterFileGray.TabIndex = 2;
@@ -641,58 +638,19 @@
             this.panelFilterFileWhite.Size = new System.Drawing.Size(102, 21);
             this.panelFilterFileWhite.TabIndex = 1;
             // 
-            // label7
-            // 
-            this.label7.AutoSize = true;
-            this.label7.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label7.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.label7.Location = new System.Drawing.Point(163, 6);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(49, 13);
-            this.label7.TabIndex = 34;
-            this.label7.Text = "Volume:";
-            // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label6.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.label6.Location = new System.Drawing.Point(442, 6);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(33, 13);
-            this.label6.TabIndex = 35;
-            this.label6.Text = "Time:";
-            // 
-            // labelPosition
-            // 
-            this.labelPosition.AutoSize = true;
-            this.labelPosition.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelPosition.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.labelPosition.Location = new System.Drawing.Point(475, 6);
-            this.labelPosition.Name = "labelPosition";
-            this.labelPosition.Size = new System.Drawing.Size(101, 13);
-            this.labelPosition.TabIndex = 36;
-            this.labelPosition.Text = "00:00.00 / 00:00.00";
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label4.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.label4.Location = new System.Drawing.Point(698, 6);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(45, 13);
-            this.label4.TabIndex = 31;
-            this.label4.Text = "Latency";
-            // 
             // checkRepeat
             // 
             this.checkRepeat.AutoSize = true;
-            this.checkRepeat.Location = new System.Drawing.Point(97, 25);
+            this.checkRepeat.Location = new System.Drawing.Point(106, 14);
             this.checkRepeat.Name = "checkRepeat";
             this.checkRepeat.Size = new System.Drawing.Size(15, 14);
             this.checkRepeat.TabIndex = 37;
             this.checkRepeat.UseVisualStyleBackColor = true;
+            // 
+            // timerKeyDown
+            // 
+            this.timerKeyDown.Interval = 200;
+            this.timerKeyDown.Tick += new System.EventHandler(this.timerKeyDown_Tick);
             // 
             // frmPlayer
             // 
@@ -701,10 +659,6 @@
             this.AutoScroll = true;
             this.ClientSize = new System.Drawing.Size(1137, 629);
             this.Controls.Add(this.checkRepeat);
-            this.Controls.Add(this.labelPosition);
-            this.Controls.Add(this.label6);
-            this.Controls.Add(this.label7);
-            this.Controls.Add(this.label4);
             this.Controls.Add(this.panelFilterFileGray);
             this.Controls.Add(this.panelLatencyGray);
             this.Controls.Add(this.panelFilterFolderGray);
@@ -724,6 +678,7 @@
             this.Name = "frmPlayer";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Pätkä Player";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.frmPlayer_FormClosing);
             this.Shown += new System.EventHandler(this.frmPlayer_Shown);
             this.statusStrip2.ResumeLayout(false);
             this.statusStrip2.PerformLayout();
@@ -799,11 +754,8 @@
         private System.Windows.Forms.Panel panelFilterFolderWhite;
         private System.Windows.Forms.Panel panelFilterFileGray;
         private System.Windows.Forms.Panel panelFilterFileWhite;
-        private System.Windows.Forms.Label label7;
-        private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.Label labelPosition;
-        private System.Windows.Forms.Label label4;
         private System.Windows.Forms.CheckBox checkRepeat;
+        private System.Windows.Forms.Timer timerKeyDown;
     }
 }
 

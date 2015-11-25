@@ -159,6 +159,8 @@
             this.label12 = new System.Windows.Forms.Label();
             this.numericMinHour2 = new System.Windows.Forms.NumericUpDown();
             this.btnApply = new System.Windows.Forms.Button();
+            this.groupBox15 = new System.Windows.Forms.GroupBox();
+            this.checkScrollLock = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             this.groupBox4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericMaxSec1)).BeginInit();
@@ -190,6 +192,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.numericMinSec2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericMinMin2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericMinHour2)).BeginInit();
+            this.groupBox15.SuspendLayout();
             this.SuspendLayout();
             // 
             // btnSet1
@@ -936,6 +939,7 @@
             // 
             // tabSettings
             // 
+            this.tabSettings.Controls.Add(this.groupBox15);
             this.tabSettings.Controls.Add(this.groupBox13);
             this.tabSettings.Controls.Add(this.groupBox8);
             this.tabSettings.Controls.Add(this.groupBox5);
@@ -1017,9 +1021,9 @@
             this.checkSendKeystrokes.AutoSize = true;
             this.checkSendKeystrokes.Location = new System.Drawing.Point(16, 127);
             this.checkSendKeystrokes.Name = "checkSendKeystrokes";
-            this.checkSendKeystrokes.Size = new System.Drawing.Size(353, 17);
+            this.checkSendKeystrokes.Size = new System.Drawing.Size(105, 17);
             this.checkSendKeystrokes.TabIndex = 59;
-            this.checkSendKeystrokes.Text = "Send keystrokes (can be temporary toggled by clicking statusbar text)";
+            this.checkSendKeystrokes.Text = "Send keystrokes";
             this.checkSendKeystrokes.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
             this.checkSendKeystrokes.UseVisualStyleBackColor = true;
             this.checkSendKeystrokes.CheckStateChanged += new System.EventHandler(this.valueChanged);
@@ -1804,6 +1808,26 @@
             this.btnApply.UseVisualStyleBackColor = true;
             this.btnApply.Click += new System.EventHandler(this.btnApply_Click);
             // 
+            // groupBox15
+            // 
+            this.groupBox15.Controls.Add(this.checkScrollLock);
+            this.groupBox15.Location = new System.Drawing.Point(6, 355);
+            this.groupBox15.Name = "groupBox15";
+            this.groupBox15.Size = new System.Drawing.Size(228, 57);
+            this.groupBox15.TabIndex = 35;
+            this.groupBox15.TabStop = false;
+            this.groupBox15.Text = "Scroll lock";
+            // 
+            // checkScrollLock
+            // 
+            this.checkScrollLock.AutoSize = true;
+            this.checkScrollLock.Location = new System.Drawing.Point(15, 25);
+            this.checkScrollLock.Name = "checkScrollLock";
+            this.checkScrollLock.Size = new System.Drawing.Size(197, 17);
+            this.checkScrollLock.TabIndex = 3;
+            this.checkScrollLock.Text = "Turn on scroll lock when playing clip";
+            this.checkScrollLock.UseVisualStyleBackColor = true;
+            // 
             // frmSettings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1869,6 +1893,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.numericMinSec2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericMinMin2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericMinHour2)).EndInit();
+            this.groupBox15.ResumeLayout(false);
+            this.groupBox15.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -2007,5 +2033,7 @@
         private System.Windows.Forms.GroupBox groupBox13;
         private System.Windows.Forms.Label label18;
         private System.Windows.Forms.ComboBox comboLatency;
+        private System.Windows.Forms.GroupBox groupBox15;
+        private System.Windows.Forms.CheckBox checkScrollLock;
     }
 }

@@ -81,14 +81,28 @@ namespace PatkaPlayer
                 pbPosition.Maximum = Convert.ToInt32(audioFileReader.TotalTime.TotalMilliseconds);
                 pbPosition.Value = Convert.ToInt32(audioFileReader.CurrentTime.TotalMilliseconds);
 
-                //if (waveOutDevice.PlaybackState == NAudio.Wave.PlaybackState.Stopped) play = false;
 
-                //if (Convert.ToInt32(audioFileReader.TotalTime.ToString(@"mm")) > 0)
-                    labelPosition.Text = audioFileReader.CurrentTime.ToString(@"mm\:ss\.ff") + " / " + audioFileReader.TotalTime.ToString(@"mm\:ss\.ff");
-
-                //else labelPosition.Text = audioFileReader.CurrentTime.ToString(@"ss\:ff") + " / " + audioFileReader.TotalTime.ToString(@"ss\:ff");
+                if (waveOutDevice.PlaybackState == NAudio.Wave.PlaybackState.Stopped)
+                {
+                    this.Text = "Pätkä Player";
+                    taskbar.SetProgressState(Microsoft.WindowsAPICodePack.Taskbar.TaskbarProgressBarState.NoProgress);
+                    pbPosition.ProgressText = "";
+                    if (scrollLock) SetScrollLockKey(false);
+                }
+                else
+                {
+                    taskbar.SetProgressState(Microsoft.WindowsAPICodePack.Taskbar.TaskbarProgressBarState.Normal);
+                    taskbar.SetProgressValue(Convert.ToInt32(audioFileReader.CurrentTime.TotalMilliseconds), Convert.ToInt32(audioFileReader.TotalTime.TotalMilliseconds));
+                    pbPosition.ProgressText = audioFileReader.CurrentTime.ToString(@"mm\:ss\.ff") + " / " + audioFileReader.TotalTime.ToString(@"mm\:ss\.ff");
+                    if (scrollLock) SetScrollLockKey(true);
+                }
 
             }
+        }
+
+        private void frmPlayer_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (scrollLock) SetScrollLockKey(false);
         }
 
         // temp timer for setting focus off from buttons at load
@@ -236,6 +250,7 @@ namespace PatkaPlayer
         private void Form1_KeyEvent(object sender, KeyEventArgs e)
         {
             //if (txtFilterFolder.Selected == true || txtFilterFile.Selected == true) return;
+            /*
             if (txtFilterFolder.Focused == true || txtFilterFile.Focused == true) return;
 
             string key = e.KeyCode.ToString();
@@ -264,6 +279,7 @@ namespace PatkaPlayer
             if (e.KeyCode == Keys.F10 && File.Exists(mp3Dir + "\\" + hotkey10)) playFile(mp3Dir + "\\" + hotkey10);
             if (e.KeyCode == Keys.F11 && File.Exists(mp3Dir + "\\" + hotkey11)) playFile(mp3Dir + "\\" + hotkey11);
             if (e.KeyCode == Keys.F12 && File.Exists(mp3Dir + "\\" + hotkey12)) playFile(mp3Dir + "\\" + hotkey12);
+            */
         }
 
         // stop button
@@ -496,35 +512,47 @@ namespace PatkaPlayer
             ReadSettings();
         }
 
+        private void timerKeyDown_Tick(object sender, EventArgs e)
+        {
+            timerKeyDown.Stop();
+            keyDown = false;
+        }
+
         void hook_KeyPressed(object sender, KeyPressedEventArgs e)
         {
-            string mod = e.Modifier.ToString().Replace("Control", "Ctrl").Replace(", ", "+");
-            string key = e.Key.ToString();
-
-            if (mod == hotkeyRandomMod && key == hotkeyRandomKey) btnRandom.PerformClick();
-            if (mod == hotkeyReplayMod && key == hotkeyReplayKey) btnReplay.PerformClick();
-            if (mod == hotkeyStopMod && key == hotkeyStopKey) btnStop.PerformClick();
-
-            if (mod == hotkeyTimer1Mod && key == hotkeyTimer1Key && !timer1Started) startTimer1();
-            if (mod == hotkeyTimer2Mod && key == hotkeyTimer2Key && !timer2Started) startTimer2();
-            if (mod == hotkeyStopTimerMod && key == hotkeyStopTimerKey)
+            if (!keyDown)
             {
-                if (timer1Started) startTimer1();
-                else if (timer2Started) startTimer2();
-            }
+                string mod = e.Modifier.ToString().Replace("Control", "Ctrl").Replace(", ", "+");
+                string key = e.Key.ToString();
 
-            if (e.Key == Keys.F1 && File.Exists(mp3Dir + "\\" + hotkey1)) playFile(mp3Dir + "\\" + hotkey1);
-            if (e.Key == Keys.F2 && File.Exists(mp3Dir + "\\" + hotkey2)) playFile(mp3Dir + "\\" + hotkey2);
-            if (e.Key == Keys.F3 && File.Exists(mp3Dir + "\\" + hotkey3)) playFile(mp3Dir + "\\" + hotkey3);
-            if (e.Key == Keys.F4 && File.Exists(mp3Dir + "\\" + hotkey4)) playFile(mp3Dir + "\\" + hotkey4);
-            if (e.Key == Keys.F5 && File.Exists(mp3Dir + "\\" + hotkey5)) playFile(mp3Dir + "\\" + hotkey5);
-            if (e.Key == Keys.F6 && File.Exists(mp3Dir + "\\" + hotkey6)) playFile(mp3Dir + "\\" + hotkey6);
-            if (e.Key == Keys.F7 && File.Exists(mp3Dir + "\\" + hotkey7)) playFile(mp3Dir + "\\" + hotkey7);
-            if (e.Key == Keys.F8 && File.Exists(mp3Dir + "\\" + hotkey8)) playFile(mp3Dir + "\\" + hotkey8);
-            if (e.Key == Keys.F9 && File.Exists(mp3Dir + "\\" + hotkey9)) playFile(mp3Dir + "\\" + hotkey9);
-            if (e.Key == Keys.F10 && File.Exists(mp3Dir + "\\" + hotkey10)) playFile(mp3Dir + "\\" + hotkey10);
-            if (e.Key == Keys.F11 && File.Exists(mp3Dir + "\\" + hotkey11)) playFile(mp3Dir + "\\" + hotkey11);
-            if (e.Key == Keys.F12 && File.Exists(mp3Dir + "\\" + hotkey12)) playFile(mp3Dir + "\\" + hotkey12);
+                if (mod == hotkeyRandomMod && key == hotkeyRandomKey) btnRandom.PerformClick();
+                if (mod == hotkeyReplayMod && key == hotkeyReplayKey) btnReplay.PerformClick();
+                if (mod == hotkeyStopMod && key == hotkeyStopKey) btnStop.PerformClick();
+
+                if (mod == hotkeyTimer1Mod && key == hotkeyTimer1Key && !timer1Started) startTimer1();
+                if (mod == hotkeyTimer2Mod && key == hotkeyTimer2Key && !timer2Started) startTimer2();
+                if (mod == hotkeyStopTimerMod && key == hotkeyStopTimerKey)
+                {
+                    if (timer1Started) startTimer1();
+                    else if (timer2Started) startTimer2();
+                }
+
+                if (e.Key == Keys.F1 && File.Exists(mp3Dir + "\\" + hotkey1)) playFile(mp3Dir + "\\" + hotkey1);
+                if (e.Key == Keys.F2 && File.Exists(mp3Dir + "\\" + hotkey2)) playFile(mp3Dir + "\\" + hotkey2);
+                if (e.Key == Keys.F3 && File.Exists(mp3Dir + "\\" + hotkey3)) playFile(mp3Dir + "\\" + hotkey3);
+                if (e.Key == Keys.F4 && File.Exists(mp3Dir + "\\" + hotkey4)) playFile(mp3Dir + "\\" + hotkey4);
+                if (e.Key == Keys.F5 && File.Exists(mp3Dir + "\\" + hotkey5)) playFile(mp3Dir + "\\" + hotkey5);
+                if (e.Key == Keys.F6 && File.Exists(mp3Dir + "\\" + hotkey6)) playFile(mp3Dir + "\\" + hotkey6);
+                if (e.Key == Keys.F7 && File.Exists(mp3Dir + "\\" + hotkey7)) playFile(mp3Dir + "\\" + hotkey7);
+                if (e.Key == Keys.F8 && File.Exists(mp3Dir + "\\" + hotkey8)) playFile(mp3Dir + "\\" + hotkey8);
+                if (e.Key == Keys.F9 && File.Exists(mp3Dir + "\\" + hotkey9)) playFile(mp3Dir + "\\" + hotkey9);
+                if (e.Key == Keys.F10 && File.Exists(mp3Dir + "\\" + hotkey10)) playFile(mp3Dir + "\\" + hotkey10);
+                if (e.Key == Keys.F11 && File.Exists(mp3Dir + "\\" + hotkey11)) playFile(mp3Dir + "\\" + hotkey11);
+                if (e.Key == Keys.F12 && File.Exists(mp3Dir + "\\" + hotkey12)) playFile(mp3Dir + "\\" + hotkey12);
+
+                keyDown = true;
+                timerKeyDown.Start();
+            }
         }
 
         private void NotifyIcon1_Click(object sender, MouseEventArgs e)

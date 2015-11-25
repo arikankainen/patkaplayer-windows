@@ -101,6 +101,8 @@ namespace PatkaPlayer
             comboLatency.Text = settings.LoadSetting("Latency");
             if (comboLatency.Text == "") comboLatency.Text = "200";
 
+            checkScrollLock.Checked = Convert.ToBoolean(settings.LoadSetting("ScrollLock"));
+
             // hotkeys
             txtPlayPreMod.Text = settings.LoadSetting("HotkeyPlayPreMod");
             txtRandomMod.Text = settings.LoadSetting("HotkeyRandomMod");
@@ -173,6 +175,7 @@ namespace PatkaPlayer
             // misc
             settings.SaveSetting("Transparency", numericTransparency.Value.ToString());
             settings.SaveSetting("Latency", comboLatency.Text);
+            settings.SaveSetting("ScrollLock", checkScrollLock.Checked.ToString());
 
             // hotkeys
             settings.SaveSetting("HotkeyPlayPreMod", txtPlayPreMod.Text);

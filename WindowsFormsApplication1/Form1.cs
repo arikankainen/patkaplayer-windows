@@ -15,6 +15,8 @@ using System.Windows.Input;
 using System.Drawing.Drawing2D;
 using System.Windows.Forms.Design;
 using System.Runtime.InteropServices;
+using Microsoft.WindowsAPICodePack.Shell;
+using Microsoft.WindowsAPICodePack.Taskbar;
 
 using NAudio;
 using NAudio.Wave;
@@ -23,6 +25,32 @@ namespace PatkaPlayer
 {
     public partial class frmPlayer : Form, IMessageFilter
     {
+
+        private const byte VK_SCROLL = 0x91;
+        private const uint KEYEVENTF_KEYUP = 0x2;
+
+        [DllImport("user32.dll", EntryPoint = "keybd_event", SetLastError = true)]
+        static extern void keybd_event(byte bVk, byte bScan, uint dwFlags, uint dwExtraInfo);
+
+        [DllImport("user32.dll", EntryPoint = "GetKeyState", SetLastError = true)]
+        static extern short GetKeyState(uint nVirtKey);
+
+        public static void SetScrollLockKey(bool newState)
+        {
+            bool scrollLockSet = GetKeyState(VK_SCROLL) != 0;
+            if (scrollLockSet != newState)
+            {
+                keybd_event(VK_SCROLL, 0, 0, 0);
+                keybd_event(VK_SCROLL, 0, KEYEVENTF_KEYUP, 0);
+            }
+        }
+
+        public static bool GetScrollLockState() // true = set, false = not set
+        {
+            return GetKeyState(VK_SCROLL) != 0;
+        }
+
+        private TaskbarManager taskbar = TaskbarManager.Instance;
         IWavePlayer waveOutDevice;
         AudioFileReader audioFileReader;
         bool play = false;
@@ -50,12 +78,14 @@ namespace PatkaPlayer
         private bool sendkeyPlay, sendkeyStop;
         private bool hotkeyWarning, sendKeystrokes;
         private int latency;
+        private bool scrollLock;
+        private bool keyDown = false;
 
         private bool sendMessages = true;
 
         private bool timer1Started = false;
         private bool timer2Started = false;
-        private string lastPlayed;
+        private string lastPlayed, lastPlayedFile;
         private string filterFolder = "";
         private string filterFile = "";
         private int numOfFolders;
@@ -91,6 +121,8 @@ namespace PatkaPlayer
         private string buttonColorCornerShadow = "#ffffff";
         private string buttonColorBorder = "#5582ac";
         private string buttonColorBorderGradientTop = "#d0e5fb";
+
+
         private string buttonColorBorderGradientBottom = "#bad5f1";
         private string buttonColorBackGradientUpperTop = "#9ac0e7";
         private string buttonColorBackGradientUpperBottom = "#88b1d8";
@@ -146,7 +178,7 @@ namespace PatkaPlayer
 
             }
 
-            labelVersion.Text = "v1.28";
+            labelVersion.Text = "v1.4";
 
             notifyIcon1.Visible = false;
             notifyIcon1.MouseUp += new MouseEventHandler(NotifyIcon1_Click);
@@ -256,8 +288,10 @@ namespace PatkaPlayer
             renderButtons(296, 30, out buttonBackFolder, out buttonBackHoverFolder, out buttonBackPressFolder);
 
             pbPosition.Left = 330;
-            pbPosition.Top = 21;
-            pbPosition.Width = 357;
+            //pbPosition.Top = 21;
+            pbPosition.Top = 9;
+            //pbPosition.Width = 357;
+            pbPosition.Width = 250;
             pbPosition.Height = 23;
             pbPosition.ForeColor = ColorTranslator.FromHtml("#8ab3da");
             pbPosition.BackColor = ColorTranslator.FromHtml("#7fa9d2");
@@ -283,8 +317,8 @@ namespace PatkaPlayer
             int fL = trackBarVolume.Right + 45;
             int fR = toolStripSettings.Left;
 
-            toolStripSettings.Top = 14;
-            toolStripPlay.Top = 14;
+            toolStripSettings.Top = 2;
+            toolStripPlay.Top = 2;
 
             if (panelFolders.VerticalScroll.Visible)
             {
@@ -543,7 +577,8 @@ namespace PatkaPlayer
         private void playFile(string fileToPlay)
         {
             int comboLatencyInt;
-            
+            if (scrollLock) SetScrollLockKey(false);
+
             try
             {
                 comboLatencyInt = Convert.ToInt32(comboLatency.Text);
@@ -560,9 +595,12 @@ namespace PatkaPlayer
             btnReplay.Tag = fileToPlay;
             btnReplay.Enabled = true;
 
+            lastPlayedFile = Path.GetFileNameWithoutExtension(fileToPlay);
             lastPlayed = pathToPlay.Substring(pathToPlay.LastIndexOf("\\") + 1) + " - " + Path.GetFileNameWithoutExtension(fileToPlay);
+
+            this.Text = lastPlayedFile;
             labelLastPlayed.Text = lastPlayed;
-            pbPosition.ProgressText = lastPlayed;
+            //pbPosition.ProgressText = lastPlayed;
 
             playpressed = true;
             if (sendkeyPlay && !play && sendKeystrokes) SendKeys.Send(sendkeyPlayString);
@@ -870,6 +908,7 @@ namespace PatkaPlayer
             if (latency < 50) latency = 200;
             if (latency > 900) latency = 200;
             comboLatency.Text = latency.ToString();
+            scrollLock = Convert.ToBoolean(settings.LoadSetting("ScrollLock"));
 
             // loading complete, setting things
             if (trayIcon) notifyIcon1.Visible = true;
@@ -1263,10 +1302,18 @@ namespace PatkaPlayer
                         rec.Height = rec.Height - 2;
 
                         // progressbar gradients
+                        
+                        // blue
                         //offscreen.FillRectangle(new SolidBrush(ColorTranslator.FromHtml("#aac9e7")), 2, 2, rec.Width - 2, (rec.Height - 2) / 2);
                         //offscreen.FillRectangle(new SolidBrush(ColorTranslator.FromHtml("#9dbddc")), 2, rec.Height / 2 + 1, rec.Width - 2, (rec.Height - 1) / 2);
+                        
+                        // red
                         offscreen.FillRectangle(new SolidBrush(ColorTranslator.FromHtml("#f2c0c0")), 2, 2, rec.Width - 2, (rec.Height - 2) / 2);
                         offscreen.FillRectangle(new SolidBrush(ColorTranslator.FromHtml("#e6b3b3")), 2, rec.Height / 2 + 1, rec.Width - 2, (rec.Height - 1) / 2);
+
+                        // gray
+                        //offscreen.FillRectangle(new SolidBrush(ColorTranslator.FromHtml("#ccc")), 2, 2, rec.Width - 2, (rec.Height - 2) / 2);
+                        //offscreen.FillRectangle(new SolidBrush(ColorTranslator.FromHtml("#bbb")), 2, rec.Height / 2 + 1, rec.Width - 2, (rec.Height - 1) / 2);
 
                     }
 
@@ -1276,7 +1323,7 @@ namespace PatkaPlayer
                         Point location = new Point(Convert.ToInt32((Width / 2) - len.Width / 2), 5);
 
                         //offscreen.DrawString(ProgressText, f, Brushes.Black, new PointF(3, 5));
-                        offscreen.DrawString(ProgressText, f, Brushes.DarkRed, location);
+                        offscreen.DrawString(ProgressText, f, Brushes.Black, location);
                     }
 
                     e.Graphics.DrawImage(offscreenImage, 0, 0);

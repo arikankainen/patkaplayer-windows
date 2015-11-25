@@ -49,6 +49,7 @@ namespace PatkaPlayer
             {
                 if (pause || stop)
                 {
+                    this.Text = lastPlayedFile;
                     waveOutDevice.Play();
                     stop = pause = false;
                     play = true;

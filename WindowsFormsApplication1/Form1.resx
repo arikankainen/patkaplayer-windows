@@ -160,10 +160,10 @@
   <data name="btnRandom.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
-        YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAACmSURBVDhPY6AaiI2NNYmOjq4OCQnhhAqRBoAG2MTExPyP
-        jIx8CDQoEijECJEhEsAMQML7gWKGUGnCAIsB/4He+Quk5wKxGFQZboDNABgODw9/HxUVVRwaGsoGVY4J
-        8BkAwxEREbeB4eMN1YIKiDEAhoGu2Q40SAuqFQLoYgDUC35QLaiAJoEIi0agrZJQZbgBFgMOAcVIT0iU
-        JGVQZqojOzORBxgYAOvwyGQgaURfAAAAAElFTkSuQmCC
+        YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAACnSURBVDhPY6AaiI2NNYmOjq4OCQnhhAqRBoAG2MTExPyP
+        jIx8CDQoEijECJEhEsAMQML7gWKGUGnCAIsB/729vf8C6blALAZVhhtgMwCGw8PD30dFRRWHhoayQZVj
+        AnwGwHBERMRtYPh4Q7WgAmIMgGGga7YDDdKCaoUAuhgA9YIfVAsqoEkgwqIRaKskVBlugMWAQ0Ax0hMS
+        JUkZlJnqyM5M5AEGBgB9ucguYM5ZXAAAAABJRU5ErkJggg==
 </value>
   </data>
   <data name="btnStop.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
@@ -176,11 +176,11 @@
   <data name="btnReplay.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
-        YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAEISURBVDhPzZI9bsJAFIRdJVUsinSUOUF6rgAFsgv/S9vb
-        HAW4BEfgBoiCAsokSgVdqkhBkaJImBlrzEqWBZT+pJF337y3z/vjdA/f9x/iOC6gNfQjcVzQU1o7aZr2
-        kbiFyhb9Q8Moikb4zlRiUee6+CNJkjGSXQrzKbTH+Avf3zAMVyqzwMxZDPM9y7KewhVYbAD/kz4VBMFO
-        lgUG91mys0IVKDTqfNkOm8i2wPijiWRXoQp0e0ZsXvvSQbalTmguUIMDfoG/gE7Qt8IWBFu30AT+K/KW
-        mloQ5N3z996ah3gXeZ4/8nS1SHWNxpgnSim3ufaQlHIbPigc5ARXtfE870hxLLtzOM4ZuDijnZgDJeYA
+        YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAEISURBVDhPzZK/asJQGMUz1anBwa1jn8C9r6AQIUP+w90T
+        H0V9CR/BNxCHDu3YilO7ORVaCiIYzwknXghBHfODQ+79zvfdL/eP0z1833+I47iANtCvxHFBT2ntpGn6
+        hMQ3qGzRERpFUTTGd64SizrXxdskSSZIdinMZ9AXxnt8/8MwXKvMAjNnMczPLMv6CldgsRf4O/pUEATv
+        siwwuM+SnRWqQKFR58t22ES2BcaBJpJdhSrQbYDYovalb9mWOqG5QA0O+Bn+EjpBPwpbEGzdQhP4Q+St
+        NLUgyLvn7300D/Eu8jzv8XS1SHWNxphHSim3ufaQlHIbPigc5BRX9ep53h/FsezO4ThnrMKji08kHZIA
         AAAASUVORK5CYII=
 </value>
   </data>
@@ -190,12 +190,12 @@
   <data name="btnDropdown.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
-        YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAEWSURBVDhPrVNLisJAEO2MnsE5Tg6R/+cKIsOAuMuhBEVX
-        DgTURS7hSleudBwXHd9LKv4jg/qgSNXrV9VV3R31CGEYjoMgGEn4GEmSfOBjlJFSpmk24zjeosDGcZyG
-        0IQh2hNIRFHUR8IA1iKH3b/B5TT4X+R83/+EP6T2uohBUhL+PM9bi380crZt7yXuM6dMFbC6ZVm/FKAL
-        nWVZrrUujD45rlFTdXkD13VXFKZpqvMrVEVgS5GfIGfQ4w4U1oFr0mEXaeUIaH16NlvRch24VumYw1yF
-        YP5sAdzIrOhCRuhw4T8jwNpIu7wFojrEe0XI1R4i8eo1nj+kHQQL8Y8m3E7iy4f0jqf82s9UB+z0A5tI
-        eAdKHQBLJZVqI6zRwgAAAABJRU5ErkJggg==
+        YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAEXSURBVDhPrVM5jsJAEBwDb1ie4w9YcuTbX0AIISEyPwpp
+        V4uTJQICf4IIIiLOYLxVdpvbaLVQUsvdNdU93TNj9QxhGI6DIPiW8DmSJGngY5SRUqZptuI43qLAxnGc
+        ptCEIdozSERRNELCJ+yDHHbvg8tp8HvkfN9vw/+i9raIQVISDp7nrcU/GTnLso4Sj5hTpgpY3bbtHQXo
+        QmdZlmutC6NPjmvUVF3ewXXdFYVpmur8BlUR2FLkZ8gZDLkDhXXgmnQ4QFo5AlqfXsxWtFwHrlU65jBX
+        IZj/twBuZFZ0ISN0ufCXEWAdpF3fAlEd4qMi5GoPkXj1Gi8f0h6ChfgnE24v8fVDesdTfu1nqgN2msB+
+        JHwApX4BkkCUp0kmq1kAAAAASUVORK5CYII=
 </value>
   </data>
   <data name="toolStripButton5.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
@@ -217,6 +217,9 @@
         AAAAAElFTkSuQmCC
 </value>
   </data>
+  <metadata name="timerKeyDown.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>1012, 4</value>
+  </metadata>
   <metadata name="$this.TrayHeight" type="System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>34</value>
   </metadata>
