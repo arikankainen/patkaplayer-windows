@@ -24,6 +24,7 @@ namespace PatkaPlayer
         public static readonly int WM_AK_TRACKCHANGED = RegisterWindowMessage("WM_AK_TRACKCHANGED");
         public static readonly int WM_AK_PAUSEPLAYER = RegisterWindowMessage("WM_AK_PAUSEPLAYER");
         public static readonly int WM_AK_PLAYPLAYER = RegisterWindowMessage("WM_AK_PLAYPLAYER");
+        public static readonly int WM_AK_PP_SHOWME = RegisterWindowMessage("WM_AK_PP_SHOWME");
         [DllImport("user32")]
         public static extern bool PostMessage(IntPtr hwnd, int msg, IntPtr wparam, IntPtr lparam);
         [DllImport("user32")]

@@ -526,7 +526,7 @@ namespace PatkaPlayer
             TextBox textBox = (TextBox)sender;
             e.SuppressKeyPress = true;
 
-            if (e.KeyCode == Keys.Menu || e.KeyCode == Keys.ShiftKey || e.KeyCode == Keys.ControlKey || e.KeyCode == Keys.LWin || e.KeyCode == Keys.RWin)
+            if (e.KeyCode == Keys.Menu || e.KeyCode == Keys.ShiftKey || e.KeyCode == Keys.ControlKey || e.KeyCode == Keys.LWin || e.KeyCode == Keys.RWin || e.KeyCode == Keys.Escape)
             {
                 txtChanged = true;
                 string key = "";
@@ -547,8 +547,11 @@ namespace PatkaPlayer
                     case Keys.RWin:
                         key = "Win";
                         break;
+                    case Keys.Escape:
+                        key = "";
+                        break;
                 }
-                
+
                 if (!listMod.Contains(key)) listMod.Add(key);
                 listMod.Sort();
 

@@ -66,6 +66,7 @@
             this.btnRandom = new System.Windows.Forms.ToolStripButton();
             this.btnStop = new System.Windows.Forms.ToolStripButton();
             this.btnReplay = new System.Windows.Forms.ToolStripButton();
+            this.btnShowAll = new System.Windows.Forms.ToolStripButton();
             this.toolStripSettings = new System.Windows.Forms.ToolStrip();
             this.btnDropdown = new System.Windows.Forms.ToolStripButton();
             this.toolStripButton5 = new System.Windows.Forms.ToolStripButton();
@@ -250,8 +251,8 @@
             this.labelClipsPlayed.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.labelClipsPlayed.Name = "labelClipsPlayed";
             this.labelClipsPlayed.Padding = new System.Windows.Forms.Padding(5, 0, 10, 0);
-            this.labelClipsPlayed.Size = new System.Drawing.Size(96, 19);
-            this.labelClipsPlayed.Text = "Play Count: 0";
+            this.labelClipsPlayed.Size = new System.Drawing.Size(94, 19);
+            this.labelClipsPlayed.Text = "Play count: 0";
             // 
             // labelTimer1
             // 
@@ -260,8 +261,8 @@
             this.labelTimer1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.labelTimer1.Name = "labelTimer1";
             this.labelTimer1.Padding = new System.Windows.Forms.Padding(5, 0, 10, 0);
-            this.labelTimer1.Size = new System.Drawing.Size(89, 19);
-            this.labelTimer1.Text = "Timer 1: Off";
+            this.labelTimer1.Size = new System.Drawing.Size(87, 19);
+            this.labelTimer1.Text = "Timer 1: off";
             this.labelTimer1.MouseUp += new System.Windows.Forms.MouseEventHandler(this.labelTimer1_Click);
             // 
             // labelTimer2
@@ -271,8 +272,8 @@
             this.labelTimer2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.labelTimer2.Name = "labelTimer2";
             this.labelTimer2.Padding = new System.Windows.Forms.Padding(5, 0, 10, 0);
-            this.labelTimer2.Size = new System.Drawing.Size(89, 19);
-            this.labelTimer2.Text = "Timer 2: Off";
+            this.labelTimer2.Size = new System.Drawing.Size(87, 19);
+            this.labelTimer2.Text = "Timer 2: off";
             this.labelTimer2.MouseUp += new System.Windows.Forms.MouseEventHandler(this.labelTimer2_Click);
             // 
             // labelSendKeystrokes
@@ -282,8 +283,8 @@
             this.labelSendKeystrokes.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.labelSendKeystrokes.Name = "labelSendKeystrokes";
             this.labelSendKeystrokes.Padding = new System.Windows.Forms.Padding(5, 0, 10, 0);
-            this.labelSendKeystrokes.Size = new System.Drawing.Size(134, 19);
-            this.labelSendKeystrokes.Text = "Send Keystrokes: Off";
+            this.labelSendKeystrokes.Size = new System.Drawing.Size(132, 19);
+            this.labelSendKeystrokes.Text = "Send Keystrokes: off";
             this.labelSendKeystrokes.Visible = false;
             this.labelSendKeystrokes.MouseUp += new System.Windows.Forms.MouseEventHandler(this.labelSendKeystrokes_MouseUp);
             // 
@@ -304,7 +305,7 @@
             this.labelSpacer.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.labelSpacer.Name = "labelSpacer";
             this.labelSpacer.Padding = new System.Windows.Forms.Padding(5, 0, 10, 0);
-            this.labelSpacer.Size = new System.Drawing.Size(726, 19);
+            this.labelSpacer.Size = new System.Drawing.Size(732, 19);
             this.labelSpacer.Spring = true;
             // 
             // labelVersion
@@ -362,11 +363,12 @@
             this.toolStripPlay.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.btnRandom,
             this.btnStop,
-            this.btnReplay});
+            this.btnReplay,
+            this.btnShowAll});
             this.toolStripPlay.Location = new System.Drawing.Point(2, 2);
             this.toolStripPlay.Name = "toolStripPlay";
             this.toolStripPlay.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
-            this.toolStripPlay.Size = new System.Drawing.Size(91, 35);
+            this.toolStripPlay.Size = new System.Drawing.Size(209, 35);
             this.toolStripPlay.TabIndex = 2;
             // 
             // btnRandom
@@ -406,6 +408,20 @@
             this.btnReplay.Tag = "";
             this.btnReplay.Text = "Replay";
             this.btnReplay.Click += new System.EventHandler(this.btnReplay_Click);
+            // 
+            // btnShowAll
+            // 
+            this.btnShowAll.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.btnShowAll.Enabled = false;
+            this.btnShowAll.Image = ((System.Drawing.Image)(resources.GetObject("btnShowAll.Image")));
+            this.btnShowAll.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnShowAll.Margin = new System.Windows.Forms.Padding(5, 3, 0, 2);
+            this.btnShowAll.Name = "btnShowAll";
+            this.btnShowAll.Padding = new System.Windows.Forms.Padding(5);
+            this.btnShowAll.Size = new System.Drawing.Size(104, 30);
+            this.btnShowAll.Text = "Show all folders";
+            this.btnShowAll.ToolTipText = "Show all folders";
+            this.btnShowAll.Click += new System.EventHandler(this.btnShowAll_Click);
             // 
             // toolStripSettings
             // 
@@ -511,9 +527,6 @@
             this.comboLatency.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.comboLatency.FormattingEnabled = true;
             this.comboLatency.Items.AddRange(new object[] {
-            "2000",
-            "1500",
-            "1000",
             "900",
             "800",
             "700",
@@ -573,7 +586,7 @@
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.label2.Location = new System.Drawing.Point(882, 14);
+            this.label2.Location = new System.Drawing.Point(885, 14);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(25, 13);
             this.label2.TabIndex = 29;
@@ -585,7 +598,7 @@
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label3.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.label3.Location = new System.Drawing.Point(723, 14);
+            this.label3.Location = new System.Drawing.Point(721, 14);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(40, 13);
             this.label3.TabIndex = 30;
@@ -757,6 +770,7 @@
         private System.Windows.Forms.Panel panelFilterFileWhite;
         private System.Windows.Forms.CheckBox checkRepeat;
         private System.Windows.Forms.Timer timerKeyDown;
+        private System.Windows.Forms.ToolStripButton btnShowAll;
     }
 }
 

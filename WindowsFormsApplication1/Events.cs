@@ -11,7 +11,6 @@ using System.Windows.Forms;
 using System.IO;
 using System.Configuration;
 using System.Windows;
-using System.Windows.Input;
 
 namespace PatkaPlayer
 {
@@ -63,12 +62,12 @@ namespace PatkaPlayer
         {
             if (sendKeystrokes) 
             {
-                labelSendKeystrokes.Text = "Send Keystrokes: Off";
+                labelSendKeystrokes.Text = "Send Keystrokes: off";
                 sendKeystrokes = false;
             }
             else
             {
-                labelSendKeystrokes.Text = "Send Keystrokes: On";
+                labelSendKeystrokes.Text = "Send Keystrokes: on";
                 sendKeystrokes = true;
             }
         }
@@ -196,6 +195,7 @@ namespace PatkaPlayer
                 addPanel();
                 Button button = this.Controls.Find("SoundButton1", true).FirstOrDefault() as Button;
                 this.ActiveControl = button;
+                btnShowAll.Enabled = false;
             }
         }
 
@@ -211,6 +211,7 @@ namespace PatkaPlayer
                 addPanel();
                 Button button = this.Controls.Find("SoundButton1", true).FirstOrDefault() as Button;
                 this.ActiveControl = button;
+                btnShowAll.Enabled = false;
             }
         }
 
@@ -244,6 +245,14 @@ namespace PatkaPlayer
             frmPopup helpForm = new frmPopup();
             helpForm.ShowDialog();
             helpForm.Dispose();
+        }
+
+        private void btnShowAll_Click(object sender, EventArgs e)
+        {
+            folderList.Clear();
+            addPanel();
+            panelFolders.Focus();
+            btnShowAll.Enabled = false;
         }
 
         // keyup event, hotkeys
@@ -457,6 +466,9 @@ namespace PatkaPlayer
                 if (button.Tag.ToString() != "") folderList.Add(button.Tag.ToString());
                 addPanel();
                 panelFolders.Focus();
+
+                if (button.Tag.ToString() != "") btnShowAll.Enabled = true;
+                else btnShowAll.Enabled = false;
             }
 
             if (e.Button == MouseButtons.Middle)
@@ -465,8 +477,10 @@ namespace PatkaPlayer
                 else folderList.Clear();
                 addPanel();
                 panelFolders.Focus();
-            }
 
+                if (button.Tag.ToString() != "") btnShowAll.Enabled = true;
+                else btnShowAll.Enabled = false;
+            }
         }
 
         // sets focus to panelbuttons on mousescroll
@@ -525,6 +539,7 @@ namespace PatkaPlayer
                 string mod = e.Modifier.ToString().Replace("Control", "Ctrl").Replace(", ", "+");
                 string key = e.Key.ToString();
 
+                //if (key == "Next") btnRandom.PerformClick();
                 if (mod == hotkeyRandomMod && key == hotkeyRandomKey) btnRandom.PerformClick();
                 if (mod == hotkeyReplayMod && key == hotkeyReplayKey) btnReplay.PerformClick();
                 if (mod == hotkeyStopMod && key == hotkeyStopKey) btnStop.PerformClick();

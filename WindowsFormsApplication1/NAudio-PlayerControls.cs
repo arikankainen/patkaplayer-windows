@@ -11,7 +11,6 @@ using System.Windows.Forms;
 using System.IO;
 using System.Configuration;
 using System.Windows;
-using System.Windows.Input;
 using System.Drawing.Drawing2D;
 
 using NAudio;

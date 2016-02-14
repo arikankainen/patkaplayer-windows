@@ -11,7 +11,6 @@ using System.Windows.Forms;
 using System.IO;
 using System.Configuration;
 using System.Windows;
-using System.Windows.Input;
 using System.Drawing.Drawing2D;
 using System.Windows.Forms.Design;
 using System.Runtime.InteropServices;
@@ -178,7 +177,7 @@ namespace PatkaPlayer
 
             }
 
-            labelVersion.Text = "v1.4";
+            labelVersion.Text = "v1.5";
 
             notifyIcon1.Visible = false;
             notifyIcon1.MouseUp += new MouseEventHandler(NotifyIcon1_Click);
@@ -360,6 +359,7 @@ namespace PatkaPlayer
             string currentPathOnly = "";
             numOfFolders = 0;
 
+            /*
             // show all button
             Button allbutton = new Button();
             allbutton.Text = "Show all folders";
@@ -396,6 +396,7 @@ namespace PatkaPlayer
 
             panelFolders.Controls.Add(allpanel);
             panelFolders.SetFlowBreak(allpanel, true);
+            */
 
             // loop for adding folder buttons
             for (int i = 0; i < array1.Length; i++)
@@ -642,7 +643,7 @@ namespace PatkaPlayer
 
             playCount++;
             if (rememberDaily) saveDailyDate();
-            labelClipsPlayed.Text = "Play Count: " + playCount.ToString();
+            labelClipsPlayed.Text = "Play count: " + playCount.ToString();
         }
 
         // save date for daily play count
@@ -774,12 +775,12 @@ namespace PatkaPlayer
                         }
                     }
 
-                    labelTimer1.Text = "Timer 1: On" + timer1Text;
+                    labelTimer1.Text = "Timer 1: on" + timer1Text;
                     labelTimer1.ForeColor = ColorTranslator.FromHtml("#dd0000");
                     timer1Started = true;
                     timer2Started = false;
 
-                    labelTimer2.Text = "Timer 2: Off" + timer2Text;
+                    labelTimer2.Text = "Timer 2: off" + timer2Text;
                     labelTimer2.ForeColor = ColorTranslator.FromHtml("#404040");
                     timer2Started = false;
                 }
@@ -797,7 +798,7 @@ namespace PatkaPlayer
                         }
                     }
 
-                    labelTimer1.Text = "Timer 1: Off" + timer1Text;
+                    labelTimer1.Text = "Timer 1: off" + timer1Text;
                     labelTimer1.ForeColor = ColorTranslator.FromHtml("#404040");
                     timer1Started = false;
                 }
@@ -830,11 +831,11 @@ namespace PatkaPlayer
                         }
                     }
 
-                    labelTimer2.Text = "Timer 2: On" + timer2Text;
+                    labelTimer2.Text = "Timer 2: on" + timer2Text;
                     labelTimer2.ForeColor = ColorTranslator.FromHtml("#dd0000");
                     timer2Started = true;
 
-                    labelTimer1.Text = "Timer 1: Off" + timer1Text;
+                    labelTimer1.Text = "Timer 1: off" + timer1Text;
                     labelTimer1.ForeColor = ColorTranslator.FromHtml("#404040");
                     timer1Started = false;
                 }
@@ -853,7 +854,7 @@ namespace PatkaPlayer
                         }
                     }
 
-                    labelTimer2.Text = "Timer 2: Off" + timer2Text;
+                    labelTimer2.Text = "Timer 2: off" + timer2Text;
                     labelTimer2.ForeColor = ColorTranslator.FromHtml("#404040");
                     timer2Started = false;
                 }
@@ -918,7 +919,7 @@ namespace PatkaPlayer
             else notifyIcon1.Visible = false;
 
             if (rememberDaily) saveDailyDate();
-            labelClipsPlayed.Text = "Play Count: " + playCount.ToString();
+            labelClipsPlayed.Text = "Play count: " + playCount.ToString();
 
             this.Opacity = Convert.ToDouble(transNormal);
             
@@ -953,11 +954,11 @@ namespace PatkaPlayer
             timer2Text += (timer2MaxSec < 10) ? "0" + timer2MaxSec.ToString() : timer2MaxSec.ToString();
             timer2Text += ")";
 
-            if (timer1Started) labelTimer1.Text = "Timer 1: On" + timer1Text;
-            else labelTimer1.Text = "Timer 1: Off" + timer1Text;
+            if (timer1Started) labelTimer1.Text = "Timer 1: on" + timer1Text;
+            else labelTimer1.Text = "Timer 1: off" + timer1Text;
 
-            if (timer2Started) labelTimer2.Text = "Timer 2: On" + timer2Text;
-            else labelTimer2.Text = "Timer 2: Off" + timer2Text;
+            if (timer2Started) labelTimer2.Text = "Timer 2: on" + timer2Text;
+            else labelTimer2.Text = "Timer 2: off" + timer2Text;
         }
 
         private int getHotkeyModNumber(string keyname)
@@ -1012,8 +1013,8 @@ namespace PatkaPlayer
             if (!String.IsNullOrEmpty(sendkeyPlayMod)) sendkeyPlayString = getHotkeyModChars(sendkeyPlayMod) + getHotkeyChar(sendkeyPlayKey);
             if (!String.IsNullOrEmpty(sendkeyStopMod)) sendkeyStopString = getHotkeyModChars(sendkeyStopMod) + getHotkeyChar(sendkeyStopKey);
 
-            if (sendKeystrokes) labelSendKeystrokes.Text = "Send Keystrokes: On";
-            else labelSendKeystrokes.Text = "Send Keystrokes: Off";
+            if (sendKeystrokes) labelSendKeystrokes.Text = "Send Keystrokes: on";
+            else labelSendKeystrokes.Text = "Send Keystrokes: off";
 
         }
 
@@ -1060,6 +1061,8 @@ namespace PatkaPlayer
             if (!String.IsNullOrEmpty(hotkeyTimer1Mod)) hook.RegisterHotKey((ModifierKeys)getHotkeyModNumber(hotkeyTimer1Mod), (Keys)Enum.Parse(typeof(Keys), hotkeyTimer1Key));
             if (!String.IsNullOrEmpty(hotkeyTimer2Mod)) hook.RegisterHotKey((ModifierKeys)getHotkeyModNumber(hotkeyTimer2Mod), (Keys)Enum.Parse(typeof(Keys), hotkeyTimer2Key));
             if (!String.IsNullOrEmpty(hotkeyStopTimerMod)) hook.RegisterHotKey((ModifierKeys)getHotkeyModNumber(hotkeyStopTimerMod), (Keys)Enum.Parse(typeof(Keys), hotkeyStopTimerKey));
+
+            //hook.RegisterHotKey((ModifierKeys)getHotkeyModNumber(""), (Keys)Enum.Parse(typeof(Keys), "Next"));
 
             if (hotkeyWarning && hook.ShowErrors() != "") MessageBox.Show("Following global hotkeys are currently registered to another application, so they do not work with this instance of Pätkä Player.\n" + hook.ShowErrors(), "Global Hotkey Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
@@ -1209,7 +1212,15 @@ namespace PatkaPlayer
             {
                 btnRandom.PerformClick();
             }
-            
+
+            if (m.Msg == NativeMethods.WM_AK_PP_SHOWME)
+            {
+                if (this.WindowState == FormWindowState.Minimized) this.WindowState = FormWindowState.Normal;
+                this.Show();
+                this.Activate();
+                this.Focus();
+            }
+
             base.WndProc(ref m);
         }
 

@@ -91,6 +91,8 @@
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabFolders = new System.Windows.Forms.TabPage();
             this.tabSettings = new System.Windows.Forms.TabPage();
+            this.groupBox15 = new System.Windows.Forms.GroupBox();
+            this.checkScrollLock = new System.Windows.Forms.CheckBox();
             this.groupBox13 = new System.Windows.Forms.GroupBox();
             this.label18 = new System.Windows.Forms.Label();
             this.comboLatency = new System.Windows.Forms.ComboBox();
@@ -159,8 +161,6 @@
             this.label12 = new System.Windows.Forms.Label();
             this.numericMinHour2 = new System.Windows.Forms.NumericUpDown();
             this.btnApply = new System.Windows.Forms.Button();
-            this.groupBox15 = new System.Windows.Forms.GroupBox();
-            this.checkScrollLock = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             this.groupBox4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericMaxSec1)).BeginInit();
@@ -175,6 +175,7 @@
             this.tabControl1.SuspendLayout();
             this.tabFolders.SuspendLayout();
             this.tabSettings.SuspendLayout();
+            this.groupBox15.SuspendLayout();
             this.groupBox13.SuspendLayout();
             this.groupBox8.SuspendLayout();
             this.groupBox5.SuspendLayout();
@@ -192,7 +193,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.numericMinSec2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericMinMin2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericMinHour2)).BeginInit();
-            this.groupBox15.SuspendLayout();
             this.SuspendLayout();
             // 
             // btnSet1
@@ -909,7 +909,7 @@
             this.txtVersion.Name = "txtVersion";
             this.txtVersion.Size = new System.Drawing.Size(188, 15);
             this.txtVersion.TabIndex = 24;
-            this.txtVersion.Text = "Pätkä Player © 2014 Ari Kankainen";
+            this.txtVersion.Text = "Pätkä Player © 2016 Ari Kankainen";
             // 
             // tabControl1
             // 
@@ -954,6 +954,26 @@
             this.tabSettings.Text = "Settings";
             this.tabSettings.UseVisualStyleBackColor = true;
             // 
+            // groupBox15
+            // 
+            this.groupBox15.Controls.Add(this.checkScrollLock);
+            this.groupBox15.Location = new System.Drawing.Point(6, 355);
+            this.groupBox15.Name = "groupBox15";
+            this.groupBox15.Size = new System.Drawing.Size(228, 57);
+            this.groupBox15.TabIndex = 35;
+            this.groupBox15.TabStop = false;
+            this.groupBox15.Text = "Scroll lock";
+            // 
+            // checkScrollLock
+            // 
+            this.checkScrollLock.AutoSize = true;
+            this.checkScrollLock.Location = new System.Drawing.Point(15, 25);
+            this.checkScrollLock.Name = "checkScrollLock";
+            this.checkScrollLock.Size = new System.Drawing.Size(197, 17);
+            this.checkScrollLock.TabIndex = 3;
+            this.checkScrollLock.Text = "Turn on scroll lock when playing clip";
+            this.checkScrollLock.UseVisualStyleBackColor = true;
+            // 
             // groupBox13
             // 
             this.groupBox13.Controls.Add(this.label18);
@@ -979,9 +999,6 @@
             this.comboLatency.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboLatency.FormattingEnabled = true;
             this.comboLatency.Items.AddRange(new object[] {
-            "2000",
-            "1500",
-            "1000",
             "900",
             "800",
             "700",
@@ -1808,26 +1825,6 @@
             this.btnApply.UseVisualStyleBackColor = true;
             this.btnApply.Click += new System.EventHandler(this.btnApply_Click);
             // 
-            // groupBox15
-            // 
-            this.groupBox15.Controls.Add(this.checkScrollLock);
-            this.groupBox15.Location = new System.Drawing.Point(6, 355);
-            this.groupBox15.Name = "groupBox15";
-            this.groupBox15.Size = new System.Drawing.Size(228, 57);
-            this.groupBox15.TabIndex = 35;
-            this.groupBox15.TabStop = false;
-            this.groupBox15.Text = "Scroll lock";
-            // 
-            // checkScrollLock
-            // 
-            this.checkScrollLock.AutoSize = true;
-            this.checkScrollLock.Location = new System.Drawing.Point(15, 25);
-            this.checkScrollLock.Name = "checkScrollLock";
-            this.checkScrollLock.Size = new System.Drawing.Size(197, 17);
-            this.checkScrollLock.TabIndex = 3;
-            this.checkScrollLock.Text = "Turn on scroll lock when playing clip";
-            this.checkScrollLock.UseVisualStyleBackColor = true;
-            // 
             // frmSettings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1867,6 +1864,8 @@
             this.tabControl1.ResumeLayout(false);
             this.tabFolders.ResumeLayout(false);
             this.tabSettings.ResumeLayout(false);
+            this.groupBox15.ResumeLayout(false);
+            this.groupBox15.PerformLayout();
             this.groupBox13.ResumeLayout(false);
             this.groupBox13.PerformLayout();
             this.groupBox8.ResumeLayout(false);
@@ -1893,8 +1892,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.numericMinSec2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericMinMin2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericMinHour2)).EndInit();
-            this.groupBox15.ResumeLayout(false);
-            this.groupBox15.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
