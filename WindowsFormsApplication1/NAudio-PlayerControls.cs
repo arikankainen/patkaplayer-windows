@@ -34,7 +34,7 @@ namespace PatkaPlayer
 
                 audioFileReader = new AudioFileReader(file);
                 waveOutDevice.Init(audioFileReader);
-                audioFileReader.Volume = (float)trackBarVolume.Value / 100;
+                audioFileReader.Volume = 1; //(float)trackBarVolume.Value / 100;
 
                 waveOutDevice.PlaybackStopped += new EventHandler<StoppedEventArgs>(waveOutDevice_PlaybackStopped);
                 pbPosition.Maximum = Convert.ToInt32(audioFileReader.TotalTime.TotalMilliseconds);
@@ -68,7 +68,6 @@ namespace PatkaPlayer
         {
             if (waveOutDevice != null)
             {
-                if (sendkeyStop && playpressed == false && sendKeystrokes && stop == false) SendKeys.Send(sendkeyStopString);
                 if (playpressed == false && sendMessages && stop == false) sendMessagePlay();
 
                 waveOutDevice.Stop();

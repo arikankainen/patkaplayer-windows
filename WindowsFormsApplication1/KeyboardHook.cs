@@ -89,7 +89,7 @@ namespace PatkaPlayer
             _currentId = _currentId + 1;
 
             // register the hot key.
-            if (!RegisterHotKey(_window.Handle, _currentId, (uint)modifier, (uint)key))
+            if (!RegisterHotKey(_window.Handle, _currentId, (uint)modifier | 0x4000, (uint)key))
                 //throw new InvalidOperationException("Couldn’t register the hot key.");
                 errorKeys.Add(modifier.ToString() + "+" + key.ToString());
         }

@@ -74,9 +74,6 @@
             this.numericMaxMin1 = new System.Windows.Forms.NumericUpDown();
             this.label6 = new System.Windows.Forms.Label();
             this.numericMaxHour1 = new System.Windows.Forms.NumericUpDown();
-            this.groupBox7 = new System.Windows.Forms.GroupBox();
-            this.radioClipsAll1 = new System.Windows.Forms.RadioButton();
-            this.radioClipsFilter1 = new System.Windows.Forms.RadioButton();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.label5 = new System.Windows.Forms.Label();
             this.numericMinSec1 = new System.Windows.Forms.NumericUpDown();
@@ -96,41 +93,6 @@
             this.groupBox13 = new System.Windows.Forms.GroupBox();
             this.label18 = new System.Windows.Forms.Label();
             this.comboLatency = new System.Windows.Forms.ComboBox();
-            this.groupBox8 = new System.Windows.Forms.GroupBox();
-            this.checkSendKeystrokes = new System.Windows.Forms.CheckBox();
-            this.label16 = new System.Windows.Forms.Label();
-            this.label17 = new System.Windows.Forms.Label();
-            this.txtKeystrokeStopKey = new System.Windows.Forms.TextBox();
-            this.label19 = new System.Windows.Forms.Label();
-            this.txtKeystrokePlayMod = new System.Windows.Forms.TextBox();
-            this.txtKeystrokeStopMod = new System.Windows.Forms.TextBox();
-            this.txtKeystrokePlayKey = new System.Windows.Forms.TextBox();
-            this.label29 = new System.Windows.Forms.Label();
-            this.groupBox5 = new System.Windows.Forms.GroupBox();
-            this.checkGlobalKeyWarning = new System.Windows.Forms.CheckBox();
-            this.txtStopTimerKey = new System.Windows.Forms.TextBox();
-            this.txtStopTimerMod = new System.Windows.Forms.TextBox();
-            this.txtTimer2Key = new System.Windows.Forms.TextBox();
-            this.txtTimer2Mod = new System.Windows.Forms.TextBox();
-            this.txtTimer1Key = new System.Windows.Forms.TextBox();
-            this.txtTimer1Mod = new System.Windows.Forms.TextBox();
-            this.txtReplayKey = new System.Windows.Forms.TextBox();
-            this.txtReplayMod = new System.Windows.Forms.TextBox();
-            this.txtStopKey = new System.Windows.Forms.TextBox();
-            this.txtStopMod = new System.Windows.Forms.TextBox();
-            this.txtRandomKey = new System.Windows.Forms.TextBox();
-            this.txtRandomMod = new System.Windows.Forms.TextBox();
-            this.txtPlayPreKey = new System.Windows.Forms.TextBox();
-            this.txtPlayPreMod = new System.Windows.Forms.TextBox();
-            this.label20 = new System.Windows.Forms.Label();
-            this.label27 = new System.Windows.Forms.Label();
-            this.label26 = new System.Windows.Forms.Label();
-            this.label25 = new System.Windows.Forms.Label();
-            this.label24 = new System.Windows.Forms.Label();
-            this.label23 = new System.Windows.Forms.Label();
-            this.label22 = new System.Windows.Forms.Label();
-            this.label21 = new System.Windows.Forms.Label();
-            this.label15 = new System.Windows.Forms.Label();
             this.groupBox14 = new System.Windows.Forms.GroupBox();
             this.checkTrayIcon = new System.Windows.Forms.CheckBox();
             this.checkBalloonTimer = new System.Windows.Forms.CheckBox();
@@ -150,9 +112,6 @@
             this.numericMaxMin2 = new System.Windows.Forms.NumericUpDown();
             this.label9 = new System.Windows.Forms.Label();
             this.numericMaxHour2 = new System.Windows.Forms.NumericUpDown();
-            this.groupBox10 = new System.Windows.Forms.GroupBox();
-            this.radioClipsAll2 = new System.Windows.Forms.RadioButton();
-            this.radioClipsFilter2 = new System.Windows.Forms.RadioButton();
             this.groupBox11 = new System.Windows.Forms.GroupBox();
             this.label10 = new System.Windows.Forms.Label();
             this.numericMinSec2 = new System.Windows.Forms.NumericUpDown();
@@ -161,12 +120,21 @@
             this.label12 = new System.Windows.Forms.Label();
             this.numericMinHour2 = new System.Windows.Forms.NumericUpDown();
             this.btnApply = new System.Windows.Forms.Button();
+            this.tabHotkeys = new System.Windows.Forms.TabPage();
+            this.groupHotkeys = new System.Windows.Forms.GroupBox();
+            this.btnEditHotkey = new System.Windows.Forms.Button();
+            this.btnRemoveHotkey = new System.Windows.Forms.Button();
+            this.btnAddHotkey = new System.Windows.Forms.Button();
+            this.checkGlobalKeyWarning = new System.Windows.Forms.CheckBox();
+            this.lstHotkeys = new PatkaPlayer.VisualStylesListView();
+            this.clmAction = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.clmHotkey = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.clmGlobal = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.groupBox1.SuspendLayout();
             this.groupBox4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericMaxSec1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericMaxMin1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericMaxHour1)).BeginInit();
-            this.groupBox7.SuspendLayout();
             this.groupBox3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericMinSec1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericMinMin1)).BeginInit();
@@ -177,8 +145,6 @@
             this.tabSettings.SuspendLayout();
             this.groupBox15.SuspendLayout();
             this.groupBox13.SuspendLayout();
-            this.groupBox8.SuspendLayout();
-            this.groupBox5.SuspendLayout();
             this.groupBox14.SuspendLayout();
             this.groupBox12.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericTransparency)).BeginInit();
@@ -188,11 +154,12 @@
             ((System.ComponentModel.ISupportInitialize)(this.numericMaxSec2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericMaxMin2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericMaxHour2)).BeginInit();
-            this.groupBox10.SuspendLayout();
             this.groupBox11.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericMinSec2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericMinMin2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericMinHour2)).BeginInit();
+            this.tabHotkeys.SuspendLayout();
+            this.groupHotkeys.SuspendLayout();
             this.SuspendLayout();
             // 
             // btnSet1
@@ -201,7 +168,7 @@
             this.btnSet1.Name = "btnSet1";
             this.btnSet1.Size = new System.Drawing.Size(100, 23);
             this.btnSet1.TabIndex = 0;
-            this.btnSet1.Text = "Select F1...";
+            this.btnSet1.Text = "Select clip 1...";
             this.btnSet1.UseVisualStyleBackColor = true;
             this.btnSet1.Click += new System.EventHandler(this.btnSet1_Click);
             // 
@@ -213,7 +180,7 @@
             this.txtSet1.Location = new System.Drawing.Point(120, 22);
             this.txtSet1.Name = "txtSet1";
             this.txtSet1.ReadOnly = true;
-            this.txtSet1.Size = new System.Drawing.Size(448, 20);
+            this.txtSet1.Size = new System.Drawing.Size(382, 20);
             this.txtSet1.TabIndex = 1;
             this.txtSet1.TextChanged += new System.EventHandler(this.valueChanged);
             // 
@@ -223,7 +190,7 @@
             this.btnSet2.Name = "btnSet2";
             this.btnSet2.Size = new System.Drawing.Size(100, 23);
             this.btnSet2.TabIndex = 2;
-            this.btnSet2.Text = "Select F2...";
+            this.btnSet2.Text = "Select clip 2...";
             this.btnSet2.UseVisualStyleBackColor = true;
             this.btnSet2.Click += new System.EventHandler(this.btnSet2_Click);
             // 
@@ -235,7 +202,7 @@
             this.txtSet2.Location = new System.Drawing.Point(120, 52);
             this.txtSet2.Name = "txtSet2";
             this.txtSet2.ReadOnly = true;
-            this.txtSet2.Size = new System.Drawing.Size(448, 20);
+            this.txtSet2.Size = new System.Drawing.Size(382, 20);
             this.txtSet2.TabIndex = 3;
             this.txtSet2.TextChanged += new System.EventHandler(this.valueChanged);
             // 
@@ -245,7 +212,7 @@
             this.btnSet3.Name = "btnSet3";
             this.btnSet3.Size = new System.Drawing.Size(100, 23);
             this.btnSet3.TabIndex = 4;
-            this.btnSet3.Text = "Select F3...";
+            this.btnSet3.Text = "Select clip 3...";
             this.btnSet3.UseVisualStyleBackColor = true;
             this.btnSet3.Click += new System.EventHandler(this.btnSet3_Click);
             // 
@@ -257,7 +224,7 @@
             this.txtSet3.Location = new System.Drawing.Point(120, 82);
             this.txtSet3.Name = "txtSet3";
             this.txtSet3.ReadOnly = true;
-            this.txtSet3.Size = new System.Drawing.Size(450, 20);
+            this.txtSet3.Size = new System.Drawing.Size(384, 20);
             this.txtSet3.TabIndex = 5;
             this.txtSet3.TextChanged += new System.EventHandler(this.valueChanged);
             // 
@@ -267,7 +234,7 @@
             this.btnSet4.Name = "btnSet4";
             this.btnSet4.Size = new System.Drawing.Size(100, 23);
             this.btnSet4.TabIndex = 6;
-            this.btnSet4.Text = "Select F4...";
+            this.btnSet4.Text = "Select clip 4...";
             this.btnSet4.UseVisualStyleBackColor = true;
             this.btnSet4.Click += new System.EventHandler(this.btnSet4_Click);
             // 
@@ -279,7 +246,7 @@
             this.txtSet4.Location = new System.Drawing.Point(120, 112);
             this.txtSet4.Name = "txtSet4";
             this.txtSet4.ReadOnly = true;
-            this.txtSet4.Size = new System.Drawing.Size(450, 20);
+            this.txtSet4.Size = new System.Drawing.Size(384, 20);
             this.txtSet4.TabIndex = 7;
             this.txtSet4.TextChanged += new System.EventHandler(this.valueChanged);
             // 
@@ -289,7 +256,7 @@
             this.btnSet5.Name = "btnSet5";
             this.btnSet5.Size = new System.Drawing.Size(100, 23);
             this.btnSet5.TabIndex = 8;
-            this.btnSet5.Text = "Select F5...";
+            this.btnSet5.Text = "Select clip 5...";
             this.btnSet5.UseVisualStyleBackColor = true;
             this.btnSet5.Click += new System.EventHandler(this.btnSet5_Click);
             // 
@@ -301,7 +268,7 @@
             this.txtSet5.Location = new System.Drawing.Point(120, 142);
             this.txtSet5.Name = "txtSet5";
             this.txtSet5.ReadOnly = true;
-            this.txtSet5.Size = new System.Drawing.Size(450, 20);
+            this.txtSet5.Size = new System.Drawing.Size(384, 20);
             this.txtSet5.TabIndex = 9;
             this.txtSet5.TextChanged += new System.EventHandler(this.valueChanged);
             // 
@@ -311,7 +278,7 @@
             this.btnSet6.Name = "btnSet6";
             this.btnSet6.Size = new System.Drawing.Size(100, 23);
             this.btnSet6.TabIndex = 10;
-            this.btnSet6.Text = "Select F6...";
+            this.btnSet6.Text = "Select clip 6...";
             this.btnSet6.UseVisualStyleBackColor = true;
             this.btnSet6.Click += new System.EventHandler(this.btnSet6_Click);
             // 
@@ -323,7 +290,7 @@
             this.txtSet6.Location = new System.Drawing.Point(120, 172);
             this.txtSet6.Name = "txtSet6";
             this.txtSet6.ReadOnly = true;
-            this.txtSet6.Size = new System.Drawing.Size(450, 20);
+            this.txtSet6.Size = new System.Drawing.Size(384, 20);
             this.txtSet6.TabIndex = 11;
             this.txtSet6.TextChanged += new System.EventHandler(this.valueChanged);
             // 
@@ -333,7 +300,7 @@
             this.btnSet7.Name = "btnSet7";
             this.btnSet7.Size = new System.Drawing.Size(100, 23);
             this.btnSet7.TabIndex = 12;
-            this.btnSet7.Text = "Select F7...";
+            this.btnSet7.Text = "Select clip 7...";
             this.btnSet7.UseVisualStyleBackColor = true;
             this.btnSet7.Click += new System.EventHandler(this.btnSet7_Click);
             // 
@@ -345,7 +312,7 @@
             this.txtSet7.Location = new System.Drawing.Point(120, 202);
             this.txtSet7.Name = "txtSet7";
             this.txtSet7.ReadOnly = true;
-            this.txtSet7.Size = new System.Drawing.Size(450, 20);
+            this.txtSet7.Size = new System.Drawing.Size(384, 20);
             this.txtSet7.TabIndex = 13;
             this.txtSet7.TextChanged += new System.EventHandler(this.valueChanged);
             // 
@@ -355,7 +322,7 @@
             this.btnSet8.Name = "btnSet8";
             this.btnSet8.Size = new System.Drawing.Size(100, 23);
             this.btnSet8.TabIndex = 14;
-            this.btnSet8.Text = "Select F8...";
+            this.btnSet8.Text = "Select clip 8...";
             this.btnSet8.UseVisualStyleBackColor = true;
             this.btnSet8.Click += new System.EventHandler(this.btnSet8_Click);
             // 
@@ -367,7 +334,7 @@
             this.txtSet8.Location = new System.Drawing.Point(120, 232);
             this.txtSet8.Name = "txtSet8";
             this.txtSet8.ReadOnly = true;
-            this.txtSet8.Size = new System.Drawing.Size(450, 20);
+            this.txtSet8.Size = new System.Drawing.Size(384, 20);
             this.txtSet8.TabIndex = 15;
             this.txtSet8.TextChanged += new System.EventHandler(this.valueChanged);
             // 
@@ -377,7 +344,7 @@
             this.btnSet9.Name = "btnSet9";
             this.btnSet9.Size = new System.Drawing.Size(100, 23);
             this.btnSet9.TabIndex = 16;
-            this.btnSet9.Text = "Select F9...";
+            this.btnSet9.Text = "Select clip 9...";
             this.btnSet9.UseVisualStyleBackColor = true;
             this.btnSet9.Click += new System.EventHandler(this.btnSet9_Click);
             // 
@@ -389,7 +356,7 @@
             this.txtSet9.Location = new System.Drawing.Point(120, 262);
             this.txtSet9.Name = "txtSet9";
             this.txtSet9.ReadOnly = true;
-            this.txtSet9.Size = new System.Drawing.Size(450, 20);
+            this.txtSet9.Size = new System.Drawing.Size(384, 20);
             this.txtSet9.TabIndex = 17;
             this.txtSet9.TextChanged += new System.EventHandler(this.valueChanged);
             // 
@@ -399,7 +366,7 @@
             this.btnSet10.Name = "btnSet10";
             this.btnSet10.Size = new System.Drawing.Size(100, 23);
             this.btnSet10.TabIndex = 18;
-            this.btnSet10.Text = "Select F10...";
+            this.btnSet10.Text = "Select clip 10...";
             this.btnSet10.UseVisualStyleBackColor = true;
             this.btnSet10.Click += new System.EventHandler(this.btnSet10_Click);
             // 
@@ -411,14 +378,14 @@
             this.txtSet10.Location = new System.Drawing.Point(120, 292);
             this.txtSet10.Name = "txtSet10";
             this.txtSet10.ReadOnly = true;
-            this.txtSet10.Size = new System.Drawing.Size(450, 20);
+            this.txtSet10.Size = new System.Drawing.Size(384, 20);
             this.txtSet10.TabIndex = 19;
             this.txtSet10.TextChanged += new System.EventHandler(this.valueChanged);
             // 
             // btnSetOk
             // 
             this.btnSetOk.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnSetOk.Location = new System.Drawing.Point(429, 503);
+            this.btnSetOk.Location = new System.Drawing.Point(363, 503);
             this.btnSetOk.Name = "btnSetOk";
             this.btnSetOk.Size = new System.Drawing.Size(75, 23);
             this.btnSetOk.TabIndex = 20;
@@ -429,7 +396,7 @@
             // btnSetCancel
             // 
             this.btnSetCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnSetCancel.Location = new System.Drawing.Point(510, 503);
+            this.btnSetCancel.Location = new System.Drawing.Point(444, 503);
             this.btnSetCancel.Name = "btnSetCancel";
             this.btnSetCancel.Size = new System.Drawing.Size(75, 23);
             this.btnSetCancel.TabIndex = 21;
@@ -480,7 +447,7 @@
             this.groupBox1.Controls.Add(this.btnSet6);
             this.groupBox1.Location = new System.Drawing.Point(6, 67);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(638, 383);
+            this.groupBox1.Size = new System.Drawing.Size(572, 383);
             this.groupBox1.TabIndex = 22;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Hotkey actions";
@@ -488,7 +455,7 @@
             // btnErase12
             // 
             this.btnErase12.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnErase12.Location = new System.Drawing.Point(578, 348);
+            this.btnErase12.Location = new System.Drawing.Point(512, 348);
             this.btnErase12.Name = "btnErase12";
             this.btnErase12.Size = new System.Drawing.Size(50, 23);
             this.btnErase12.TabIndex = 35;
@@ -504,7 +471,7 @@
             this.txtSet12.Location = new System.Drawing.Point(120, 350);
             this.txtSet12.Name = "txtSet12";
             this.txtSet12.ReadOnly = true;
-            this.txtSet12.Size = new System.Drawing.Size(450, 20);
+            this.txtSet12.Size = new System.Drawing.Size(384, 20);
             this.txtSet12.TabIndex = 34;
             this.txtSet12.TextChanged += new System.EventHandler(this.valueChanged);
             // 
@@ -514,14 +481,14 @@
             this.btnSet12.Name = "btnSet12";
             this.btnSet12.Size = new System.Drawing.Size(100, 23);
             this.btnSet12.TabIndex = 33;
-            this.btnSet12.Text = "Select F12...";
+            this.btnSet12.Text = "Select clip 12...";
             this.btnSet12.UseVisualStyleBackColor = true;
             this.btnSet12.Click += new System.EventHandler(this.btnSet12_Click);
             // 
             // btnErase11
             // 
             this.btnErase11.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnErase11.Location = new System.Drawing.Point(578, 319);
+            this.btnErase11.Location = new System.Drawing.Point(512, 319);
             this.btnErase11.Name = "btnErase11";
             this.btnErase11.Size = new System.Drawing.Size(50, 23);
             this.btnErase11.TabIndex = 32;
@@ -537,7 +504,7 @@
             this.txtSet11.Location = new System.Drawing.Point(120, 321);
             this.txtSet11.Name = "txtSet11";
             this.txtSet11.ReadOnly = true;
-            this.txtSet11.Size = new System.Drawing.Size(450, 20);
+            this.txtSet11.Size = new System.Drawing.Size(384, 20);
             this.txtSet11.TabIndex = 31;
             this.txtSet11.TextChanged += new System.EventHandler(this.valueChanged);
             // 
@@ -547,14 +514,14 @@
             this.btnSet11.Name = "btnSet11";
             this.btnSet11.Size = new System.Drawing.Size(100, 23);
             this.btnSet11.TabIndex = 30;
-            this.btnSet11.Text = "Select F11...";
+            this.btnSet11.Text = "Select clip 11...";
             this.btnSet11.UseVisualStyleBackColor = true;
             this.btnSet11.Click += new System.EventHandler(this.btnSet11_Click);
             // 
             // btnErase10
             // 
             this.btnErase10.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnErase10.Location = new System.Drawing.Point(578, 290);
+            this.btnErase10.Location = new System.Drawing.Point(512, 290);
             this.btnErase10.Name = "btnErase10";
             this.btnErase10.Size = new System.Drawing.Size(50, 23);
             this.btnErase10.TabIndex = 29;
@@ -565,7 +532,7 @@
             // btnErase9
             // 
             this.btnErase9.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnErase9.Location = new System.Drawing.Point(578, 260);
+            this.btnErase9.Location = new System.Drawing.Point(512, 260);
             this.btnErase9.Name = "btnErase9";
             this.btnErase9.Size = new System.Drawing.Size(50, 23);
             this.btnErase9.TabIndex = 28;
@@ -576,7 +543,7 @@
             // btnErase8
             // 
             this.btnErase8.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnErase8.Location = new System.Drawing.Point(578, 230);
+            this.btnErase8.Location = new System.Drawing.Point(512, 230);
             this.btnErase8.Name = "btnErase8";
             this.btnErase8.Size = new System.Drawing.Size(50, 23);
             this.btnErase8.TabIndex = 27;
@@ -587,7 +554,7 @@
             // btnErase7
             // 
             this.btnErase7.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnErase7.Location = new System.Drawing.Point(578, 200);
+            this.btnErase7.Location = new System.Drawing.Point(512, 200);
             this.btnErase7.Name = "btnErase7";
             this.btnErase7.Size = new System.Drawing.Size(50, 23);
             this.btnErase7.TabIndex = 26;
@@ -598,7 +565,7 @@
             // btnErase6
             // 
             this.btnErase6.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnErase6.Location = new System.Drawing.Point(578, 170);
+            this.btnErase6.Location = new System.Drawing.Point(512, 170);
             this.btnErase6.Name = "btnErase6";
             this.btnErase6.Size = new System.Drawing.Size(50, 23);
             this.btnErase6.TabIndex = 25;
@@ -609,7 +576,7 @@
             // btnErase5
             // 
             this.btnErase5.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnErase5.Location = new System.Drawing.Point(578, 140);
+            this.btnErase5.Location = new System.Drawing.Point(512, 140);
             this.btnErase5.Name = "btnErase5";
             this.btnErase5.Size = new System.Drawing.Size(50, 23);
             this.btnErase5.TabIndex = 24;
@@ -620,7 +587,7 @@
             // btnErase4
             // 
             this.btnErase4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnErase4.Location = new System.Drawing.Point(578, 110);
+            this.btnErase4.Location = new System.Drawing.Point(512, 110);
             this.btnErase4.Name = "btnErase4";
             this.btnErase4.Size = new System.Drawing.Size(50, 23);
             this.btnErase4.TabIndex = 23;
@@ -631,7 +598,7 @@
             // btnErase3
             // 
             this.btnErase3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnErase3.Location = new System.Drawing.Point(578, 80);
+            this.btnErase3.Location = new System.Drawing.Point(512, 80);
             this.btnErase3.Name = "btnErase3";
             this.btnErase3.Size = new System.Drawing.Size(50, 23);
             this.btnErase3.TabIndex = 22;
@@ -642,7 +609,7 @@
             // btnErase2
             // 
             this.btnErase2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnErase2.Location = new System.Drawing.Point(578, 50);
+            this.btnErase2.Location = new System.Drawing.Point(512, 50);
             this.btnErase2.Name = "btnErase2";
             this.btnErase2.Size = new System.Drawing.Size(50, 23);
             this.btnErase2.TabIndex = 21;
@@ -653,7 +620,7 @@
             // btnErase1
             // 
             this.btnErase1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnErase1.Location = new System.Drawing.Point(578, 20);
+            this.btnErase1.Location = new System.Drawing.Point(512, 20);
             this.btnErase1.Name = "btnErase1";
             this.btnErase1.Size = new System.Drawing.Size(50, 23);
             this.btnErase1.TabIndex = 20;
@@ -744,41 +711,6 @@
             this.numericMaxHour1.TabIndex = 4;
             this.numericMaxHour1.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.numericMaxHour1.ValueChanged += new System.EventHandler(this.valueChanged);
-            // 
-            // groupBox7
-            // 
-            this.groupBox7.Controls.Add(this.radioClipsAll1);
-            this.groupBox7.Controls.Add(this.radioClipsFilter1);
-            this.groupBox7.Location = new System.Drawing.Point(451, 6);
-            this.groupBox7.Name = "groupBox7";
-            this.groupBox7.Size = new System.Drawing.Size(193, 75);
-            this.groupBox7.TabIndex = 28;
-            this.groupBox7.TabStop = false;
-            this.groupBox7.Text = "Timer 1 settings";
-            // 
-            // radioClipsAll1
-            // 
-            this.radioClipsAll1.AutoSize = true;
-            this.radioClipsAll1.Checked = true;
-            this.radioClipsAll1.Location = new System.Drawing.Point(15, 22);
-            this.radioClipsAll1.Name = "radioClipsAll1";
-            this.radioClipsAll1.Size = new System.Drawing.Size(111, 17);
-            this.radioClipsAll1.TabIndex = 29;
-            this.radioClipsAll1.TabStop = true;
-            this.radioClipsAll1.Text = "Play all audio clips";
-            this.radioClipsAll1.UseVisualStyleBackColor = true;
-            this.radioClipsAll1.CheckedChanged += new System.EventHandler(this.valueChanged);
-            // 
-            // radioClipsFilter1
-            // 
-            this.radioClipsFilter1.AutoSize = true;
-            this.radioClipsFilter1.Location = new System.Drawing.Point(15, 45);
-            this.radioClipsFilter1.Name = "radioClipsFilter1";
-            this.radioClipsFilter1.Size = new System.Drawing.Size(154, 17);
-            this.radioClipsFilter1.TabIndex = 30;
-            this.radioClipsFilter1.Text = "Play only filtered audio clips";
-            this.radioClipsFilter1.UseVisualStyleBackColor = true;
-            this.radioClipsFilter1.CheckedChanged += new System.EventHandler(this.valueChanged);
             // 
             // groupBox3
             // 
@@ -872,7 +804,7 @@
             this.groupBox2.Controls.Add(this.btnSetFolder);
             this.groupBox2.Location = new System.Drawing.Point(6, 6);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(638, 55);
+            this.groupBox2.Size = new System.Drawing.Size(572, 55);
             this.groupBox2.TabIndex = 24;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Audio folder";
@@ -885,7 +817,7 @@
             this.txtSetFolder.Location = new System.Drawing.Point(120, 21);
             this.txtSetFolder.Name = "txtSetFolder";
             this.txtSetFolder.ReadOnly = true;
-            this.txtSetFolder.Size = new System.Drawing.Size(508, 20);
+            this.txtSetFolder.Size = new System.Drawing.Size(442, 20);
             this.txtSetFolder.TabIndex = 20;
             this.txtSetFolder.TextChanged += new System.EventHandler(this.valueChanged);
             // 
@@ -909,7 +841,7 @@
             this.txtVersion.Name = "txtVersion";
             this.txtVersion.Size = new System.Drawing.Size(188, 15);
             this.txtVersion.TabIndex = 24;
-            this.txtVersion.Text = "Pätkä Player © 2016 Ari Kankainen";
+            this.txtVersion.Text = "Pätkä Player © 2017 Ari Kankainen";
             // 
             // tabControl1
             // 
@@ -919,10 +851,11 @@
             this.tabControl1.Controls.Add(this.tabFolders);
             this.tabControl1.Controls.Add(this.tabSettings);
             this.tabControl1.Controls.Add(this.tabTimers);
+            this.tabControl1.Controls.Add(this.tabHotkeys);
             this.tabControl1.Location = new System.Drawing.Point(10, 10);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(660, 483);
+            this.tabControl1.Size = new System.Drawing.Size(594, 483);
             this.tabControl1.TabIndex = 25;
             // 
             // tabFolders
@@ -932,7 +865,7 @@
             this.tabFolders.Location = new System.Drawing.Point(4, 22);
             this.tabFolders.Name = "tabFolders";
             this.tabFolders.Padding = new System.Windows.Forms.Padding(3);
-            this.tabFolders.Size = new System.Drawing.Size(652, 457);
+            this.tabFolders.Size = new System.Drawing.Size(586, 457);
             this.tabFolders.TabIndex = 0;
             this.tabFolders.Text = "Folders";
             this.tabFolders.UseVisualStyleBackColor = true;
@@ -941,15 +874,13 @@
             // 
             this.tabSettings.Controls.Add(this.groupBox15);
             this.tabSettings.Controls.Add(this.groupBox13);
-            this.tabSettings.Controls.Add(this.groupBox8);
-            this.tabSettings.Controls.Add(this.groupBox5);
             this.tabSettings.Controls.Add(this.groupBox14);
             this.tabSettings.Controls.Add(this.groupBox12);
             this.tabSettings.Controls.Add(this.groupBox6);
             this.tabSettings.Location = new System.Drawing.Point(4, 22);
             this.tabSettings.Name = "tabSettings";
             this.tabSettings.Padding = new System.Windows.Forms.Padding(3);
-            this.tabSettings.Size = new System.Drawing.Size(652, 457);
+            this.tabSettings.Size = new System.Drawing.Size(586, 457);
             this.tabSettings.TabIndex = 2;
             this.tabSettings.Text = "Settings";
             this.tabSettings.UseVisualStyleBackColor = true;
@@ -1014,446 +945,6 @@
             this.comboLatency.Size = new System.Drawing.Size(121, 21);
             this.comboLatency.TabIndex = 0;
             this.comboLatency.SelectedIndexChanged += new System.EventHandler(this.valueChanged);
-            // 
-            // groupBox8
-            // 
-            this.groupBox8.Controls.Add(this.checkSendKeystrokes);
-            this.groupBox8.Controls.Add(this.label16);
-            this.groupBox8.Controls.Add(this.label17);
-            this.groupBox8.Controls.Add(this.txtKeystrokeStopKey);
-            this.groupBox8.Controls.Add(this.label19);
-            this.groupBox8.Controls.Add(this.txtKeystrokePlayMod);
-            this.groupBox8.Controls.Add(this.txtKeystrokeStopMod);
-            this.groupBox8.Controls.Add(this.txtKeystrokePlayKey);
-            this.groupBox8.Controls.Add(this.label29);
-            this.groupBox8.Location = new System.Drawing.Point(240, 291);
-            this.groupBox8.Name = "groupBox8";
-            this.groupBox8.Size = new System.Drawing.Size(404, 160);
-            this.groupBox8.TabIndex = 49;
-            this.groupBox8.TabStop = false;
-            this.groupBox8.Text = "Send keystrokes";
-            // 
-            // checkSendKeystrokes
-            // 
-            this.checkSendKeystrokes.AutoSize = true;
-            this.checkSendKeystrokes.Location = new System.Drawing.Point(16, 127);
-            this.checkSendKeystrokes.Name = "checkSendKeystrokes";
-            this.checkSendKeystrokes.Size = new System.Drawing.Size(105, 17);
-            this.checkSendKeystrokes.TabIndex = 59;
-            this.checkSendKeystrokes.Text = "Send keystrokes";
-            this.checkSendKeystrokes.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
-            this.checkSendKeystrokes.UseVisualStyleBackColor = true;
-            this.checkSendKeystrokes.CheckStateChanged += new System.EventHandler(this.valueChanged);
-            // 
-            // label16
-            // 
-            this.label16.Location = new System.Drawing.Point(147, 18);
-            this.label16.Name = "label16";
-            this.label16.Size = new System.Drawing.Size(100, 18);
-            this.label16.TabIndex = 60;
-            this.label16.Text = "Modifier";
-            this.label16.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
-            // 
-            // label17
-            // 
-            this.label17.Location = new System.Drawing.Point(253, 18);
-            this.label17.Name = "label17";
-            this.label17.Size = new System.Drawing.Size(100, 18);
-            this.label17.TabIndex = 59;
-            this.label17.Text = "Key";
-            this.label17.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
-            // 
-            // txtKeystrokeStopKey
-            // 
-            this.txtKeystrokeStopKey.Location = new System.Drawing.Point(253, 69);
-            this.txtKeystrokeStopKey.Name = "txtKeystrokeStopKey";
-            this.txtKeystrokeStopKey.Size = new System.Drawing.Size(100, 20);
-            this.txtKeystrokeStopKey.TabIndex = 64;
-            this.txtKeystrokeStopKey.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.txtKeystrokeStopKey.Click += new System.EventHandler(this.txtKey_Click);
-            this.txtKeystrokeStopKey.DoubleClick += new System.EventHandler(this.txtKey_DoubleClick);
-            this.txtKeystrokeStopKey.Enter += new System.EventHandler(this.txtKey_Enter);
-            this.txtKeystrokeStopKey.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtKey_KeyDown);
-            this.txtKeystrokeStopKey.Leave += new System.EventHandler(this.txtKey_Leave);
-            this.txtKeystrokeStopKey.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.txtSendKey_PreviewKeyDown);
-            // 
-            // label19
-            // 
-            this.label19.AutoSize = true;
-            this.label19.Location = new System.Drawing.Point(13, 46);
-            this.label19.Name = "label19";
-            this.label19.Size = new System.Drawing.Size(46, 13);
-            this.label19.TabIndex = 59;
-            this.label19.Text = "On play:";
-            // 
-            // txtKeystrokePlayMod
-            // 
-            this.txtKeystrokePlayMod.Location = new System.Drawing.Point(147, 43);
-            this.txtKeystrokePlayMod.Name = "txtKeystrokePlayMod";
-            this.txtKeystrokePlayMod.Size = new System.Drawing.Size(100, 20);
-            this.txtKeystrokePlayMod.TabIndex = 60;
-            this.txtKeystrokePlayMod.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.txtKeystrokePlayMod.Click += new System.EventHandler(this.txtKey_Click);
-            this.txtKeystrokePlayMod.DoubleClick += new System.EventHandler(this.txtKey_DoubleClick);
-            this.txtKeystrokePlayMod.Enter += new System.EventHandler(this.txtKey_Enter);
-            this.txtKeystrokePlayMod.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtSendMod_KeyDown);
-            this.txtKeystrokePlayMod.KeyUp += new System.Windows.Forms.KeyEventHandler(this.txtMod_KeyUp);
-            this.txtKeystrokePlayMod.Leave += new System.EventHandler(this.txtKey_Leave);
-            // 
-            // txtKeystrokeStopMod
-            // 
-            this.txtKeystrokeStopMod.Location = new System.Drawing.Point(147, 69);
-            this.txtKeystrokeStopMod.Name = "txtKeystrokeStopMod";
-            this.txtKeystrokeStopMod.Size = new System.Drawing.Size(100, 20);
-            this.txtKeystrokeStopMod.TabIndex = 63;
-            this.txtKeystrokeStopMod.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.txtKeystrokeStopMod.Click += new System.EventHandler(this.txtKey_Click);
-            this.txtKeystrokeStopMod.DoubleClick += new System.EventHandler(this.txtKey_DoubleClick);
-            this.txtKeystrokeStopMod.Enter += new System.EventHandler(this.txtKey_Enter);
-            this.txtKeystrokeStopMod.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtSendMod_KeyDown);
-            this.txtKeystrokeStopMod.KeyUp += new System.Windows.Forms.KeyEventHandler(this.txtMod_KeyUp);
-            this.txtKeystrokeStopMod.Leave += new System.EventHandler(this.txtKey_Leave);
-            // 
-            // txtKeystrokePlayKey
-            // 
-            this.txtKeystrokePlayKey.Location = new System.Drawing.Point(253, 43);
-            this.txtKeystrokePlayKey.Name = "txtKeystrokePlayKey";
-            this.txtKeystrokePlayKey.Size = new System.Drawing.Size(100, 20);
-            this.txtKeystrokePlayKey.TabIndex = 61;
-            this.txtKeystrokePlayKey.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.txtKeystrokePlayKey.Click += new System.EventHandler(this.txtKey_Click);
-            this.txtKeystrokePlayKey.DoubleClick += new System.EventHandler(this.txtKey_DoubleClick);
-            this.txtKeystrokePlayKey.Enter += new System.EventHandler(this.txtKey_Enter);
-            this.txtKeystrokePlayKey.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtKey_KeyDown);
-            this.txtKeystrokePlayKey.Leave += new System.EventHandler(this.txtKey_Leave);
-            this.txtKeystrokePlayKey.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.txtSendKey_PreviewKeyDown);
-            // 
-            // label29
-            // 
-            this.label29.AutoSize = true;
-            this.label29.Location = new System.Drawing.Point(13, 72);
-            this.label29.Name = "label29";
-            this.label29.Size = new System.Drawing.Size(47, 13);
-            this.label29.TabIndex = 62;
-            this.label29.Text = "On stop:";
-            // 
-            // groupBox5
-            // 
-            this.groupBox5.Controls.Add(this.checkGlobalKeyWarning);
-            this.groupBox5.Controls.Add(this.txtStopTimerKey);
-            this.groupBox5.Controls.Add(this.txtStopTimerMod);
-            this.groupBox5.Controls.Add(this.txtTimer2Key);
-            this.groupBox5.Controls.Add(this.txtTimer2Mod);
-            this.groupBox5.Controls.Add(this.txtTimer1Key);
-            this.groupBox5.Controls.Add(this.txtTimer1Mod);
-            this.groupBox5.Controls.Add(this.txtReplayKey);
-            this.groupBox5.Controls.Add(this.txtReplayMod);
-            this.groupBox5.Controls.Add(this.txtStopKey);
-            this.groupBox5.Controls.Add(this.txtStopMod);
-            this.groupBox5.Controls.Add(this.txtRandomKey);
-            this.groupBox5.Controls.Add(this.txtRandomMod);
-            this.groupBox5.Controls.Add(this.txtPlayPreKey);
-            this.groupBox5.Controls.Add(this.txtPlayPreMod);
-            this.groupBox5.Controls.Add(this.label20);
-            this.groupBox5.Controls.Add(this.label27);
-            this.groupBox5.Controls.Add(this.label26);
-            this.groupBox5.Controls.Add(this.label25);
-            this.groupBox5.Controls.Add(this.label24);
-            this.groupBox5.Controls.Add(this.label23);
-            this.groupBox5.Controls.Add(this.label22);
-            this.groupBox5.Controls.Add(this.label21);
-            this.groupBox5.Controls.Add(this.label15);
-            this.groupBox5.Location = new System.Drawing.Point(240, 6);
-            this.groupBox5.Name = "groupBox5";
-            this.groupBox5.Size = new System.Drawing.Size(404, 279);
-            this.groupBox5.TabIndex = 48;
-            this.groupBox5.TabStop = false;
-            this.groupBox5.Text = "Hotkeys";
-            // 
-            // checkGlobalKeyWarning
-            // 
-            this.checkGlobalKeyWarning.AutoSize = true;
-            this.checkGlobalKeyWarning.Location = new System.Drawing.Point(16, 248);
-            this.checkGlobalKeyWarning.Name = "checkGlobalKeyWarning";
-            this.checkGlobalKeyWarning.Size = new System.Drawing.Size(319, 17);
-            this.checkGlobalKeyWarning.TabIndex = 38;
-            this.checkGlobalKeyWarning.Text = "Show a warning if global hotkey is used by another application";
-            this.checkGlobalKeyWarning.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
-            this.checkGlobalKeyWarning.UseVisualStyleBackColor = true;
-            this.checkGlobalKeyWarning.CheckStateChanged += new System.EventHandler(this.valueChanged);
-            // 
-            // txtStopTimerKey
-            // 
-            this.txtStopTimerKey.Location = new System.Drawing.Point(253, 196);
-            this.txtStopTimerKey.Name = "txtStopTimerKey";
-            this.txtStopTimerKey.Size = new System.Drawing.Size(100, 20);
-            this.txtStopTimerKey.TabIndex = 58;
-            this.txtStopTimerKey.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.txtStopTimerKey.Click += new System.EventHandler(this.txtKey_Click);
-            this.txtStopTimerKey.DoubleClick += new System.EventHandler(this.txtKey_DoubleClick);
-            this.txtStopTimerKey.Enter += new System.EventHandler(this.txtKey_Enter);
-            this.txtStopTimerKey.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtKey_KeyDown);
-            this.txtStopTimerKey.Leave += new System.EventHandler(this.txtKey_Leave);
-            this.txtStopTimerKey.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.txtKey_PreviewKeyDown);
-            // 
-            // txtStopTimerMod
-            // 
-            this.txtStopTimerMod.Location = new System.Drawing.Point(147, 196);
-            this.txtStopTimerMod.Name = "txtStopTimerMod";
-            this.txtStopTimerMod.Size = new System.Drawing.Size(100, 20);
-            this.txtStopTimerMod.TabIndex = 57;
-            this.txtStopTimerMod.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.txtStopTimerMod.Click += new System.EventHandler(this.txtKey_Click);
-            this.txtStopTimerMod.DoubleClick += new System.EventHandler(this.txtKey_DoubleClick);
-            this.txtStopTimerMod.Enter += new System.EventHandler(this.txtKey_Enter);
-            this.txtStopTimerMod.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtMod_KeyDown);
-            this.txtStopTimerMod.KeyUp += new System.Windows.Forms.KeyEventHandler(this.txtMod_KeyUp);
-            this.txtStopTimerMod.Leave += new System.EventHandler(this.txtKey_Leave);
-            // 
-            // txtTimer2Key
-            // 
-            this.txtTimer2Key.Location = new System.Drawing.Point(253, 170);
-            this.txtTimer2Key.Name = "txtTimer2Key";
-            this.txtTimer2Key.Size = new System.Drawing.Size(100, 20);
-            this.txtTimer2Key.TabIndex = 55;
-            this.txtTimer2Key.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.txtTimer2Key.Click += new System.EventHandler(this.txtKey_Click);
-            this.txtTimer2Key.DoubleClick += new System.EventHandler(this.txtKey_DoubleClick);
-            this.txtTimer2Key.Enter += new System.EventHandler(this.txtKey_Enter);
-            this.txtTimer2Key.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtKey_KeyDown);
-            this.txtTimer2Key.Leave += new System.EventHandler(this.txtKey_Leave);
-            this.txtTimer2Key.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.txtKey_PreviewKeyDown);
-            // 
-            // txtTimer2Mod
-            // 
-            this.txtTimer2Mod.Location = new System.Drawing.Point(147, 170);
-            this.txtTimer2Mod.Name = "txtTimer2Mod";
-            this.txtTimer2Mod.Size = new System.Drawing.Size(100, 20);
-            this.txtTimer2Mod.TabIndex = 54;
-            this.txtTimer2Mod.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.txtTimer2Mod.Click += new System.EventHandler(this.txtKey_Click);
-            this.txtTimer2Mod.DoubleClick += new System.EventHandler(this.txtKey_DoubleClick);
-            this.txtTimer2Mod.Enter += new System.EventHandler(this.txtKey_Enter);
-            this.txtTimer2Mod.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtMod_KeyDown);
-            this.txtTimer2Mod.KeyUp += new System.Windows.Forms.KeyEventHandler(this.txtMod_KeyUp);
-            this.txtTimer2Mod.Leave += new System.EventHandler(this.txtKey_Leave);
-            // 
-            // txtTimer1Key
-            // 
-            this.txtTimer1Key.Location = new System.Drawing.Point(253, 144);
-            this.txtTimer1Key.Name = "txtTimer1Key";
-            this.txtTimer1Key.Size = new System.Drawing.Size(100, 20);
-            this.txtTimer1Key.TabIndex = 52;
-            this.txtTimer1Key.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.txtTimer1Key.Click += new System.EventHandler(this.txtKey_Click);
-            this.txtTimer1Key.DoubleClick += new System.EventHandler(this.txtKey_DoubleClick);
-            this.txtTimer1Key.Enter += new System.EventHandler(this.txtKey_Enter);
-            this.txtTimer1Key.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtKey_KeyDown);
-            this.txtTimer1Key.Leave += new System.EventHandler(this.txtKey_Leave);
-            this.txtTimer1Key.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.txtKey_PreviewKeyDown);
-            // 
-            // txtTimer1Mod
-            // 
-            this.txtTimer1Mod.Location = new System.Drawing.Point(147, 144);
-            this.txtTimer1Mod.Name = "txtTimer1Mod";
-            this.txtTimer1Mod.Size = new System.Drawing.Size(100, 20);
-            this.txtTimer1Mod.TabIndex = 51;
-            this.txtTimer1Mod.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.txtTimer1Mod.Click += new System.EventHandler(this.txtKey_Click);
-            this.txtTimer1Mod.DoubleClick += new System.EventHandler(this.txtKey_DoubleClick);
-            this.txtTimer1Mod.Enter += new System.EventHandler(this.txtKey_Enter);
-            this.txtTimer1Mod.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtMod_KeyDown);
-            this.txtTimer1Mod.KeyUp += new System.Windows.Forms.KeyEventHandler(this.txtMod_KeyUp);
-            this.txtTimer1Mod.Leave += new System.EventHandler(this.txtKey_Leave);
-            // 
-            // txtReplayKey
-            // 
-            this.txtReplayKey.Location = new System.Drawing.Point(253, 118);
-            this.txtReplayKey.Name = "txtReplayKey";
-            this.txtReplayKey.Size = new System.Drawing.Size(100, 20);
-            this.txtReplayKey.TabIndex = 49;
-            this.txtReplayKey.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.txtReplayKey.Click += new System.EventHandler(this.txtKey_Click);
-            this.txtReplayKey.DoubleClick += new System.EventHandler(this.txtKey_DoubleClick);
-            this.txtReplayKey.Enter += new System.EventHandler(this.txtKey_Enter);
-            this.txtReplayKey.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtKey_KeyDown);
-            this.txtReplayKey.Leave += new System.EventHandler(this.txtKey_Leave);
-            this.txtReplayKey.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.txtKey_PreviewKeyDown);
-            // 
-            // txtReplayMod
-            // 
-            this.txtReplayMod.Location = new System.Drawing.Point(147, 118);
-            this.txtReplayMod.Name = "txtReplayMod";
-            this.txtReplayMod.Size = new System.Drawing.Size(100, 20);
-            this.txtReplayMod.TabIndex = 48;
-            this.txtReplayMod.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.txtReplayMod.Click += new System.EventHandler(this.txtKey_Click);
-            this.txtReplayMod.DoubleClick += new System.EventHandler(this.txtKey_DoubleClick);
-            this.txtReplayMod.Enter += new System.EventHandler(this.txtKey_Enter);
-            this.txtReplayMod.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtMod_KeyDown);
-            this.txtReplayMod.KeyUp += new System.Windows.Forms.KeyEventHandler(this.txtMod_KeyUp);
-            this.txtReplayMod.Leave += new System.EventHandler(this.txtKey_Leave);
-            // 
-            // txtStopKey
-            // 
-            this.txtStopKey.Location = new System.Drawing.Point(253, 92);
-            this.txtStopKey.Name = "txtStopKey";
-            this.txtStopKey.Size = new System.Drawing.Size(100, 20);
-            this.txtStopKey.TabIndex = 46;
-            this.txtStopKey.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.txtStopKey.Click += new System.EventHandler(this.txtKey_Click);
-            this.txtStopKey.DoubleClick += new System.EventHandler(this.txtKey_DoubleClick);
-            this.txtStopKey.Enter += new System.EventHandler(this.txtKey_Enter);
-            this.txtStopKey.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtKey_KeyDown);
-            this.txtStopKey.Leave += new System.EventHandler(this.txtKey_Leave);
-            this.txtStopKey.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.txtKey_PreviewKeyDown);
-            // 
-            // txtStopMod
-            // 
-            this.txtStopMod.Location = new System.Drawing.Point(147, 92);
-            this.txtStopMod.Name = "txtStopMod";
-            this.txtStopMod.Size = new System.Drawing.Size(100, 20);
-            this.txtStopMod.TabIndex = 45;
-            this.txtStopMod.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.txtStopMod.Click += new System.EventHandler(this.txtKey_Click);
-            this.txtStopMod.DoubleClick += new System.EventHandler(this.txtKey_DoubleClick);
-            this.txtStopMod.Enter += new System.EventHandler(this.txtKey_Enter);
-            this.txtStopMod.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtMod_KeyDown);
-            this.txtStopMod.KeyUp += new System.Windows.Forms.KeyEventHandler(this.txtMod_KeyUp);
-            this.txtStopMod.Leave += new System.EventHandler(this.txtKey_Leave);
-            // 
-            // txtRandomKey
-            // 
-            this.txtRandomKey.Location = new System.Drawing.Point(253, 66);
-            this.txtRandomKey.Name = "txtRandomKey";
-            this.txtRandomKey.Size = new System.Drawing.Size(100, 20);
-            this.txtRandomKey.TabIndex = 43;
-            this.txtRandomKey.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.txtRandomKey.Click += new System.EventHandler(this.txtKey_Click);
-            this.txtRandomKey.DoubleClick += new System.EventHandler(this.txtKey_DoubleClick);
-            this.txtRandomKey.Enter += new System.EventHandler(this.txtKey_Enter);
-            this.txtRandomKey.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtKey_KeyDown);
-            this.txtRandomKey.Leave += new System.EventHandler(this.txtKey_Leave);
-            this.txtRandomKey.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.txtKey_PreviewKeyDown);
-            // 
-            // txtRandomMod
-            // 
-            this.txtRandomMod.Location = new System.Drawing.Point(147, 66);
-            this.txtRandomMod.Name = "txtRandomMod";
-            this.txtRandomMod.Size = new System.Drawing.Size(100, 20);
-            this.txtRandomMod.TabIndex = 42;
-            this.txtRandomMod.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.txtRandomMod.Click += new System.EventHandler(this.txtKey_Click);
-            this.txtRandomMod.DoubleClick += new System.EventHandler(this.txtKey_DoubleClick);
-            this.txtRandomMod.Enter += new System.EventHandler(this.txtKey_Enter);
-            this.txtRandomMod.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtMod_KeyDown);
-            this.txtRandomMod.KeyUp += new System.Windows.Forms.KeyEventHandler(this.txtMod_KeyUp);
-            this.txtRandomMod.Leave += new System.EventHandler(this.txtKey_Leave);
-            // 
-            // txtPlayPreKey
-            // 
-            this.txtPlayPreKey.Enabled = false;
-            this.txtPlayPreKey.Location = new System.Drawing.Point(253, 40);
-            this.txtPlayPreKey.Name = "txtPlayPreKey";
-            this.txtPlayPreKey.Size = new System.Drawing.Size(100, 20);
-            this.txtPlayPreKey.TabIndex = 40;
-            this.txtPlayPreKey.Text = "F1 - F12";
-            this.txtPlayPreKey.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            // 
-            // txtPlayPreMod
-            // 
-            this.txtPlayPreMod.Location = new System.Drawing.Point(147, 40);
-            this.txtPlayPreMod.Name = "txtPlayPreMod";
-            this.txtPlayPreMod.Size = new System.Drawing.Size(100, 20);
-            this.txtPlayPreMod.TabIndex = 39;
-            this.txtPlayPreMod.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.txtPlayPreMod.Click += new System.EventHandler(this.txtKey_Click);
-            this.txtPlayPreMod.DoubleClick += new System.EventHandler(this.txtKey_DoubleClick);
-            this.txtPlayPreMod.Enter += new System.EventHandler(this.txtKey_Enter);
-            this.txtPlayPreMod.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtMod_KeyDown);
-            this.txtPlayPreMod.KeyUp += new System.Windows.Forms.KeyEventHandler(this.txtMod_KeyUp);
-            this.txtPlayPreMod.Leave += new System.EventHandler(this.txtKey_Leave);
-            // 
-            // label20
-            // 
-            this.label20.Location = new System.Drawing.Point(147, 16);
-            this.label20.Name = "label20";
-            this.label20.Size = new System.Drawing.Size(100, 18);
-            this.label20.TabIndex = 37;
-            this.label20.Text = "Modifier";
-            this.label20.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
-            // 
-            // label27
-            // 
-            this.label27.AutoSize = true;
-            this.label27.Location = new System.Drawing.Point(13, 199);
-            this.label27.Name = "label27";
-            this.label27.Size = new System.Drawing.Size(57, 13);
-            this.label27.TabIndex = 22;
-            this.label27.Text = "Stop timer:";
-            // 
-            // label26
-            // 
-            this.label26.AutoSize = true;
-            this.label26.Location = new System.Drawing.Point(13, 173);
-            this.label26.Name = "label26";
-            this.label26.Size = new System.Drawing.Size(66, 13);
-            this.label26.TabIndex = 21;
-            this.label26.Text = "Start timer 2:";
-            // 
-            // label25
-            // 
-            this.label25.AutoSize = true;
-            this.label25.Location = new System.Drawing.Point(13, 147);
-            this.label25.Name = "label25";
-            this.label25.Size = new System.Drawing.Size(66, 13);
-            this.label25.TabIndex = 20;
-            this.label25.Text = "Start timer 1:";
-            // 
-            // label24
-            // 
-            this.label24.AutoSize = true;
-            this.label24.Location = new System.Drawing.Point(13, 121);
-            this.label24.Name = "label24";
-            this.label24.Size = new System.Drawing.Size(43, 13);
-            this.label24.TabIndex = 13;
-            this.label24.Text = "Replay:";
-            // 
-            // label23
-            // 
-            this.label23.AutoSize = true;
-            this.label23.Location = new System.Drawing.Point(13, 95);
-            this.label23.Name = "label23";
-            this.label23.Size = new System.Drawing.Size(32, 13);
-            this.label23.TabIndex = 10;
-            this.label23.Text = "Stop:";
-            // 
-            // label22
-            // 
-            this.label22.AutoSize = true;
-            this.label22.Location = new System.Drawing.Point(13, 69);
-            this.label22.Name = "label22";
-            this.label22.Size = new System.Drawing.Size(68, 13);
-            this.label22.TabIndex = 5;
-            this.label22.Text = "Play random:";
-            // 
-            // label21
-            // 
-            this.label21.Location = new System.Drawing.Point(253, 16);
-            this.label21.Name = "label21";
-            this.label21.Size = new System.Drawing.Size(100, 18);
-            this.label21.TabIndex = 3;
-            this.label21.Text = "Key";
-            this.label21.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
-            // 
-            // label15
-            // 
-            this.label15.AutoSize = true;
-            this.label15.Location = new System.Drawing.Point(13, 43);
-            this.label15.Name = "label15";
-            this.label15.Size = new System.Drawing.Size(107, 13);
-            this.label15.TabIndex = 0;
-            this.label15.Text = "Play preselected clip:";
             // 
             // groupBox14
             // 
@@ -1597,15 +1088,13 @@
             // tabTimers
             // 
             this.tabTimers.Controls.Add(this.groupBox9);
-            this.tabTimers.Controls.Add(this.groupBox10);
             this.tabTimers.Controls.Add(this.groupBox4);
             this.tabTimers.Controls.Add(this.groupBox11);
-            this.tabTimers.Controls.Add(this.groupBox7);
             this.tabTimers.Controls.Add(this.groupBox3);
             this.tabTimers.Location = new System.Drawing.Point(4, 22);
             this.tabTimers.Name = "tabTimers";
             this.tabTimers.Padding = new System.Windows.Forms.Padding(3);
-            this.tabTimers.Size = new System.Drawing.Size(652, 457);
+            this.tabTimers.Size = new System.Drawing.Size(586, 457);
             this.tabTimers.TabIndex = 1;
             this.tabTimers.Text = "Timers";
             this.tabTimers.UseVisualStyleBackColor = true;
@@ -1693,41 +1182,6 @@
             this.numericMaxHour2.TabIndex = 4;
             this.numericMaxHour2.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.numericMaxHour2.ValueChanged += new System.EventHandler(this.valueChanged);
-            // 
-            // groupBox10
-            // 
-            this.groupBox10.Controls.Add(this.radioClipsAll2);
-            this.groupBox10.Controls.Add(this.radioClipsFilter2);
-            this.groupBox10.Location = new System.Drawing.Point(451, 87);
-            this.groupBox10.Name = "groupBox10";
-            this.groupBox10.Size = new System.Drawing.Size(193, 75);
-            this.groupBox10.TabIndex = 28;
-            this.groupBox10.TabStop = false;
-            this.groupBox10.Text = "Timer 2 settings";
-            // 
-            // radioClipsAll2
-            // 
-            this.radioClipsAll2.AutoSize = true;
-            this.radioClipsAll2.Checked = true;
-            this.radioClipsAll2.Location = new System.Drawing.Point(15, 22);
-            this.radioClipsAll2.Name = "radioClipsAll2";
-            this.radioClipsAll2.Size = new System.Drawing.Size(111, 17);
-            this.radioClipsAll2.TabIndex = 29;
-            this.radioClipsAll2.TabStop = true;
-            this.radioClipsAll2.Text = "Play all audio clips";
-            this.radioClipsAll2.UseVisualStyleBackColor = true;
-            this.radioClipsAll2.CheckedChanged += new System.EventHandler(this.valueChanged);
-            // 
-            // radioClipsFilter2
-            // 
-            this.radioClipsFilter2.AutoSize = true;
-            this.radioClipsFilter2.Location = new System.Drawing.Point(15, 45);
-            this.radioClipsFilter2.Name = "radioClipsFilter2";
-            this.radioClipsFilter2.Size = new System.Drawing.Size(154, 17);
-            this.radioClipsFilter2.TabIndex = 30;
-            this.radioClipsFilter2.Text = "Play only filtered audio clips";
-            this.radioClipsFilter2.UseVisualStyleBackColor = true;
-            this.radioClipsFilter2.CheckedChanged += new System.EventHandler(this.valueChanged);
             // 
             // groupBox11
             // 
@@ -1817,7 +1271,7 @@
             // 
             this.btnApply.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnApply.Enabled = false;
-            this.btnApply.Location = new System.Drawing.Point(591, 503);
+            this.btnApply.Location = new System.Drawing.Point(525, 503);
             this.btnApply.Name = "btnApply";
             this.btnApply.Size = new System.Drawing.Size(75, 23);
             this.btnApply.TabIndex = 26;
@@ -1825,11 +1279,116 @@
             this.btnApply.UseVisualStyleBackColor = true;
             this.btnApply.Click += new System.EventHandler(this.btnApply_Click);
             // 
+            // tabHotkeys
+            // 
+            this.tabHotkeys.Controls.Add(this.groupHotkeys);
+            this.tabHotkeys.Location = new System.Drawing.Point(4, 22);
+            this.tabHotkeys.Name = "tabHotkeys";
+            this.tabHotkeys.Padding = new System.Windows.Forms.Padding(3);
+            this.tabHotkeys.Size = new System.Drawing.Size(586, 457);
+            this.tabHotkeys.TabIndex = 3;
+            this.tabHotkeys.Text = "Hotkeys";
+            this.tabHotkeys.UseVisualStyleBackColor = true;
+            // 
+            // groupHotkeys
+            // 
+            this.groupHotkeys.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupHotkeys.Controls.Add(this.checkGlobalKeyWarning);
+            this.groupHotkeys.Controls.Add(this.lstHotkeys);
+            this.groupHotkeys.Controls.Add(this.btnEditHotkey);
+            this.groupHotkeys.Controls.Add(this.btnRemoveHotkey);
+            this.groupHotkeys.Controls.Add(this.btnAddHotkey);
+            this.groupHotkeys.Location = new System.Drawing.Point(6, 6);
+            this.groupHotkeys.Name = "groupHotkeys";
+            this.groupHotkeys.Size = new System.Drawing.Size(572, 444);
+            this.groupHotkeys.TabIndex = 0;
+            this.groupHotkeys.TabStop = false;
+            this.groupHotkeys.Text = "Hotkeys";
+            // 
+            // btnEditHotkey
+            // 
+            this.btnEditHotkey.Enabled = false;
+            this.btnEditHotkey.Location = new System.Drawing.Point(116, 20);
+            this.btnEditHotkey.Name = "btnEditHotkey";
+            this.btnEditHotkey.Size = new System.Drawing.Size(100, 23);
+            this.btnEditHotkey.TabIndex = 6;
+            this.btnEditHotkey.Text = "Edit hotkey...";
+            this.btnEditHotkey.UseVisualStyleBackColor = true;
+            this.btnEditHotkey.Click += new System.EventHandler(this.btnEditHotkey_Click);
+            // 
+            // btnRemoveHotkey
+            // 
+            this.btnRemoveHotkey.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnRemoveHotkey.Enabled = false;
+            this.btnRemoveHotkey.Location = new System.Drawing.Point(462, 20);
+            this.btnRemoveHotkey.Name = "btnRemoveHotkey";
+            this.btnRemoveHotkey.Size = new System.Drawing.Size(100, 23);
+            this.btnRemoveHotkey.TabIndex = 5;
+            this.btnRemoveHotkey.Text = "Remove hotkey";
+            this.btnRemoveHotkey.UseVisualStyleBackColor = true;
+            this.btnRemoveHotkey.Click += new System.EventHandler(this.btnRemoveHotkey_Click);
+            // 
+            // btnAddHotkey
+            // 
+            this.btnAddHotkey.Location = new System.Drawing.Point(10, 20);
+            this.btnAddHotkey.Name = "btnAddHotkey";
+            this.btnAddHotkey.Size = new System.Drawing.Size(100, 23);
+            this.btnAddHotkey.TabIndex = 4;
+            this.btnAddHotkey.Text = "Add hotkey...";
+            this.btnAddHotkey.UseVisualStyleBackColor = true;
+            this.btnAddHotkey.Click += new System.EventHandler(this.btnAddHotkey_Click);
+            // 
+            // checkGlobalKeyWarning
+            // 
+            this.checkGlobalKeyWarning.AutoSize = true;
+            this.checkGlobalKeyWarning.Location = new System.Drawing.Point(15, 417);
+            this.checkGlobalKeyWarning.Name = "checkGlobalKeyWarning";
+            this.checkGlobalKeyWarning.Size = new System.Drawing.Size(319, 17);
+            this.checkGlobalKeyWarning.TabIndex = 39;
+            this.checkGlobalKeyWarning.Text = "Show a warning if global hotkey is used by another application";
+            this.checkGlobalKeyWarning.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+            this.checkGlobalKeyWarning.UseVisualStyleBackColor = true;
+            // 
+            // lstHotkeys
+            // 
+            this.lstHotkeys.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.lstHotkeys.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.clmAction,
+            this.clmHotkey,
+            this.clmGlobal});
+            this.lstHotkeys.FullRowSelect = true;
+            this.lstHotkeys.Location = new System.Drawing.Point(10, 54);
+            this.lstHotkeys.Name = "lstHotkeys";
+            this.lstHotkeys.Size = new System.Drawing.Size(552, 351);
+            this.lstHotkeys.TabIndex = 7;
+            this.lstHotkeys.UseCompatibleStateImageBehavior = false;
+            this.lstHotkeys.View = System.Windows.Forms.View.Details;
+            this.lstHotkeys.SelectedIndexChanged += new System.EventHandler(this.lstHotkeys_SelectedIndexChanged);
+            this.lstHotkeys.DoubleClick += new System.EventHandler(this.lstHotkeys_DoubleClick);
+            // 
+            // clmAction
+            // 
+            this.clmAction.Text = "Action";
+            this.clmAction.Width = 206;
+            // 
+            // clmHotkey
+            // 
+            this.clmHotkey.Text = "Hotkey";
+            this.clmHotkey.Width = 232;
+            // 
+            // clmGlobal
+            // 
+            this.clmGlobal.Text = "Global";
+            this.clmGlobal.Width = 110;
+            // 
             // frmSettings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(678, 535);
+            this.ClientSize = new System.Drawing.Size(612, 535);
             this.Controls.Add(this.btnApply);
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.txtVersion);
@@ -1845,6 +1404,8 @@
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Settings";
+            this.Load += new System.EventHandler(this.frmSettings_Load);
+            this.Shown += new System.EventHandler(this.frmSettings_Shown);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.groupBox4.ResumeLayout(false);
@@ -1852,8 +1413,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.numericMaxSec1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericMaxMin1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericMaxHour1)).EndInit();
-            this.groupBox7.ResumeLayout(false);
-            this.groupBox7.PerformLayout();
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericMinSec1)).EndInit();
@@ -1868,10 +1427,6 @@
             this.groupBox15.PerformLayout();
             this.groupBox13.ResumeLayout(false);
             this.groupBox13.PerformLayout();
-            this.groupBox8.ResumeLayout(false);
-            this.groupBox8.PerformLayout();
-            this.groupBox5.ResumeLayout(false);
-            this.groupBox5.PerformLayout();
             this.groupBox14.ResumeLayout(false);
             this.groupBox14.PerformLayout();
             this.groupBox12.ResumeLayout(false);
@@ -1885,13 +1440,14 @@
             ((System.ComponentModel.ISupportInitialize)(this.numericMaxSec2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericMaxMin2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericMaxHour2)).EndInit();
-            this.groupBox10.ResumeLayout(false);
-            this.groupBox10.PerformLayout();
             this.groupBox11.ResumeLayout(false);
             this.groupBox11.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericMinSec2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericMinMin2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericMinHour2)).EndInit();
+            this.tabHotkeys.ResumeLayout(false);
+            this.groupHotkeys.ResumeLayout(false);
+            this.groupHotkeys.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1943,9 +1499,6 @@
         private System.Windows.Forms.NumericUpDown numericMinMin1;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.NumericUpDown numericMinHour1;
-        private System.Windows.Forms.RadioButton radioClipsFilter1;
-        private System.Windows.Forms.RadioButton radioClipsAll1;
-        private System.Windows.Forms.GroupBox groupBox7;
         private System.Windows.Forms.TabControl tabControl1;
         private System.Windows.Forms.TabPage tabFolders;
         private System.Windows.Forms.TabPage tabTimers;
@@ -1963,9 +1516,6 @@
         private System.Windows.Forms.NumericUpDown numericMaxMin2;
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.NumericUpDown numericMaxHour2;
-        private System.Windows.Forms.GroupBox groupBox10;
-        private System.Windows.Forms.RadioButton radioClipsAll2;
-        private System.Windows.Forms.RadioButton radioClipsFilter2;
         private System.Windows.Forms.GroupBox groupBox11;
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.NumericUpDown numericMinSec2;
@@ -1992,45 +1542,20 @@
         private System.Windows.Forms.CheckBox checkBalloonTimer;
         private System.Windows.Forms.Label label14;
         private System.Windows.Forms.Label label13;
-        private System.Windows.Forms.GroupBox groupBox5;
-        private System.Windows.Forms.Label label27;
-        private System.Windows.Forms.Label label26;
-        private System.Windows.Forms.Label label25;
-        private System.Windows.Forms.Label label24;
-        private System.Windows.Forms.Label label23;
-        private System.Windows.Forms.Label label22;
-        private System.Windows.Forms.Label label21;
-        private System.Windows.Forms.Label label15;
-        private System.Windows.Forms.Label label20;
-        private System.Windows.Forms.CheckBox checkGlobalKeyWarning;
-        private System.Windows.Forms.TextBox txtPlayPreKey;
-        private System.Windows.Forms.TextBox txtPlayPreMod;
-        private System.Windows.Forms.TextBox txtStopTimerKey;
-        private System.Windows.Forms.TextBox txtStopTimerMod;
-        private System.Windows.Forms.TextBox txtTimer2Key;
-        private System.Windows.Forms.TextBox txtTimer2Mod;
-        private System.Windows.Forms.TextBox txtTimer1Key;
-        private System.Windows.Forms.TextBox txtTimer1Mod;
-        private System.Windows.Forms.TextBox txtReplayKey;
-        private System.Windows.Forms.TextBox txtReplayMod;
-        private System.Windows.Forms.TextBox txtStopKey;
-        private System.Windows.Forms.TextBox txtStopMod;
-        private System.Windows.Forms.TextBox txtRandomKey;
-        private System.Windows.Forms.TextBox txtRandomMod;
-        private System.Windows.Forms.TextBox txtKeystrokeStopKey;
-        private System.Windows.Forms.TextBox txtKeystrokeStopMod;
-        private System.Windows.Forms.Label label29;
-        private System.Windows.Forms.TextBox txtKeystrokePlayKey;
-        private System.Windows.Forms.TextBox txtKeystrokePlayMod;
-        private System.Windows.Forms.Label label19;
-        private System.Windows.Forms.GroupBox groupBox8;
-        private System.Windows.Forms.Label label16;
-        private System.Windows.Forms.Label label17;
-        private System.Windows.Forms.CheckBox checkSendKeystrokes;
         private System.Windows.Forms.GroupBox groupBox13;
         private System.Windows.Forms.Label label18;
         private System.Windows.Forms.ComboBox comboLatency;
         private System.Windows.Forms.GroupBox groupBox15;
         private System.Windows.Forms.CheckBox checkScrollLock;
+        private System.Windows.Forms.TabPage tabHotkeys;
+        private System.Windows.Forms.GroupBox groupHotkeys;
+        private System.Windows.Forms.Button btnEditHotkey;
+        private System.Windows.Forms.Button btnRemoveHotkey;
+        private System.Windows.Forms.Button btnAddHotkey;
+        private VisualStylesListView lstHotkeys;
+        private System.Windows.Forms.ColumnHeader clmAction;
+        private System.Windows.Forms.ColumnHeader clmHotkey;
+        private System.Windows.Forms.ColumnHeader clmGlobal;
+        private System.Windows.Forms.CheckBox checkGlobalKeyWarning;
     }
 }

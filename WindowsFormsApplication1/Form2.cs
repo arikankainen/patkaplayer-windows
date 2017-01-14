@@ -15,42 +15,75 @@ namespace PatkaPlayer
 {
     public partial class frmSettings : Form
     {
-        // storage for frmPlayer instance
+        private string appPath = Application.ExecutablePath; // full path of exe
+        private string appDir = Path.GetDirectoryName(Application.ExecutablePath); // folder only
+        private string appFile = Path.GetFileNameWithoutExtension(Path.GetDirectoryName(Application.ExecutablePath)); // filename only, without extension
+
+        public bool HotkeyExist(string key, bool editMode)
+        {
+            foreach (ListViewItem findItem in lstHotkeys.Items)
+            {
+                if (findItem.SubItems[1].Text == Hotkeys.ValueListToKeyList(key))
+                {
+                    if (editMode && !findItem.Selected) return true;
+                    if (!editMode) return true;
+                }
+            }
+            return false;
+        }
+
+        private string action;
+        public string Action
+        {
+            get { return action; }
+            set { action = value; }
+        }
+
+        private string hotkey;
+        public string Hotkey
+        {
+            get { return hotkey; }
+            set { hotkey = value; }
+        }
+
+        private bool global;
+        public bool Global
+        {
+            get { return global; }
+            set { global = value; }
+        }
+
         private readonly frmPlayer _frmPlayer;
         private string oldMp3Dir;
         private List<string> listMod = new List<string>();
         private bool txtChanged = false;
         private string txtOrig = "";
-        Settings settings = new Settings();
+        private Settings settings = new Settings();
 
-        //[DllImport("user32.dll")]
-        //static extern bool HideCaret(IntPtr hWnd);
-        //HideCaret(txtSet1.Handle);
-
-        // default constructor
         public frmSettings()
         {
             InitializeComponent();
         }
 
-        // overloaded constructor
         public frmSettings(frmPlayer temp)
         {
             InitializeComponent();
-            this._frmPlayer = temp;
+            _frmPlayer = temp;
+
             readConfig();
-            this.oldMp3Dir = txtSetFolder.Text;
+
+            oldMp3Dir = txtSetFolder.Text;
+
             if (temp.settingsPage == 1) this.tabControl1.SelectedTab = tabFolders;
             else if (temp.settingsPage == 2) this.tabControl1.SelectedTab = tabSettings;
             else if (temp.settingsPage == 3) this.tabControl1.SelectedTab = tabTimers;
-            btnApply.Enabled = false;
+            else if (temp.settingsPage == 4) this.tabControl1.SelectedTab = tabHotkeys;
 
+            btnApply.Enabled = false;
         }
 
-        // read values from config
         private void readConfig()
         {
-            // folders
             txtSetFolder.Text = settings.LoadSetting("Mp3Dir");
             txtSet1.Text = settings.LoadSetting("Hotkey1");
             txtSet2.Text = settings.LoadSetting("Hotkey2");
@@ -65,18 +98,6 @@ namespace PatkaPlayer
             txtSet11.Text = settings.LoadSetting("Hotkey11");
             txtSet12.Text = settings.LoadSetting("Hotkey12");
 
-            // timer 2 settings
-            numericMinHour2.Value = Convert.ToInt32(settings.LoadSetting("Timer2MinHour"));
-            numericMinMin2.Value = Convert.ToInt32(settings.LoadSetting("Timer2MinMin"));
-            numericMinSec2.Value = Convert.ToInt32(settings.LoadSetting("Timer2MinSec"));
-            numericMaxHour2.Value = Convert.ToInt32(settings.LoadSetting("Timer2MaxHour"));
-            numericMaxMin2.Value = Convert.ToInt32(settings.LoadSetting("Timer2MaxMin"));
-            numericMaxSec2.Value = Convert.ToInt32(settings.LoadSetting("Timer2MaxSec"));
-
-            radioClipsAll2.Checked = Convert.ToBoolean(settings.LoadSetting("Timer2ClipsAll"));
-            if (radioClipsAll2.Checked == false) radioClipsFilter2.Checked = true;
-
-            // timer 1 settings
             numericMinHour1.Value = Convert.ToInt32(settings.LoadSetting("Timer1MinHour"));
             numericMinMin1.Value = Convert.ToInt32(settings.LoadSetting("Timer1MinMin"));
             numericMinSec1.Value = Convert.ToInt32(settings.LoadSetting("Timer1MinSec"));
@@ -84,53 +105,64 @@ namespace PatkaPlayer
             numericMaxMin1.Value = Convert.ToInt32(settings.LoadSetting("Timer1MaxMin"));
             numericMaxSec1.Value = Convert.ToInt32(settings.LoadSetting("Timer1MaxSec"));
 
-            radioClipsAll1.Checked = Convert.ToBoolean(settings.LoadSetting("Timer1ClipsAll"));
-            if (radioClipsAll1.Checked == false) radioClipsFilter1.Checked = true;
+            numericMinHour2.Value = Convert.ToInt32(settings.LoadSetting("Timer2MinHour"));
+            numericMinMin2.Value = Convert.ToInt32(settings.LoadSetting("Timer2MinMin"));
+            numericMinSec2.Value = Convert.ToInt32(settings.LoadSetting("Timer2MinSec"));
+            numericMaxHour2.Value = Convert.ToInt32(settings.LoadSetting("Timer2MaxHour"));
+            numericMaxMin2.Value = Convert.ToInt32(settings.LoadSetting("Timer2MaxMin"));
+            numericMaxSec2.Value = Convert.ToInt32(settings.LoadSetting("Timer2MaxSec"));
 
-            // log
             checkLog.Checked = Convert.ToBoolean(settings.LoadSetting("Logging"));
             checkDaily.Checked = Convert.ToBoolean(settings.LoadSetting("RememberDaily"));
 
-            // tray
             checkTrayIcon.Checked = Convert.ToBoolean(settings.LoadSetting("TrayIcon"));
             checkBalloonPlay.Checked = Convert.ToBoolean(settings.LoadSetting("BalloonPlay"));
             checkBalloonTimer.Checked = Convert.ToBoolean(settings.LoadSetting("BalloonTimer"));
             
-            // misc
             numericTransparency.Value = Convert.ToDecimal(settings.LoadSetting("Transparency") ?? "1");
             comboLatency.Text = settings.LoadSetting("Latency");
             if (comboLatency.Text == "") comboLatency.Text = "200";
 
             checkScrollLock.Checked = Convert.ToBoolean(settings.LoadSetting("ScrollLock"));
-
-            // hotkeys
-            txtPlayPreMod.Text = settings.LoadSetting("HotkeyPlayPreMod");
-            txtRandomMod.Text = settings.LoadSetting("HotkeyRandomMod");
-            txtRandomKey.Text = settings.LoadSetting("HotkeyRandomKey");
-            txtStopMod.Text = settings.LoadSetting("HotkeyStopMod");
-            txtStopKey.Text = settings.LoadSetting("HotkeyStopKey");
-            txtReplayMod.Text = settings.LoadSetting("HotkeyReplayMod");
-            txtReplayKey.Text = settings.LoadSetting("HotkeyReplayKey");
-            txtTimer1Mod.Text = settings.LoadSetting("HotkeyTimer1Mod");
-            txtTimer1Key.Text = settings.LoadSetting("HotkeyTimer1Key");
-            txtTimer2Mod.Text = settings.LoadSetting("HotkeyTimer2Mod");
-            txtTimer2Key.Text = settings.LoadSetting("HotkeyTimer2Key");
-            txtStopTimerMod.Text = settings.LoadSetting("HotkeyStopTimerMod");
-            txtStopTimerKey.Text = settings.LoadSetting("HotkeyStopTimerKey");
             checkGlobalKeyWarning.Checked = Convert.ToBoolean(settings.LoadSetting("HotkeyWarning"));
 
-            // send keys
-            txtKeystrokePlayMod.Text = settings.LoadSetting("SendkeyPlayMod");
-            txtKeystrokePlayKey.Text = settings.LoadSetting("SendkeyPlayKey");
-            txtKeystrokeStopMod.Text = settings.LoadSetting("SendkeyStopMod");
-            txtKeystrokeStopKey.Text = settings.LoadSetting("SendkeyStopKey");
-            checkSendKeystrokes.Checked = Convert.ToBoolean(settings.LoadSetting("SendKeystrokes"));
+            try
+            {
+                lstHotkeys.Items.Clear();
+                string file = Path.Combine(appDir, "hotkeys.cfg");
+
+                using (StreamReader reader = File.OpenText(file))
+                {
+                    lstHotkeys.BeginUpdate();
+                    while (reader.Peek() >= 0)
+                    {
+                        string line = reader.ReadLine();
+                        List<string> list = line.Split('|').ToList<string>();
+
+                        ListViewItem item = new ListViewItem(list[0]);
+
+                        bool firstCol = true;
+                        foreach (string column in list)
+                        {
+                            if (!firstCol) item.SubItems.Add(column);
+                            firstCol = false;
+                        }
+
+                        lstHotkeys.Items.Add(item);
+
+                    }
+                    lstHotkeys.EndUpdate();
+                }
+
+            }
+
+            catch { }
+
+            resizeHotkeyColumns();
         }
 
-        // save config file
         private void saveConfig()
         {
-            // folders
             settings.SaveSetting("Mp3Dir", txtSetFolder.Text);
             settings.SaveSetting("Hotkey1", txtSet1.Text);
             settings.SaveSetting("Hotkey2", txtSet2.Text);
@@ -145,83 +177,74 @@ namespace PatkaPlayer
             settings.SaveSetting("Hotkey11", txtSet11.Text);
             settings.SaveSetting("Hotkey12", txtSet12.Text);
 
-            // timer 1 settings
             settings.SaveSetting("Timer1MinHour", numericMinHour1.Value.ToString());
             settings.SaveSetting("Timer1MinMin", numericMinMin1.Value.ToString());
             settings.SaveSetting("Timer1MinSec", numericMinSec1.Value.ToString());
             settings.SaveSetting("Timer1MaxHour", numericMaxHour1.Value.ToString());
             settings.SaveSetting("Timer1MaxMin", numericMaxMin1.Value.ToString());
             settings.SaveSetting("Timer1MaxSec", numericMaxSec1.Value.ToString());
-            settings.SaveSetting("Timer1ClipsAll", radioClipsAll1.Checked.ToString());
 
-            // timer 2 settings
             settings.SaveSetting("Timer2MinHour", numericMinHour2.Value.ToString());
             settings.SaveSetting("Timer2MinMin", numericMinMin2.Value.ToString());
             settings.SaveSetting("Timer2MinSec", numericMinSec2.Value.ToString());
             settings.SaveSetting("Timer2MaxHour", numericMaxHour2.Value.ToString());
             settings.SaveSetting("Timer2MaxMin", numericMaxMin2.Value.ToString());
             settings.SaveSetting("Timer2MaxSec", numericMaxSec2.Value.ToString());
-            settings.SaveSetting("Timer2ClipsAll", radioClipsAll2.Checked.ToString());
 
-            // log
             settings.SaveSetting("Logging", checkLog.Checked.ToString());
             settings.SaveSetting("RememberDaily", checkDaily.Checked.ToString());
 
-            // tray
             settings.SaveSetting("TrayIcon", checkTrayIcon.Checked.ToString());
             settings.SaveSetting("BalloonPlay", checkBalloonPlay.Checked.ToString());
             settings.SaveSetting("BalloonTimer", checkBalloonTimer.Checked.ToString());
 
-            // misc
             settings.SaveSetting("Transparency", numericTransparency.Value.ToString());
             settings.SaveSetting("Latency", comboLatency.Text);
             settings.SaveSetting("ScrollLock", checkScrollLock.Checked.ToString());
 
-            // hotkeys
-            settings.SaveSetting("HotkeyPlayPreMod", txtPlayPreMod.Text);
-            settings.SaveSetting("HotkeyRandomMod", txtRandomMod.Text);
-            settings.SaveSetting("HotkeyRandomKey", txtRandomKey.Text);
-            settings.SaveSetting("HotkeyStopMod", txtStopMod.Text);
-            settings.SaveSetting("HotkeyStopKey", txtStopKey.Text);
-            settings.SaveSetting("HotkeyReplayMod", txtReplayMod.Text);
-            settings.SaveSetting("HotkeyReplayKey", txtReplayKey.Text);
-            settings.SaveSetting("HotkeyTimer1Mod", txtTimer1Mod.Text);
-            settings.SaveSetting("HotkeyTimer1Key", txtTimer1Key.Text);
-            settings.SaveSetting("HotkeyTimer2Mod", txtTimer2Mod.Text);
-            settings.SaveSetting("HotkeyTimer2Key", txtTimer2Key.Text);
-            settings.SaveSetting("HotkeyStopTimerMod", txtStopTimerMod.Text);
-            settings.SaveSetting("HotkeyStopTimerKey", txtStopTimerKey.Text);
             settings.SaveSetting("HotkeyWarning", checkGlobalKeyWarning.Checked.ToString());
 
-            // send keys
-            settings.SaveSetting("SendkeyPlayMod", txtKeystrokePlayMod.Text);
-            settings.SaveSetting("SendkeyPlayKey", txtKeystrokePlayKey.Text);
-            settings.SaveSetting("SendkeyStopMod", txtKeystrokeStopMod.Text);
-            settings.SaveSetting("SendkeyStopKey", txtKeystrokeStopKey.Text);
-            settings.SaveSetting("SendKeystrokes", checkSendKeystrokes.Checked.ToString());
+            try
+            {
+                using (StreamWriter sw = new StreamWriter(Path.Combine(appDir, "hotkeys.cfg")))
+                {
+                    if (lstHotkeys.Items.Count > 0)
+                    {
+                        foreach (ListViewItem item in lstHotkeys.Items)
+                        {
+                            bool firstRow = true;
+                            string str = "";
+
+                            foreach (ListViewItem.ListViewSubItem sub in item.SubItems)
+                            {
+                                if (firstRow) str = sub.Text;
+                                else str += "|" + sub.Text;
+                                firstRow = false;
+                            }
+                            sw.WriteLine(str);
+                        }
+                    }
+                }
+            }
+
+            catch { }
+
         }
 
-        // OK button, saves config and reloads frmPlayer
         private void btnSetOk_Click(object sender, EventArgs e)
         {
-            int minTime1 = Convert.ToInt32((numericMinHour1.Value * 60 * 60) + (numericMinMin1.Value * 60) + numericMinSec1.Value);
-            int maxTime1 = Convert.ToInt32((numericMaxHour1.Value * 60 * 60) + (numericMaxMin1.Value * 60) + numericMaxSec1.Value);
-  
-            int minTime2 = Convert.ToInt32((numericMinHour2.Value * 60 * 60) + (numericMinMin2.Value * 60) + numericMinSec2.Value);
-            int maxTime2 = Convert.ToInt32((numericMaxHour2.Value * 60 * 60) + (numericMaxMin2.Value * 60) + numericMaxSec2.Value);
-
-            if (minTime1 > maxTime1 || minTime2 > maxTime2) MessageBox.Show("Minimum delays for timer cannot be larger than maximum delays.", "Timer error", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
-            else
-            {
-                saveConfig();
-                if (this.oldMp3Dir != txtSetFolder.Text) this._frmPlayer.InsertPanelButtons();
-                else this._frmPlayer.ReadSettings();
-                this.Close();
-            }
+            checkSave();
+            this.Close();
         }
 
         private void btnApply_Click(object sender, EventArgs e)
         {
+            checkSave();
+            btnApply.Enabled = false;
+        }
+
+        private void checkSave()
+        {
             int minTime1 = Convert.ToInt32((numericMinHour1.Value * 60 * 60) + (numericMinMin1.Value * 60) + numericMinSec1.Value);
             int maxTime1 = Convert.ToInt32((numericMaxHour1.Value * 60 * 60) + (numericMaxMin1.Value * 60) + numericMaxSec1.Value);
 
@@ -234,17 +257,14 @@ namespace PatkaPlayer
                 saveConfig();
                 if (this.oldMp3Dir != txtSetFolder.Text) this._frmPlayer.InsertPanelButtons();
                 else this._frmPlayer.ReadSettings();
-                btnApply.Enabled = false;
             }
         }
 
-        // Cancel button, closes settings dialog
         private void btnSetCancel_Click(object sender, EventArgs e)
         {
             this.Close();
         }
 
-        // set folder button
         private void btnSetFolder_Click(object sender, EventArgs e)
         {
             FolderBrowserDialog folder = new FolderBrowserDialog();
@@ -252,13 +272,11 @@ namespace PatkaPlayer
             if (Directory.Exists(txtSetFolder.Text)) folder.SelectedPath = txtSetFolder.Text;
             folder.Description = "\nSelect root folder for MP3 files";
             folder.ShowNewFolderButton = false;
-            //folder.RootFolder = Environment.SpecialFolder.MyComputer;
 
             DialogResult result = folder.ShowDialog();
             if (folder.SelectedPath != "") txtSetFolder.Text = folder.SelectedPath;
         }
 
-        // dialog for choosing mp3 to hotkey
         private string setHotkeyFile()
         {
             if (Directory.Exists(txtSetFolder.Text))
@@ -430,199 +448,160 @@ namespace PatkaPlayer
             btnApply.Enabled = true;
         }
 
-        private void txtKey_Enter(object sender, EventArgs e)
+        private void btnAddHotkey_Click(object sender, EventArgs e)
         {
-            TextBox textBox = (TextBox)sender;
-            txtChanged = false;
-            txtOrig = textBox.Text;
-            textBox.Text = "";
-            listMod.Clear();
-            textBox.BackColor = ColorTranslator.FromHtml("#b2d0ef");
-            textBox.Tag = null;
+            addHotkey();
         }
 
-        private void txtKey_Leave(object sender, EventArgs e)
+        private void btnEditHotkey_Click(object sender, EventArgs e)
         {
-            TextBox textBox = (TextBox)sender;
-            textBox.BackColor = SystemColors.Window;
-            if (!txtChanged) textBox.Text = txtOrig;
-            else if (textBox.Text != txtOrig) btnApply.Enabled = true;
+            editHotkey();
         }
 
-        private void txtKey_KeyDown(object sender, KeyEventArgs e)
+        private void resizeHotkeyColumns()
         {
-            e.SuppressKeyPress = true;
+            lstHotkeys.BeginUpdate();
+            clmAction.Width = 0;
+            clmHotkey.Width = -1;
+            clmGlobal.Width = -1;
+            if (clmHotkey.Width < 60) clmHotkey.Width = 60;
+            if (clmGlobal.Width < 60) clmGlobal.Width = 60;
+            clmAction.Width = lstHotkeys.ClientRectangle.Width - clmHotkey.Width - clmGlobal.Width;
+            lstHotkeys.EndUpdate();
         }
 
-        private void txtKey_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
+        private void btnRemoveHotkey_Click(object sender, EventArgs e)
         {
-            TextBox textBox = (TextBox)sender;
-            if (
-                e.KeyCode != Keys.Menu &&
-                e.KeyCode != Keys.ShiftKey &&
-                e.KeyCode != Keys.ControlKey &&
-                e.KeyCode != Keys.LWin &&
-                e.KeyCode != Keys.RWin &&
-                e.KeyCode != Keys.F1 &&
-                e.KeyCode != Keys.F2 &&
-                e.KeyCode != Keys.F3 &&
-                e.KeyCode != Keys.F4 &&
-                e.KeyCode != Keys.F5 &&
-                e.KeyCode != Keys.F6 &&
-                e.KeyCode != Keys.F7 &&
-                e.KeyCode != Keys.F8 &&
-                e.KeyCode != Keys.F9 &&
-                e.KeyCode != Keys.F10 &&
-                e.KeyCode != Keys.F11 &&
-                e.KeyCode != Keys.F12 &&
-                e.KeyCode.ToString() != txtRandomKey.Text &&
-                e.KeyCode.ToString() != txtReplayKey.Text &&
-                e.KeyCode.ToString() != txtStopKey.Text &&
-                e.KeyCode.ToString() != txtTimer1Key.Text &&
-                e.KeyCode.ToString() != txtTimer2Key.Text &&
-                e.KeyCode.ToString() != txtStopTimerKey.Text
-                )
+            if (lstHotkeys.SelectedItems.Count > 0)
             {
-                txtChanged = true;
-                textBox.Text = e.KeyCode.ToString();
-                txtVersion.Focus();
+                int selected = lstHotkeys.SelectedItems[0].Index;
+
+                lstHotkeys.Items[selected].Remove();
+
+                if (lstHotkeys.Items.Count > selected) lstHotkeys.Items[selected].Selected = true;
+                else if (lstHotkeys.Items.Count > 0) lstHotkeys.Items[lstHotkeys.Items.Count - 1].Selected = true;
+                btnApply.Enabled = true;
+                //folderChanged = true;
             }
+
+            resizeHotkeyColumns();
         }
 
-        private void txtSendKey_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
+        private void editHotkey()
         {
-            TextBox textBox = (TextBox)sender;
-            if (
-                e.KeyCode != Keys.Menu &&
-                e.KeyCode != Keys.ShiftKey &&
-                e.KeyCode != Keys.ControlKey &&
-                e.KeyCode != Keys.LWin &&
-                e.KeyCode != Keys.RWin &&
-                e.KeyCode != Keys.F1 &&
-                e.KeyCode != Keys.F2 &&
-                e.KeyCode != Keys.F3 &&
-                e.KeyCode != Keys.F4 &&
-                e.KeyCode != Keys.F5 &&
-                e.KeyCode != Keys.F6 &&
-                e.KeyCode != Keys.F7 &&
-                e.KeyCode != Keys.F8 &&
-                e.KeyCode != Keys.F9 &&
-                e.KeyCode != Keys.F10 &&
-                e.KeyCode != Keys.F11 &&
-                e.KeyCode != Keys.F12 &&
-                char.IsLetterOrDigit((char)e.KeyCode) &&
-                e.KeyCode.ToString().IndexOf("Oem") == -1 &&
-                e.KeyCode.ToString().IndexOf("NumPad") == -1
-                )
-            {
-                txtChanged = true;
-                textBox.Text = e.KeyCode.ToString();
-                txtVersion.Focus();
-            }
-        }
+            FormHotkey set = new FormHotkey(this);
+            Action = lstHotkeys.SelectedItems[0].Text;
+            Hotkey = Hotkeys.KeyListToValueList(lstHotkeys.SelectedItems[0].SubItems[1].Text);
 
-        private void txtMod_KeyDown(object sender, KeyEventArgs e)
-        {
-            TextBox textBox = (TextBox)sender;
-            e.SuppressKeyPress = true;
+            if (lstHotkeys.SelectedItems[0].SubItems[2].Text == "X") Global = true;
+            else Global = false;
 
-            if (e.KeyCode == Keys.Menu || e.KeyCode == Keys.ShiftKey || e.KeyCode == Keys.ControlKey || e.KeyCode == Keys.LWin || e.KeyCode == Keys.RWin || e.KeyCode == Keys.Escape)
+            set.Action = Action;
+            set.Hotkey = Hotkey;
+            set.Global = Global;
+            set.EditMode = true;
+            set.Topic = "Edit hotkey";
+
+            set.ShowDialog();
+            set.Dispose();
+
+            if (Action != "")
             {
-                txtChanged = true;
-                string key = "";
-                switch (e.KeyCode)
+                lstHotkeys.BeginUpdate();
+                lstHotkeys.SelectedItems[0].Remove();
+
+                ListViewItem item = new ListViewItem(Action);
+                item.SubItems.Add(Hotkeys.ValueListToKeyList(Hotkey));
+
+                if (Global) item.SubItems.Add("X");
+                else item.SubItems.Add("");
+
+                lstHotkeys.Items.Add(item);
+                lstHotkeys.EndUpdate();
+
+                foreach (ListViewItem findItem in lstHotkeys.Items)
                 {
-                    case Keys.Menu:
-                        key = "Alt";
-                        break;
-                    case Keys.ShiftKey:
-                        key = "Shift";
-                        break;
-                    case Keys.ControlKey:
-                        key = "Ctrl";
-                        break;
-                    case Keys.LWin:
-                        key = "Win";
-                        break;
-                    case Keys.RWin:
-                        key = "Win";
-                        break;
-                    case Keys.Escape:
-                        key = "";
-                        break;
+                    if (findItem.Text == Action && findItem.SubItems[1].Text == Hotkeys.ValueListToKeyList(Hotkey))
+                    {
+                        findItem.Selected = true;
+                    }
                 }
-
-                if (!listMod.Contains(key)) listMod.Add(key);
-                listMod.Sort();
-
-                textBox.Text = "";
-                for (int i = 0; i < listMod.Count; i++)
-                {
-                    if (i > 0) textBox.Text += "+" + listMod[i];
-                    else textBox.Text = listMod[i];
-                }
+                btnApply.Enabled = true;
             }
+
+            resizeHotkeyColumns();
         }
 
-        private void txtSendMod_KeyDown(object sender, KeyEventArgs e)
+        private void addHotkey()
         {
-            TextBox textBox = (TextBox)sender;
-            e.SuppressKeyPress = true;
+            FormHotkey set = new FormHotkey(this);
 
-            if (e.KeyCode == Keys.Menu || e.KeyCode == Keys.ShiftKey || e.KeyCode == Keys.ControlKey)
+            Action = "";
+            Hotkey = "";
+            Global = false;
+
+            set.Action = Action;
+            set.Hotkey = Hotkey;
+            set.Global = Global;
+            set.EditMode = false;
+            set.Topic = "Add new hotkey";
+
+            set.ShowDialog();
+            set.Dispose();
+
+            if (Action != "")
             {
-                txtChanged = true;
-                string key = "";
-                switch (e.KeyCode)
-                {
-                    case Keys.Menu:
-                        key = "Alt";
-                        break;
-                    case Keys.ShiftKey:
-                        key = "Shift";
-                        break;
-                    case Keys.ControlKey:
-                        key = "Ctrl";
-                        break;
-                }
+                lstHotkeys.BeginUpdate();
+                ListViewItem item = new ListViewItem(Action);
+                item.SubItems.Add(Hotkeys.ValueListToKeyList(Hotkey));
 
-                if (!listMod.Contains(key)) listMod.Add(key);
-                listMod.Sort();
+                if (Global) item.SubItems.Add("X");
+                else item.SubItems.Add("");
 
-                textBox.Text = "";
-                for (int i = 0; i < listMod.Count; i++)
+                lstHotkeys.Items.Add(item);
+                lstHotkeys.EndUpdate();
+
+                foreach (ListViewItem findItem in lstHotkeys.Items)
                 {
-                    if (i > 0) textBox.Text += "+" + listMod[i];
-                    else textBox.Text = listMod[i];
+                    if (findItem.Text == Action && findItem.SubItems[1].Text == Hotkeys.ValueListToKeyList(Hotkey))
+                    {
+                        findItem.Selected = true;
+                    }
                 }
+                btnApply.Enabled = true;
             }
+
+            resizeHotkeyColumns();
         }
 
-        private void txtMod_KeyUp(object sender, KeyEventArgs e)
+        private void lstHotkeys_SelectedIndexChanged(object sender, EventArgs e)
         {
-            listMod.Clear();
-            if (txtChanged) txtVersion.Focus();
-        }
-
-        private void txtKey_Click(object sender, EventArgs e)
-        {
-            TextBox textBox = (TextBox)sender;
-            if (textBox.Tag != null)
+            if (lstHotkeys.SelectedItems.Count > 0)
             {
-                textBox.Text = txtOrig;
-                txtVersion.Focus();
+                btnEditHotkey.Enabled = true;
+                btnRemoveHotkey.Enabled = true;
             }
-            textBox.Tag = "clicked";
+
+            else
+            {
+                btnEditHotkey.Enabled = false;
+                btnRemoveHotkey.Enabled = false;
+            }
         }
 
-        private void txtKey_DoubleClick(object sender, EventArgs e)
+        private void lstHotkeys_DoubleClick(object sender, EventArgs e)
         {
-            TextBox textBox = (TextBox)sender;
-            textBox.Text = "";
-            txtOrig = "";
-            txtChanged = true;
-            txtVersion.Focus();
+            editHotkey();
         }
 
-    } // class end
-} // namespace end
+        private void frmSettings_Load(object sender, EventArgs e)
+        {
+            resizeHotkeyColumns();
+        }
+
+        private void frmSettings_Shown(object sender, EventArgs e)
+        {
+            resizeHotkeyColumns();
+        }
+    }
+}

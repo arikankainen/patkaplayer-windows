@@ -31,4 +31,42 @@ namespace PatkaPlayer
         public static extern int RegisterWindowMessage(string message);
 
     }
+
+    public class MessageHelper
+    {
+        [DllImport("User32.dll", EntryPoint = "SendMessage")]
+        public static extern int SendMessage(int hWnd, int Msg, int wParam, ref COPYDATASTRUCT lParam);
+
+        public const int WM_COPYDATA = 0x4A;
+
+        public struct COPYDATASTRUCT
+        {
+            public IntPtr dwData;
+            public int cbData;
+            [MarshalAs(UnmanagedType.LPStr)]
+            public string lpData;
+        }
+
+        public int sendWindowsStringMessage(int hWnd, int wParam, string msg)
+        {
+            int result = 0;
+
+            if (hWnd > 0)
+            {
+                byte[] sarr = System.Text.Encoding.Default.GetBytes(msg);
+                int len = sarr.Length;
+                COPYDATASTRUCT cds;
+                cds.dwData = (IntPtr)100;
+                cds.lpData = msg;
+                cds.cbData = len + 1;
+                result = SendMessage(hWnd, WM_COPYDATA, wParam, ref cds);
+            }
+
+            return result;
+        }
+    }
+
+
+
+
 }

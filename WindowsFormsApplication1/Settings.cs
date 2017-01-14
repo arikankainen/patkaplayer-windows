@@ -7,58 +7,230 @@ using System.Configuration;
 using System.Windows;
 using System.Windows.Forms;
 using System.IO;
+using System.Globalization;
 
 namespace PatkaPlayer
 {
     class Settings
     {
-        public string LoadSetting(string key)
+        private string appDir = Path.GetDirectoryName(Application.ExecutablePath);
+        private string customPath;
+
+        private ExeConfigurationFileMap configFileMap2;
+        private Configuration configFile2;
+        private KeyValueConfigurationCollection settings2;
+
+        public Settings()
+        {
+            customPath = Path.Combine(appDir, "pp.cfg");
+        }
+
+        public string CfgFile
+        {
+            set
+            {
+                if (value != null)
+                {
+                    try
+                    {
+                        string dir = Path.GetDirectoryName(value);
+                        string file = Path.GetFileName(value);
+
+                        if (!Directory.Exists(dir)) Directory.CreateDirectory(dir);
+
+                        customPath = Path.Combine(dir, file);
+                    }
+
+                    catch { }
+                }
+            }
+
+            get
+            {
+                return customPath;
+            }
+
+        }
+
+        public void OpenSettings()
         {
             try
             {
-                string originalPath = Application.ExecutablePath;
-                string path = Path.GetDirectoryName(originalPath);
-                string file = Path.GetFileNameWithoutExtension(originalPath);
-                string customPath = path + "\\" + file + ".cfg";
+                configFileMap2 = new ExeConfigurationFileMap();
+                configFileMap2.ExeConfigFilename = customPath;
 
-                if (File.Exists(customPath))
+                configFile2 = ConfigurationManager.OpenMappedExeConfiguration(configFileMap2, ConfigurationUserLevel.None);
+                settings2 = configFile2.AppSettings.Settings;
+            }
+
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message + ex.StackTrace);
+            }
+        }
+
+        public void WriteSettings()
+        {
+            try
+            {
+                configFile2.Save(ConfigurationSaveMode.Modified);
+                ConfigurationManager.RefreshSection(configFile2.AppSettings.SectionInformation.Name);
+            }
+
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message + ex.StackTrace);
+            }
+        }
+
+        public string GetSetting(string key)
+        {
+            return GetSetting(key, "string", "");
+        }
+
+        public dynamic GetSetting(string key, string type, string def)
+        {
+            string result;
+
+            try { result = settings2[key].Value ?? null; }
+            catch { result = null; }
+
+            if (type == "int")
+            {
+                if (result == null) return Convert.ToInt32(def);
+                else return Convert.ToInt32(result);
+            }
+
+            if (type == "dec")
+            {
+                if (result == null) return Convert.ToDecimal(def);
+                else return Convert.ToDecimal(result);
+            }
+
+            if (type == "timespan")
+            {
+                if (result == null) return TimeSpan.Parse(def);
+                else return TimeSpan.Parse(result);
+            }
+
+            if (type == "float")
+            {
+                if (result == null) return float.Parse(def);
+                else return float.Parse(result);
+            }
+
+            if (type == "double")
+            {
+                if (result == null) return double.Parse(def, CultureInfo.InvariantCulture);
+                else return double.Parse(result, CultureInfo.InvariantCulture);
+            }
+
+            if (type == "bool")
+            {
+                if (result == null) return Convert.ToBoolean(def);
+                else return Convert.ToBoolean(result);
+            }
+
+            if (type == "string")
+            {
+                if (result == null) return def;
+                else return result;
+            }
+
+            else return result;
+        }
+
+        public void SetSetting(string key, string value)
+        {
+            try
+            {
+                if (settings2[key] == null)
                 {
-                    ExeConfigurationFileMap configFileMap = new ExeConfigurationFileMap();
-                    configFileMap.ExeConfigFilename = customPath;
-
-                    var configFile = ConfigurationManager.OpenMappedExeConfiguration(configFileMap, ConfigurationUserLevel.None);
-                    var settings = configFile.AppSettings.Settings;
-
-                    string result = settings[key].Value ?? null;
-
-                    return result;
+                    settings2.Add(key, value);
                 }
-                else return null;
+                else
+                {
+                    settings2[key].Value = value;
+                }
             }
-            
-            catch (Exception e) //(NullReferenceException)
+
+            catch { }
+        }
+
+
+
+        public string LoadSetting(string key)
+        {
+            return LoadSetting(key, "string", "");
+        }
+
+        public dynamic LoadSetting(string key, string type, string def)
+        {
+            string result;
+
+            try
             {
-                //MessageBox.Show(e.ToString());
-                return null;
+                ExeConfigurationFileMap configFileMap = new ExeConfigurationFileMap();
+                configFileMap.ExeConfigFilename = customPath;
+
+                Configuration configFile = ConfigurationManager.OpenMappedExeConfiguration(configFileMap, ConfigurationUserLevel.None);
+                KeyValueConfigurationCollection settings = configFile.AppSettings.Settings;
+
+                try { result = settings[key].Value ?? null; }
+                catch { result = null; }
             }
-            
-            /*
-            catch (ConfigurationErrorsException)
+
+            catch { result = null; }
+
+            if (type == "int")
             {
-                return null;
+                if (result == null) return Convert.ToInt32(def);
+                else return Convert.ToInt32(result);
             }
-            */
+
+            if (type == "dec")
+            {
+                if (result == null) return Convert.ToDecimal(def);
+                else return Convert.ToDecimal(result);
+            }
+
+            if (type == "timespan")
+            {
+                if (result == null) return TimeSpan.Parse(def);
+                else return TimeSpan.Parse(result);
+            }
+
+            if (type == "float")
+            {
+                if (result == null) return float.Parse(def);
+                else return float.Parse(result);
+            }
+
+            if (type == "double")
+            {
+                if (result == null) return double.Parse(def, CultureInfo.InvariantCulture);
+                else return double.Parse(result, CultureInfo.InvariantCulture);
+            }
+
+            if (type == "bool")
+            {
+                if (result == null) return Convert.ToBoolean(def);
+                else return Convert.ToBoolean(result);
+            }
+
+            if (type == "string")
+            {
+                if (result == null) return def;
+                else return result;
+            }
+
+            else return result;
         }
 
         public void SaveSetting(string key, string value)
         {
             try
             {
-                string originalPath = Application.ExecutablePath;
-                string path = Path.GetDirectoryName(originalPath);
-                string file = Path.GetFileNameWithoutExtension(originalPath);
-                string customPath = path + "\\" + file + ".cfg";
-
                 ExeConfigurationFileMap configFileMap = new ExeConfigurationFileMap();
                 configFileMap.ExeConfigFilename = customPath;
 
@@ -77,16 +249,30 @@ namespace PatkaPlayer
                 configFile.Save(ConfigurationSaveMode.Modified);
                 ConfigurationManager.RefreshSection(configFile.AppSettings.SectionInformation.Name);
             }
-            
-            catch (Exception e) //(ConfigurationErrorsException)
-            {
-                //MessageBox.Show(e.ToString());
-            }
+
+            catch { }
         }
 
-        private void showError()
+        public void EraseSetting(string key)
         {
-            MessageBox.Show("Cannot save config, write access denied.", "Error saving configuration", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            try
+            {
+                ExeConfigurationFileMap configFileMap = new ExeConfigurationFileMap();
+                configFileMap.ExeConfigFilename = customPath;
+
+                var configFile = ConfigurationManager.OpenMappedExeConfiguration(configFileMap, ConfigurationUserLevel.None);
+                var settings = configFile.AppSettings.Settings;
+
+                if (settings[key] != null)
+                {
+                    settings.Remove(key);
+                }
+
+                configFile.Save(ConfigurationSaveMode.Modified);
+                ConfigurationManager.RefreshSection(configFile.AppSettings.SectionInformation.Name);
+            }
+
+            catch { }
         }
 
 
