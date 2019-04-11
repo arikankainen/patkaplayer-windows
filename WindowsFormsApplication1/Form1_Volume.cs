@@ -71,7 +71,7 @@ namespace PatkaPlayer
             ushort CalcVol = (ushort)(CurrVol & 0x0000ffff);
             vol.Value = CalcVol / (ushort.MaxValue / 100);
             //labelVolume.Text = "Volume: " + vol.Value.ToString() + "%";
-            labelVolume.Text = vol.Value.ToString() + "%";
+            labelVolumePercent.Text = vol.Value.ToString() + "%";
         }
 
         private void setVol()
@@ -85,7 +85,7 @@ namespace PatkaPlayer
             waveOutSetVolume(IntPtr.Zero, NewVolumeAllChannels);
 
             //labelVolume.Text = "Volume: " + vol.Value.ToString() + "%";
-            labelVolume.Text = vol.Value.ToString() + "%";
+            labelVolumePercent.Text = vol.Value.ToString() + "%";
         }
 
         private void timerVol_Tick(object sender, EventArgs e)
@@ -103,19 +103,42 @@ namespace PatkaPlayer
 
             if (x < -1)
             {
-                if (vol.Value > 4) vol.Value -= 5;
+                if (vol.Value > 9) vol.Value -= 5;
                 else vol.Value = 0;
                 setVol();
             }
 
             if (x > 1)
             {
-                if (vol.Value < 96) vol.Value += 5;
+                if (vol.Value < 91) vol.Value += 5;
                 else vol.Value = 100;
                 setVol();
             }
         }
 
+        private void increaseVol()
+        {
+            if (vol.Value < 91) vol.Value += 5;
+            else vol.Value = 100;
+
+            dnVolume.SetBodyText = "Volume: " + vol.Value.ToString() + "%";
+            dnVolume.SetProgress = vol.Value;
+            dnVolume.ShowNotification();
+
+            setVol();
+        }
+
+        private void decreaseVol()
+        {
+            if (vol.Value > 9) vol.Value -= 5;
+            else vol.Value = 0;
+
+            dnVolume.SetBodyText = "Volume: " + vol.Value.ToString() + "%";
+            dnVolume.SetProgress = vol.Value;
+            dnVolume.ShowNotification();
+
+            setVol();
+        }
 
 
 

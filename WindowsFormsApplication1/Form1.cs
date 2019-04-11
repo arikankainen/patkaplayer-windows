@@ -16,17 +16,35 @@ using System.Windows.Forms.Design;
 using System.Runtime.InteropServices;
 using Microsoft.WindowsAPICodePack.Shell;
 using Microsoft.WindowsAPICodePack.Taskbar;
-
 using NAudio;
 using NAudio.Wave;
 using System.IO.Ports;
+using NAudio.CoreAudioApi;
+using System.Diagnostics;
+using System.Globalization;
+using Microsoft.Speech.Recognition;
+using Microsoft.Speech.Synthesis;
+
 
 namespace PatkaPlayer
 {
     public partial class frmPlayer : Form, IMessageFilter
     {
-        private VolumeControl volScreamer = new VolumeControl("screamer");
-        private VolumeControl volFirefox = new VolumeControl("opera");
+        [DllImport("user32.dll", SetLastError = true)]
+        public static extern void keybd_event(byte virtualKey, byte scanCode, uint flags, IntPtr extraInfo);
+        public const int VK_MEDIA_NEXT_TRACK = 0xB0;
+        public const int VK_MEDIA_PLAY_PAUSE = 0xB3;
+        public const int VK_MEDIA_PREV_TRACK = 0xB1;
+        public const int KEYEVENTF_EXTENDEDKEY = 0x0001; //Key down flag
+        public const int KEYEVENTF_KEYUP2 = 0x0002; //Key up flag
+
+        private AK.DesktopNotification dnVolume;
+
+        private static MMDeviceEnumerator enumer = new MMDeviceEnumerator();
+        private MMDevice dev = enumer.GetDefaultAudioEndpoint(DataFlow.Render, Role.Multimedia);
+
+        //private VolumeControl volScreamer = new VolumeControl("screamer");
+        //private VolumeControl volFirefox = new VolumeControl("opera");
 
         private TaskbarManager taskbar = TaskbarManager.Instance;
         private IWavePlayer waveOutDevice;
@@ -36,9 +54,9 @@ namespace PatkaPlayer
         private bool playpressed = false;
         private bool pause = false;
         private bool stop = true;
-        private bool randompressed = false;
+        private bool spotifyWasPlaying = false;
 
-        private string mp3Dir, hotkey1, hotkey2, hotkey3, hotkey4, hotkey5, hotkey6, hotkey7, hotkey8, hotkey9, hotkey10, hotkey11, hotkey12;
+        private string mp3Dir, hotkey1, hotkey2, hotkey3, hotkey4, hotkey5, hotkey6, hotkey7, hotkey8, hotkey9, hotkey10, hotkey11, hotkey12, hotkey13, hotkey14, hotkey15;
         private int timer1MinHour, timer1MinMin, timer1MinSec, timer1MaxHour, timer1MaxMin, timer1MaxSec, timer2MinHour, timer2MinMin, timer2MinSec, timer2MaxHour, timer2MaxMin, timer2MaxSec;
         private string timer1Text, timer2Text;
         private decimal transNormal = 1;
@@ -46,7 +64,7 @@ namespace PatkaPlayer
         private bool trayIcon, balloonPlay, balloonTimer;
         private string dailyDate;
         private int dailyCount;
-        private string sendkeyPlayMod, sendkeyPlayKey, sendkeyStopMod, sendkeyStopKey, sendkeyPlayString, sendkeyStopString;
+        //private string sendkeyPlayMod, sendkeyPlayKey, sendkeyStopMod, sendkeyStopKey, sendkeyPlayString, sendkeyStopString;
 
         private bool hotkeyWarning, sendKeystrokes;
         private int latency;
@@ -54,18 +72,22 @@ namespace PatkaPlayer
         private bool keyDown = false;
 
         private bool sendMessages = true;
-
         private bool timer1Started = false;
         private bool timer2Started = false;
-        private string lastPlayed, lastPlayedFile;
+        private string lastPlayed, lastPlayedFile, lastPlayedFolder;
+
         private int lastRandomNumber = 0;
         private FormWindowState LastWindowState;
+
         private int lastWidth;
-        private int playCount = 0;
+
+        private int playCount = 0, totalPlayCount = 0;
+
         public int settingsPage;
         private bool tray = false;
 
         private static Timer timer = new Timer();
+        
         private static Timer timer1 = new Timer();
         private static Timer timer2 = new Timer();
         private static Timer timerVol = new Timer();
@@ -83,6 +105,15 @@ namespace PatkaPlayer
         public frmPlayer()
         {
             InitializeComponent();
+
+            dnVolume = new AK.DesktopNotification();
+            dnVolume.SetTopicText = "Pätkä Player";
+            dnVolume.SetImage = this.Icon.ToBitmap();
+            dnVolume.SetShowProgress = true;
+            dnVolume.NotificationClickEvent += new AK.NotificationClickEventHandler(Notification_Clicked);
+            dnVolume.NotificationProgressEvent += new AK.NotificationProgressEventHandler(Notification_Progress);
+            dnVolume.NotificationHideEvent += new EventHandler(Notification_Hide);
+
             Application.AddMessageFilter(this);
 
             if (!File.Exists("naudio.dll"))
@@ -92,11 +123,15 @@ namespace PatkaPlayer
                 else Environment.Exit(1);
             }
 
-            labelVersion.Text = "v2.0";
+            Version version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
+            labelVersion.Text = String.Format("Pätkä Player v{0}.{1}.{2}.{3}", version.Major, version.Minor, version.Build, version.Revision);
+
+            //labelVersion.Text = "Pätkä Player v2.1";
 
             notifyIcon1.Visible = false;
             notifyIcon1.MouseUp += new MouseEventHandler(NotifyIcon1_Click);
 
+            this.ResizeBegin += new EventHandler(Form1_ResizeBegin);
             this.ResizeEnd += new EventHandler(Form1_ResizeEnd);
             this.SizeChanged += new EventHandler(Form1_SizeChanged);
             this.Layout += new LayoutEventHandler(Form1_Layout);
@@ -121,23 +156,24 @@ namespace PatkaPlayer
             toolStripPlay.Renderer = new MySR();
             toolStripSettings.Renderer = new MySR();
 
-            pbPosition.Left = panelFileFilterG.Left;
+            pbPosition.Left = labelRefreshMs.Right + 48;
             pbPosition.Top = 9;
-            pbPosition.Width = panelFileFilterG.Width;
+            //pbPosition.Width = (toolStripSettings.Left - 40) - pbPosition.Left;
+            pbPosition.Width = (radioFolders.Left - 40) - pbPosition.Left;
             pbPosition.Height = 23;
 
             pbPosition.ForeColor = ColorTranslator.FromHtml("#8ab3da");
             pbPosition.BackColor = ColorTranslator.FromHtml("#7fa9d2");
             pbPosition.Value = 0;
             pbPosition.Name = "progressPosition";
-            pbPosition.Anchor = AnchorStyles.Top | AnchorStyles.Left;
+            pbPosition.Anchor = AnchorStyles.Top | AnchorStyles.Right | AnchorStyles.Left;
             pbPosition.ProgressText = "";
             this.Controls.Add(pbPosition);
 
             pbPosition.MouseDown += new MouseEventHandler(pbPosition_MouseDown);
             pbPosition.MouseMove += new MouseEventHandler(pbPosition_MouseMove);
 
-            vol.Left = labelVolumeName.Right + 5;
+            vol.Left = labelVolumeName.Right + 2;
             vol.Top = 14;
             vol.Width = 100;
             vol.Height = 14;
@@ -151,11 +187,27 @@ namespace PatkaPlayer
             vol.MouseWheel += new MouseEventHandler(vol_MouseWheel);
             vol.MouseMove += new MouseEventHandler(vol_MouseMove);
 
-            labelVolume.Left = vol.Right + 5;
+            labelVolumePercent.Left = vol.Right + 2;
 
             buttonLocations();
             InsertPanelButtons();
-            getPorts();
+        }
+
+        private void Notification_Clicked(object sender, AK.NotificationClickEventArgs e)
+        {
+            //MessageBox.Show("Sender: " + sender.ToString() + Environment.NewLine + "Address: " + e.Address);
+        }
+
+        private void Notification_Progress(object sender, AK.NotificationProgressEventArgs e)
+        {
+            //this.Text = e.ProgressValue.ToString() + "% (" + e.MousePressed.ToString() + ")";
+            //if (e.MousePressed) count = e.ProgressValue;
+            //pressed = e.MousePressed;
+        }
+
+        private void Notification_Hide(object sender, EventArgs e)
+        {
+            //this.Text = "Hide";
         }
 
         private void buttonLocations()
@@ -205,6 +257,7 @@ namespace PatkaPlayer
 
             lastPlayedFile = Path.GetFileNameWithoutExtension(fileToPlay);
             lastPlayed = pathToPlay.Substring(pathToPlay.LastIndexOf("\\") + 1) + " - " + Path.GetFileNameWithoutExtension(fileToPlay);
+            lastPlayedFolder = Path.GetFileNameWithoutExtension(pathToPlay);
 
             this.Text = lastPlayedFile;
             labelLastPlayed.Text = lastPlayed;
@@ -216,7 +269,8 @@ namespace PatkaPlayer
             loadTrack(fileToPlay, latency * 2);
             playTrack();
 
-            sendName("<row1>" + Path.GetFileNameWithoutExtension(fileToPlay) + "</row1>");
+            sendWindowsMessage("<pp_file>" + Path.GetFileNameWithoutExtension(fileToPlay) + "</pp_file>");
+            sendWindowsMessage("<pp_folder>" + Path.GetFileNameWithoutExtension(pathToPlay) + "</pp_folder>");
 
             if (logging)
             {
@@ -245,15 +299,28 @@ namespace PatkaPlayer
                 }
             }
 
-            playCount++;
+            getCount(true);
+        }
+
+        private void getCount(bool increase)
+        {
+            if (increase)
+            {
+                playCount++;
+                totalPlayCount++;
+            }
             if (rememberDaily) saveDailyDate();
-            labelClipsPlayed.Text = "Play count: " + playCount.ToString();
+
+            labelClipsPlayed.Text = "Play count today: " + playCount.ToString() + " / Total: " + totalPlayCount.ToString();
+
+            sendWindowsMessage("<pp_today>Today: " + playCount.ToString() + "</pp_today>");
+            sendWindowsMessage("<pp_total>Total: " + totalPlayCount.ToString() + "</pp_total>");
         }
 
         private void saveDailyDate()
         {
             dailyDate = settings.LoadSetting("DailyDate");
-            dailyCount = Convert.ToInt32(settings.LoadSetting("DailyCount"));
+            dailyCount = settings.LoadSetting("DailyCount", "int", "0");
 
             if (dailyCount > playCount) playCount = dailyCount;
             
@@ -430,55 +497,49 @@ namespace PatkaPlayer
         public void ReadSettings()
         {
             mp3Dir = settings.LoadSetting("Mp3Dir");
-            hotkey1 = settings.LoadSetting("Hotkey1");
-            hotkey2 = settings.LoadSetting("Hotkey2");
-            hotkey3 = settings.LoadSetting("Hotkey3");
-            hotkey4 = settings.LoadSetting("Hotkey4");
-            hotkey5 = settings.LoadSetting("Hotkey5");
-            hotkey6 = settings.LoadSetting("Hotkey6");
-            hotkey7 = settings.LoadSetting("Hotkey7");
-            hotkey8 = settings.LoadSetting("Hotkey8");
-            hotkey9 = settings.LoadSetting("Hotkey9");
-            hotkey10 = settings.LoadSetting("Hotkey10");
-            hotkey11 = settings.LoadSetting("Hotkey11");
-            hotkey12 = settings.LoadSetting("Hotkey12");
 
-            timer1MinHour = Convert.ToInt32(settings.LoadSetting("Timer1MinHour"));
-            timer1MinMin = Convert.ToInt32(settings.LoadSetting("Timer1MinMin"));
-            timer1MinSec = Convert.ToInt32(settings.LoadSetting("Timer1MinSec"));
-            timer1MaxHour = Convert.ToInt32(settings.LoadSetting("Timer1MaxHour"));
-            timer1MaxMin = Convert.ToInt32(settings.LoadSetting("Timer1MaxMin"));
-            timer1MaxSec = Convert.ToInt32(settings.LoadSetting("Timer1MaxSec"));
+            timer1MinHour = settings.LoadSetting("Timer1MinHour", "int", "0");
+            timer1MinMin = settings.LoadSetting("Timer1MinMin", "int", "1");
+            timer1MinSec = settings.LoadSetting("Timer1MinSec", "int", "0");
+            timer1MaxHour = settings.LoadSetting("Timer1MaxHour", "int", "0");
+            timer1MaxMin = settings.LoadSetting("Timer1MaxMin", "int", "2");
+            timer1MaxSec = settings.LoadSetting("Timer1MaxSec", "int", "0");
 
-            timer2MinHour = Convert.ToInt32(settings.LoadSetting("Timer2MinHour"));
-            timer2MinMin = Convert.ToInt32(settings.LoadSetting("Timer2MinMin"));
-            timer2MinSec = Convert.ToInt32(settings.LoadSetting("Timer2MinSec"));
-            timer2MaxHour = Convert.ToInt32(settings.LoadSetting("Timer2MaxHour"));
-            timer2MaxMin = Convert.ToInt32(settings.LoadSetting("Timer2MaxMin"));
-            timer2MaxSec = Convert.ToInt32(settings.LoadSetting("Timer2MaxSec"));
+            timer2MinHour = settings.LoadSetting("Timer2MinHour", "int", "0");
+            timer2MinMin = settings.LoadSetting("Timer2MinMin", "int", "1");
+            timer2MinSec = settings.LoadSetting("Timer2MinSec", "int", "0");
+            timer2MaxHour = settings.LoadSetting("Timer2MaxHour", "int", "0");
+            timer2MaxMin = settings.LoadSetting("Timer2MaxMin", "int", "2");
+            timer2MaxSec = settings.LoadSetting("Timer2MaxSec", "int", "0");
             
-            logging = Convert.ToBoolean(settings.LoadSetting("Logging"));
-            rememberDaily = Convert.ToBoolean(settings.LoadSetting("RememberDaily"));
+            logging = settings.LoadSetting("Logging", "bool", "false");
+            rememberDaily = settings.LoadSetting("RememberDaily", "bool", "true");
 
-            trayIcon = Convert.ToBoolean(settings.LoadSetting("TrayIcon"));
-            balloonPlay = Convert.ToBoolean(settings.LoadSetting("BalloonPlay"));
-            balloonTimer = Convert.ToBoolean(settings.LoadSetting("BalloonTimer"));
+            trayIcon = settings.LoadSetting("TrayIcon", "bool", "false");
+            balloonPlay = settings.LoadSetting("BalloonPlay", "bool", "false");
+            balloonTimer = settings.LoadSetting("BalloonTimer", "bool", "false");
             
-            transNormal = Convert.ToDecimal(settings.LoadSetting("Transparency") ?? "1");
-            latency = Convert.ToInt32(settings.LoadSetting("Latency"));
-            if (latency < 50) latency = 200;
-            if (latency > 900) latency = 200;
+            transNormal = settings.LoadSetting("Transparency", "dec", "1");
+            latency = settings.LoadSetting("Latency", "int", "100");
             comboLatency.Text = latency.ToString();
-            scrollLock = Convert.ToBoolean(settings.LoadSetting("ScrollLock"));
+            scrollLock = settings.LoadSetting("ScrollLock", "bool", "false");
 
-            hotkeyWarning = Convert.ToBoolean(settings.LoadSetting("HotkeyWarning"));
+            hotkeyWarning = settings.LoadSetting("HotkeyWarning", "bool", "true");
 
             if (trayIcon) notifyIcon1.Visible = true;
             else notifyIcon1.Visible = false;
 
-            if (rememberDaily) saveDailyDate();
-            labelClipsPlayed.Text = "Play count: " + playCount.ToString();
+            string originalPath = Application.ExecutablePath;
+            string pathname = Path.GetDirectoryName(originalPath);
+            string filename = Path.GetFileNameWithoutExtension(originalPath);
+            string customPath = pathname + "\\" + filename + ".log";
+            totalPlayCount = File.ReadLines(customPath).Count();
 
+            if (rememberDaily) saveDailyDate();
+            labelClipsPlayed.Text = "Play count today: " + playCount.ToString() + " / Total: " + totalPlayCount.ToString();
+
+            sendWindowsMessage("<pp_today>Today: " + playCount.ToString() + "</pp_today>");
+            sendWindowsMessage("<pp_total>Total: " + totalPlayCount.ToString() + "</pp_total>");
             this.Opacity = Convert.ToDouble(transNormal);
             
             readHotkeys();
@@ -516,18 +577,52 @@ namespace PatkaPlayer
 
             if (timer2Started) labelTimer2.Text = "Timer 2: on" + timer2Text;
             else labelTimer2.Text = "Timer 2: off" + timer2Text;
-        }
 
-        private void sendMessagePlay()
-        {
-            NativeMethods.PostMessage((IntPtr)NativeMethods.HWND_BROADCAST, NativeMethods.WM_AK_PLAYPLAYER, IntPtr.Zero, IntPtr.Zero);
+            loadButtons();
         }
 
         private void sendMessagePause()
         {
             NativeMethods.PostMessage((IntPtr)NativeMethods.HWND_BROADCAST, NativeMethods.WM_AK_PAUSEPLAYER, IntPtr.Zero, IntPtr.Zero);
+            if (spotifyWasPlaying || IsSpotifyPlaying())
+            {
+                keybd_event(VK_MEDIA_PLAY_PAUSE, 0, KEYEVENTF_EXTENDEDKEY, IntPtr.Zero);
+                keybd_event(VK_MEDIA_PLAY_PAUSE, 0, KEYEVENTF_KEYUP2, IntPtr.Zero);
+                spotifyWasPlaying = true;
+            }
         }
 
+        private void sendMessagePlay()
+        {
+            NativeMethods.PostMessage((IntPtr)NativeMethods.HWND_BROADCAST, NativeMethods.WM_AK_PLAYPLAYER, IntPtr.Zero, IntPtr.Zero);
+            if (spotifyWasPlaying)
+            {
+                if (!IsSpotifyPlaying())
+                {
+                    keybd_event(VK_MEDIA_PLAY_PAUSE, 0, KEYEVENTF_EXTENDEDKEY, IntPtr.Zero);
+                    keybd_event(VK_MEDIA_PLAY_PAUSE, 0, KEYEVENTF_KEYUP2, IntPtr.Zero);
+                }
+                spotifyWasPlaying = false;
+            }
+        }
+
+        private bool IsSpotifyPlaying()
+        {
+            bool playing = false;
+            Process[] workers = Process.GetProcesses();
+
+            foreach (Process worker in workers)
+            {
+                if (worker.ProcessName == "Spotify")
+                {
+                    if (worker.MainWindowTitle != "" && worker.MainWindowTitle != "Spotify" && worker.MainWindowTitle != "Spotify Premium") playing = true;
+                }
+
+                worker.Dispose();
+            }
+
+            return playing;
+        }
 
     }
 }

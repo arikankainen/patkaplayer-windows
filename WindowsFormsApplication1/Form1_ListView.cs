@@ -145,6 +145,7 @@ namespace PatkaPlayer
 
         private void resizeColumns()
         {
+            /*
             lstFolders.BeginUpdate();
             clmFolder.Width = 0;
             clmFolderName.Width = lstFolders.ClientRectangle.Width;
@@ -155,15 +156,27 @@ namespace PatkaPlayer
             clmFileName.Width = lstFiles.ClientRectangle.Width;
             lstFiles.EndUpdate();
 
+            lstWords.BeginUpdate();
+            clmWord.Width = lstWords.ClientRectangle.Width;
+            lstWords.EndUpdate();
+
+            lstClips.BeginUpdate();
+            clmClip.Width = 0;
+            clmClipName.Width = lstClips.ClientRectangle.Width;
+            lstClips.EndUpdate();
+
             lstPlaylist.BeginUpdate();
             clmPlaylist.Width = 0;
-            clmPlaylistFolder.Width = 340;
-            clmPlaylistFile.Width = 340;
+            clmPlaylistNum.Width = -1;
+            clmPlaylistFolder.Width = -1;
+            clmPlaylistFile.Width = -1;
 
-            int numWidth = lstPlaylist.ClientRectangle.Width - clmPlaylistFolder.Width - clmPlaylistFile.Width;
-            if (numWidth > 80) numWidth = 80;
-            clmPlaylistNum.Width = numWidth;
+            if (clmPlaylistNum.Width < 40) clmPlaylistNum.Width = 40;
+            if (clmPlaylistFolder.Width < 100) clmPlaylistFolder.Width = 100;
+            if (clmPlaylistFile.Width < 100) clmPlaylistFile.Width = 100;
+
             lstPlaylist.EndUpdate();
+            */
         }
 
         private void setPlaylistNumbers()
@@ -359,6 +372,8 @@ namespace PatkaPlayer
             setPlaylistNumbers();
         }
 
+        // ************************ lstFolders **********************************************
+
         private void lstFolders_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (lstFolders.SelectedItems.Count > 0) lastFolder = lstFolders.SelectedItems[0].Text;
@@ -378,10 +393,19 @@ namespace PatkaPlayer
                 if (item != null)
                 {
                     if (e.Button == MouseButtons.Left) addFiles(item.Text);
-                    //else if (e.Button == MouseButtons.Right) addPlaylistFolder(item.Text);
                 }
             }
         }
+
+        private void lstFolders_ItemDrag(object sender, ItemDragEventArgs e)
+        {
+            folderDragStarted = true;
+            dragFrom = (ListViewItem)e.Item;
+            dragFromLV = lstFolders;
+            lstFolders.DoDragDrop(e.Item, DragDropEffects.All);
+        }
+
+        // ************************ lstFiles **********************************************
 
         private void lstFiles_MouseDown(object sender, MouseEventArgs e)
         {
@@ -390,17 +414,52 @@ namespace PatkaPlayer
 
         private void lstFiles_MouseUp(object sender, MouseEventArgs e)
         {
-            if (!fileDragStarted && lstFiles.Items.Count > 0)
+            if (!fileDragStarted && lstFiles.Items.Count > 0 && lstFiles.SelectedItems.Count == 1)
             {
                 ListViewItem item = lstFiles.GetItemAt(e.X, e.Y);
 
                 if (item != null)
                 {
                     if (e.Button == MouseButtons.Left) playFile(item.Text);
-                    //else if (e.Button == MouseButtons.Right) addPlaylistFile(item.Text);
                 }
             }
         }
+
+        private void lstFiles_ItemDrag(object sender, ItemDragEventArgs e)
+        {
+            fileDragStarted = true;
+            dragFrom = (ListViewItem)e.Item;
+            dragFromLV = lstFiles;
+            lstFiles.DoDragDrop(e.Item, DragDropEffects.All);
+        }
+
+        private void lstFiles_DragDrop(object sender, DragEventArgs e)
+        {
+            if (dragFromLV == lstPlaylist)
+            {
+                removePlaylistItems();
+                lstPlaylist_Layout(null, null);
+            }
+
+            dragFromLV = null;
+        }
+
+        private void lstFiles_DragEnter(object sender, DragEventArgs e)
+        {
+            e.Effect = DragDropEffects.Move;
+        }
+
+        private void lstFiles_DragOver(object sender, DragEventArgs e)
+        {
+        }
+
+        private void lstFiles_GiveFeedback(object sender, GiveFeedbackEventArgs e)
+        {
+            //e.UseDefaultCursors = false;
+            //Cursor.Current = Cursors.Default;
+        }
+
+        // ************************ lstPlaylist **********************************************
 
         private void lstPlaylist_MouseDown(object sender, MouseEventArgs e)
         {
@@ -409,7 +468,7 @@ namespace PatkaPlayer
 
         private void lstPlaylist_MouseUp(object sender, MouseEventArgs e)
         {
-            if (lstPlaylist.Items.Count > 0 && !playlistDragStarted)
+            if (lstPlaylist.Items.Count > 0 && lstPlaylist.SelectedItems.Count == 1 && !playlistDragStarted)
             {
                 ListViewItem item = lstPlaylist.GetItemAt(e.X, e.Y);
 
@@ -439,73 +498,6 @@ namespace PatkaPlayer
             }
         }
 
-        private void removePlaylistItems()
-        {
-            if (lstPlaylist.SelectedItems.Count > 0)
-            {
-                int index = lstPlaylist.SelectedItems[0].Index;
-
-                foreach (ListViewItem item in lstPlaylist.SelectedItems)
-                {
-                    item.Remove();
-                }
-
-                if (lstPlaylist.Items.Count > 0)
-                {
-                    if (index < lstPlaylist.Items.Count) lstPlaylist.Items[index].Selected = true;
-                    else lstPlaylist.Items[lstPlaylist.Items.Count - 1].Selected = true;
-                }
-
-                createPlaylistList();
-                resizeColumns();
-                setPlaylistNumbers();
-            }
-        }
-
-        // ******************* Drag and drop / Folders ********************
-
-        private void lstFolders_ItemDrag(object sender, ItemDragEventArgs e)
-        {
-            folderDragStarted = true;
-            dragFrom = (ListViewItem)e.Item;
-            dragFromLV = lstFolders;
-            lstFolders.DoDragDrop(e.Item, DragDropEffects.All);
-        }
-
-        // ******************* Drag and drop / Files ********************
-
-        private void lstFiles_ItemDrag(object sender, ItemDragEventArgs e)
-        {
-            fileDragStarted = true;
-            dragFrom = (ListViewItem)e.Item;
-            dragFromLV = lstFiles;
-            lstFiles.DoDragDrop(e.Item, DragDropEffects.All);
-        }
-
-        private void lstFiles_DragDrop(object sender, DragEventArgs e)
-        {
-            if (dragFromLV == lstPlaylist) removePlaylistItems();
-
-            dragFromLV = null;
-        }
-
-        private void lstFiles_DragEnter(object sender, DragEventArgs e)
-        {
-            e.Effect = DragDropEffects.Move;
-        }
-
-        private void lstFiles_DragOver(object sender, DragEventArgs e)
-        {
-        }
-
-        private void lstFiles_GiveFeedback(object sender, GiveFeedbackEventArgs e)
-        {
-            //e.UseDefaultCursors = false;
-            //Cursor.Current = Cursors.Default;
-        }
-
-        // ******************* Drag and drop / Playlist ********************
-
         private void lstPlaylist_ItemDrag(object sender, ItemDragEventArgs e)
         {
             playlistDragStarted = true;
@@ -517,7 +509,24 @@ namespace PatkaPlayer
         private void lstPlaylist_DragDrop(object sender, DragEventArgs e)
         {
             if (dragFromLV == lstFolders) addPlaylistFolder(lstFolders.SelectedItems[0].Text);
-            else if (dragFromLV == lstFiles) addPlaylistFile(lstFiles.SelectedItems[0].Text);
+            else if (dragFromLV == lstFiles)
+            {
+                lstPlaylist.BeginUpdate();
+                foreach (ListViewItem item in lstFiles.SelectedItems)
+                {
+                    string folder = Path.GetDirectoryName(item.Text);
+                    ListViewItem newItem = new ListViewItem(item.Text);
+                    newItem.SubItems.Add("");
+                    newItem.SubItems.Add(Path.GetFileName(folder));
+                    newItem.SubItems.Add(Path.GetFileNameWithoutExtension(item.Text));
+                    lstPlaylist.Items.Add(newItem);
+                }
+                setPlaylistNumbers();
+                lstPlaylist.EndUpdate();
+
+                lstPlaylist_Layout(null, null);
+                createPlaylistList();
+            }
 
             dragFromLV = null;
         }
@@ -530,7 +539,7 @@ namespace PatkaPlayer
         private void lstPlaylist_DragOver(object sender, DragEventArgs e)
         {
             if (dragFromLV == lstPlaylist)
-                {
+            {
                 Point location = lstPlaylist.PointToClient(new Point(e.X, e.Y));
                 ListViewItem item = lstPlaylist.GetItemAt(location.X, location.Y);
 
@@ -564,6 +573,32 @@ namespace PatkaPlayer
         {
             //e.UseDefaultCursors = false;
             //Cursor.Current = Cursors.Default;
+        }
+
+        // **********************************************************************************
+
+        private void removePlaylistItems()
+        {
+            if (lstPlaylist.SelectedItems.Count > 0)
+            {
+                int index = lstPlaylist.SelectedItems[0].Index;
+
+                lstPlaylist.BeginUpdate();
+                foreach (ListViewItem item in lstPlaylist.SelectedItems)
+                {
+                    item.Remove();
+                }
+                lstPlaylist.EndUpdate();
+
+                if (lstPlaylist.Items.Count > 0)
+                {
+                    if (index < lstPlaylist.Items.Count) lstPlaylist.Items[index].Selected = true;
+                    else lstPlaylist.Items[lstPlaylist.Items.Count - 1].Selected = true;
+                }
+
+                createPlaylistList();
+                setPlaylistNumbers();
+            }
         }
 
         private void moveUp(int indexTo)
@@ -605,20 +640,25 @@ namespace PatkaPlayer
 
         // ******************* lstPlaylist filters ********************
 
-        private void btnRemoveFolderFilter_Click(object sender, EventArgs e)
+        private void quickFilter()
         {
-            txtFolderFilter.Text = "";
-        }
+            if (this.WindowState == FormWindowState.Minimized) this.WindowState = FormWindowState.Normal;
+            this.Show();
+            this.Activate();
+            this.Focus();
 
-        private void btnRemoveFileFilter_Click(object sender, EventArgs e)
-        {
-            txtFileFilter.Text = "";
-        }
 
-        private void btnRemovePlaylistFilter_Click(object sender, EventArgs e)
-        {
-            txtPlaylistFolderFilter.Text = "";
-            txtPlaylistFileFilter.Text = "";
+            if (lstFolders.Items.Count > 0)
+            {
+                lstFolders.Items[0].Selected = true;
+                radioFiles.Checked = true;
+                txtFileFilter.Text = "";
+                txtFileFilter.Focus();
+                addFiles("-");
+
+                createFolderListFiltered();
+                createFileListFiltered();
+            }
         }
 
         private void txtFolderFilter_TextChanged(object sender, EventArgs e)
@@ -694,7 +734,8 @@ namespace PatkaPlayer
                 lstFiles.EndUpdate();
                 resizeColumns();
                 */
-                addFiles(lastFolder);
+                if (Directory.Exists(lastFolder)) addFiles(lastFolder);
+                else addFiles("-");
             }
 
             else
@@ -825,6 +866,8 @@ namespace PatkaPlayer
             lstPlaylist.Items.Clear();
             lstPlaylist.EndUpdate();
             resizeColumns();
+
+            createPlaylistList();
         }
 
         private void btnLoadPlaylist_Click(object sender, EventArgs e)
@@ -919,6 +962,8 @@ namespace PatkaPlayer
                         lstPlaylist.EndUpdate();
                         resizeColumns();
                         setPlaylistNumbers();
+
+                        createPlaylistList();
                     }
 
                 }
@@ -926,9 +971,6 @@ namespace PatkaPlayer
 
             catch { }
         }
-
-
-
 
     }
 }

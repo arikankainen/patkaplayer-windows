@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>PatkaPlayer</RootNamespace>
     <AssemblyName>pp</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <PublishUrl>d:\Download\1\</PublishUrl>
@@ -39,6 +39,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -48,6 +49,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
     <ManifestCertificateThumbprint>5BF3BA4858048161BE93EF36ABA11CA55B11B327</ManifestCertificateThumbprint>
@@ -62,18 +64,22 @@
     <SignManifests>false</SignManifests>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>patka_001.ico</ApplicationIcon>
+    <ApplicationIcon>pp.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.Speech, Version=10.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Program Files\Microsoft Speech Platform SDK\Assembly\Microsoft.Speech.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.VisualBasic" />
-    <Reference Include="Microsoft.WindowsAPICodePack">
-      <HintPath>..\packages\WindowsAPICodePack-Core.1.1.1\lib\Microsoft.WindowsAPICodePack.dll</HintPath>
+    <Reference Include="Microsoft.WindowsAPICodePack, Version=1.1.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\WindowsAPICodePack-Core.1.1.2\lib\Microsoft.WindowsAPICodePack.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.WindowsAPICodePack.Shell">
       <HintPath>..\packages\WindowsAPICodePack-Shell.1.1.1\lib\Microsoft.WindowsAPICodePack.Shell.dll</HintPath>
     </Reference>
-    <Reference Include="NAudio">
-      <HintPath>..\packages\NAudio.1.7.1\lib\net35\NAudio.dll</HintPath>
+    <Reference Include="NAudio, Version=1.8.5.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\NAudio.1.8.5\lib\net35\NAudio.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
@@ -89,6 +95,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DesktopNotification.cs" />
     <Compile Include="Events.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -98,13 +105,13 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="Form1_Buttons.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Form1_Hotkeys.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Form1_ListView.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Form1_Arduino.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Form1_Volume.cs">
@@ -147,7 +154,6 @@
     <Compile Include="VisualStylesListView.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="VolumeControl.cs" />
     <Compile Include="WndProc.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -209,16 +215,13 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\dropdownarrow.png" />
-    <Content Include="patka.ico" />
-    <Content Include="patka1.ico" />
-    <Content Include="patka_001.ico" />
-    <Content Include="patka_2014_04_06.ico" />
     <None Include="Resources\mini.png" />
     <None Include="Resources\maxi.png" />
     <None Include="Resources\patka_taskbar.ico" />
     <None Include="Resources\patka_taskbar_red.ico" />
     <None Include="Resources\round_volume_hover.png" />
     <None Include="Resources\round_volume_normal.png" />
+    <Content Include="pp.ico" />
     <Content Include="TextFile1.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

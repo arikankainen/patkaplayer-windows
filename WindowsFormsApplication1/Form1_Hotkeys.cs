@@ -113,16 +113,30 @@ namespace PatkaPlayer
 
         private void hook_KeyPressed(object sender, KeyPressedEventArgs e)
         {
-            foreach (List<string> set in hotkeyList)
+            if (!keyDown)
             {
-                string keyPressed = e.Key.ToString();
-                string modPressed = e.Modifier.ToString();
-                if (modPressed == "None" || modPressed == "0") modPressed = null;
+                bool enableDelay = true;
+                foreach (List<string> set in hotkeyList)
+                {
+                    string keyPressed = e.Key.ToString();
+                    string modPressed = e.Modifier.ToString();
+                    if (modPressed == "None" || modPressed == "0") modPressed = null;
 
-                string keyList = Hotkeys.GetHotkeyKey(set[1]);
-                string modList = Hotkeys.GetHotkeyModifiersGlobal(set[1]);
+                    string keyList = Hotkeys.GetHotkeyKey(set[1]);
+                    string modList = Hotkeys.GetHotkeyModifiersGlobal(set[1]);
 
-                if (modList == modPressed && keyList == keyPressed) hotkeyAction(set[0]);
+                    if (modList == modPressed && keyList == keyPressed)
+                    {
+                        if (set[0].Contains("Volume")) enableDelay = false;
+                        hotkeyAction(set[0]);
+                    }
+                }
+
+                if (enableDelay)
+                {
+                    keyDown = true;
+                    timerKeyDown.Start();
+                }
             }
         }
 
@@ -143,12 +157,15 @@ namespace PatkaPlayer
                     break;
 
                 case "Volume up":
+                    increaseVol();
                     break;
 
                 case "Volume down":
+                    decreaseVol();
                     break;
 
-                case "Volume mute":
+                case "Quick filter":
+                    quickFilter();
                     break;
 
                 case "Focus application":
@@ -158,19 +175,16 @@ namespace PatkaPlayer
                     this.Focus();
                     break;
 
-                case "Play selected clip":
-                    break;
-
                 case "Playmode: Folder":
-                    btnFolder.PerformClick();
+                    radioFolders.Checked = true;
                     break;
 
                 case "Playmode: File":
-                    btnFile.PerformClick();
+                    radioFiles.Checked = true;
                     break;
 
                 case "Playmode: Playlist":
-                    btnPlaylist.PerformClick();
+                    radioPlaylist.Checked = true;
                     break;
 
                 case "Start timer1":
@@ -232,6 +246,44 @@ namespace PatkaPlayer
 
                 case "Play clip 12":
                     playFile(Path.Combine(mp3Dir, hotkey12));
+                    break;
+
+                case "Play clip 13":
+                    playFile(Path.Combine(mp3Dir, hotkey13));
+                    break;
+
+                case "Play clip 14":
+                    playFile(Path.Combine(mp3Dir, hotkey14));
+                    break;
+
+                case "Play clip 15":
+                    if (File.Exists(Path.Combine(mp3Dir, hotkey15))) playFile(Path.Combine(mp3Dir, hotkey15));
+                    break;
+
+                case "Spotify: Play/Pause":
+                    //SpotifyPlayPause();
+                    keybd_event(VK_MEDIA_PLAY_PAUSE, 0, KEYEVENTF_EXTENDEDKEY, IntPtr.Zero);
+                    keybd_event(VK_MEDIA_PLAY_PAUSE, 0, KEYEVENTF_KEYUP2, IntPtr.Zero);
+                    break;
+
+                case "Spotify: Previous":
+                    //SpotifyPrevious();
+                    keybd_event(VK_MEDIA_PREV_TRACK, 0, KEYEVENTF_EXTENDEDKEY, IntPtr.Zero);
+                    keybd_event(VK_MEDIA_PREV_TRACK, 0, KEYEVENTF_KEYUP2, IntPtr.Zero);
+                    break;
+
+                case "Spotify: Next":
+                    //SpotifyNext();
+                    keybd_event(VK_MEDIA_NEXT_TRACK, 0, KEYEVENTF_EXTENDEDKEY, IntPtr.Zero);
+                    keybd_event(VK_MEDIA_NEXT_TRACK, 0, KEYEVENTF_KEYUP2, IntPtr.Zero);
+                    break;
+
+                case "Speech: On":
+                    //checkSpeech.Checked = true;
+                    break;
+
+                case "Speech: Off":
+                    //checkSpeech.Checked = false;
                     break;
             }
         }

@@ -11,11 +11,34 @@ using System.Windows.Forms;
 using System.IO;
 using System.Configuration;
 using System.Windows;
+using System.Globalization;
+using Microsoft.Speech.Recognition;
+using Microsoft.Speech.Synthesis;
 
 namespace PatkaPlayer
 {
     public partial class frmPlayer
     {
+        private void btnFolderFilterClear_Click(object sender, EventArgs e)
+        {
+            txtFolderFilter.Text = "";
+        }
+
+        private void btnFileFilterClear_Click(object sender, EventArgs e)
+        {
+            txtFileFilter.Text = "";
+        }
+
+        private void btnPlaylistFolderFilterClear_Click(object sender, EventArgs e)
+        {
+            txtPlaylistFolderFilter.Text = "";
+        }
+
+        private void btnPlaylistFileFilterClear_Click(object sender, EventArgs e)
+        {
+            txtPlaylistFileFilter.Text = "";
+        }
+
         private void menuCenter_Click(object sender, EventArgs e)
         {
             Screen screen = Screen.FromPoint(Cursor.Position);
@@ -66,18 +89,22 @@ namespace PatkaPlayer
                 sendKeystrokes = true;
             }
         }
-        
+
+        private int percentageOld;
+
         private void timer_Tick(object sender, EventArgs e)
         {
             if (!volumeJustSet) getVol();
 
-            if (waveOutDevice != null)
+            if (waveOutDevice != null && audioFileReader != null)
             {
                 pbPosition.Maximum = Convert.ToInt32(audioFileReader.TotalTime.TotalMilliseconds);
                 pbPosition.Value = Convert.ToInt32(audioFileReader.CurrentTime.TotalMilliseconds);
 
                 double percentage = ((double)pbPosition.Value / (double)pbPosition.Maximum) * 100;
                 sendPosition((int)percentage);
+                //if ((int)percentage != percentageOld) sendWindowsMessage("<PP_PERCENT>" + ((int)percentage).ToString() + "</PP_PERCENT>");
+                percentageOld = (int)percentage;
 
                 if (waveOutDevice.PlaybackState == NAudio.Wave.PlaybackState.Stopped)
                 {
@@ -91,50 +118,123 @@ namespace PatkaPlayer
                     taskbar.SetProgressState(Microsoft.WindowsAPICodePack.Taskbar.TaskbarProgressBarState.Normal);
                     taskbar.SetProgressValue(Convert.ToInt32(audioFileReader.CurrentTime.TotalMilliseconds), Convert.ToInt32(audioFileReader.TotalTime.TotalMilliseconds));
                     pbPosition.ProgressText = audioFileReader.CurrentTime.ToString(@"mm\:ss\.ff") + " / " + audioFileReader.TotalTime.ToString(@"mm\:ss\.ff");
+                    sendWindowsMessage("<pp_time>" + audioFileReader.CurrentTime.ToString(@"mm\:ss\.f") + "  " + audioFileReader.TotalTime.ToString(@"mm\:ss\.f") + "</pp_time>");
+
                     if (scrollLock) SetScrollLockKeyAndScreamerRadioMute(true);
                 }
 
             }
         }
 
+        private bool playOld;
+        private void sendPosition(int pos)
+        {
+            if (play)
+            {
+                sendWindowsMessage("<pp_pos>" + pos.ToString() + "</pp_pos>");
+                playOld = true;
+            }
+
+            else if (playOld)
+            {
+                sendWindowsMessage("<pp_pos>0</pp_pos>");
+                playOld = false;
+            }
+        }
+
         private void frmPlayer_Shown(object sender, EventArgs e)
         {
-            labelVolume.Focus();
+            labelVolumePercent.Focus();
         }
 
         private void frmPlayer_Load(object sender, EventArgs e)
         {
             resizeColumns();
 
-            string volume = settings.LoadSetting("Volume");
-            if (volume == null) volume = "100";
-            int intVolume = Convert.ToInt32(volume);
-            vol.Value = intVolume;
+            vol.Value = settings.LoadSetting("Volume", "int", "100");
             setVol();
 
-            string port = settings.LoadSetting("Port");
-            if (port == null) port = "-";
-            if (comboPort.Items.Contains(port)) comboPort.Text = port;
+            randomTarget = settings.LoadSetting("Random", "string", "folder");
 
-            string random = settings.LoadSetting("Random");
-            if (random == null) random = "folder";
-            if (random == "folder") btnFolder.PerformClick();
-            else if (random == "file") btnFile.PerformClick();
-            else if (random == "playlist") btnPlaylist.PerformClick();
+            if (randomTarget == "folder") radioFolders.Checked = true;
+            else if (randomTarget == "file") radioFiles.Checked = true;
+            else if (randomTarget == "playlist") radioPlaylist.Checked = true;
+
+            this.Top = settings.LoadSetting("Top", "int", "0");
+            this.Left = settings.LoadSetting("Left", "int", "0");
+            this.Width = settings.LoadSetting("Width", "int", "1805");
+            this.Height = settings.LoadSetting("Height", "int", "856");
 
             listLoad("autosave.lst");
             timer.Start();
+
+            resizeColumns();
+        }
+
+        private void checkSpeech_CheckedChanged(object sender, EventArgs e)
+        {
+        }
+
+        private void lstFolders_Layout(object sender, LayoutEventArgs e)
+        {
+            if (!resizing)
+            {
+                lstFolders.BeginUpdate();
+                clmFolder.Width = 0;
+                clmFolderName.Width = lstFolders.ClientRectangle.Width;
+                lstFolders.EndUpdate();
+            }
+        }
+
+        private void lstFiles_Layout(object sender, LayoutEventArgs e)
+        {
+            if (!resizing)
+            {
+                lstFiles.BeginUpdate();
+                clmFile.Width = 0;
+                clmFileName.Width = lstFiles.ClientRectangle.Width;
+                lstFiles.EndUpdate();
+            }
+        }
+
+        private void lstPlaylist_Layout(object sender, LayoutEventArgs e)
+        {
+            if (!resizing)
+            {
+                lstPlaylist.BeginUpdate();
+                clmPlaylist.Width = 0;
+                clmPlaylistNum.Width = -1;
+                clmPlaylistFolder.Width = -1;
+                clmPlaylistFile.Width = -1;
+
+                if (clmPlaylistNum.Width < 40) clmPlaylistNum.Width = 40;
+                if (clmPlaylistFolder.Width < 100) clmPlaylistFolder.Width = 100;
+                if (clmPlaylistFile.Width < 100) clmPlaylistFile.Width = 100;
+
+                lstPlaylist.EndUpdate();
+            }
         }
 
         private void frmPlayer_FormClosing(object sender, FormClosingEventArgs e)
         {
+            //this.WindowState = FormWindowState.Normal;
+
             if (scrollLock) SetScrollLockKeyAndScreamerRadioMute(false);
 
             settings.SaveSetting("Volume", vol.Value.ToString());
-            settings.SaveSetting("Port", comboPort.Text);
             settings.SaveSetting("Random", randomTarget);
 
+            if (this.WindowState == FormWindowState.Normal)
+            {
+                settings.SaveSetting("Top", this.Top.ToString());
+                settings.SaveSetting("Left", this.Left.ToString());
+                settings.SaveSetting("Width", this.Width.ToString());
+                settings.SaveSetting("Height", this.Height.ToString());
+            }
+
             listSave("autosave.lst");
+
+            sendPosition(0);
         }
 
         private void timer1_Tick(object sender, EventArgs e)
@@ -205,32 +305,37 @@ namespace PatkaPlayer
 
         private void btnRandom_Click(object sender, EventArgs e)
         {
-            randompressed = true;
             playRandom();
         }
 
-        private void btnFolder_Click(object sender, EventArgs e)
+        private void radioFolders_CheckedChanged(object sender, EventArgs e)
         {
-            randomTarget = "folder";
-            btnFolder.Checked = true;
-            btnFile.Checked = false;
-            btnPlaylist.Checked = false;
+            if (radioFolders.Checked)
+            {
+                randomTarget = "folder";
+                radioFiles.Checked = false;
+                radioPlaylist.Checked = false;
+            }
         }
 
-        private void btnFile_Click(object sender, EventArgs e)
+        private void radioFiles_CheckedChanged(object sender, EventArgs e)
         {
-            randomTarget = "file";
-            btnFolder.Checked = false;
-            btnFile.Checked = true;
-            btnPlaylist.Checked = false;
+            if (radioFiles.Checked)
+            {
+                randomTarget = "file";
+                radioFolders.Checked = false;
+                radioPlaylist.Checked = false;
+            }
         }
 
-        private void btnPlaylist_Click(object sender, EventArgs e)
+        private void radioPlaylist_CheckedChanged(object sender, EventArgs e)
         {
-            randomTarget = "playlist";
-            btnFolder.Checked = false;
-            btnFile.Checked = false;
-            btnPlaylist.Checked = true;
+            if (radioPlaylist.Checked)
+            {
+                randomTarget = "playlist";
+                radioFolders.Checked = false;
+                radioFiles.Checked = false;
+            }
         }
 
         private void Form1_KeyEvent(object sender, KeyEventArgs e)
@@ -271,7 +376,6 @@ namespace PatkaPlayer
         private void btnStop_Click(object sender, EventArgs e)
         {
             playpressed = false;
-            randompressed = false;
             stopTrack();
         }
 
@@ -281,23 +385,34 @@ namespace PatkaPlayer
 
         private void Form1_SizeChanged(object sender, System.EventArgs e)
         {
-            buttonLocations();
+            //buttonLocations();
         }
 
         private void Form1_Layout(object sender, LayoutEventArgs e)
         {
-            buttonLocations();
-            resizeColumns();
+        }
+
+        private bool resizing = false;
+        private void Form1_ResizeBegin(object sender, System.EventArgs e)
+        {
+            resizing = true;
         }
 
         private void Form1_ResizeEnd(object sender, System.EventArgs e)
         {
+            resizing = false;
+
             if (FormWindowState.Minimized == this.WindowState)
             {
                 notifyIcon1.Visible = true;
                 notifyIcon1.ShowBalloonTip(500);
                 this.Hide();
             }
+            
+            buttonLocations();
+            lstFolders_Layout(null, null);
+            lstFiles_Layout(null, null);
+            lstPlaylist_Layout(null, null);
         }
 
         private void timerKeyDown_Tick(object sender, EventArgs e)
@@ -361,38 +476,14 @@ namespace PatkaPlayer
 
         private void pbPosition_MouseDown(object sender, MouseEventArgs e)
         {
-            if (waveOutDevice != null)
+            try
             {
-
-                int mouseX = e.Location.X + 2;
-                if (mouseX < 0) mouseX = 0;
-                //if (mouseX > pbPosition.Width) mouseX = pbPosition.Width;
-                if (mouseX > pbPosition.Width - 7) mouseX = pbPosition.Width - 7;
-
-                double trackBarPercent = (((double)pbPosition.Value / (double)pbPosition.Maximum));
-                double mousePercent = (((double)mouseX / ((double)pbPosition.Width)));
-
-                pbPosition.Value = (int)(pbPosition.Maximum * mousePercent);
-                audioFileReader.SetPosition((double)pbPosition.Value / 1000);
-
-                if (!play)
+                if (waveOutDevice != null)
                 {
-                    playpressed = true;
-                    if (!play && sendMessages) sendMessagePause();
 
-                    playTrack();
-                }
-            }
-        }
-
-        private void pbPosition_MouseMove(object sender, MouseEventArgs e)
-        {
-            if (waveOutDevice != null)
-            {
-                if (e.Button == MouseButtons.Left)
-                {
                     int mouseX = e.Location.X + 2;
                     if (mouseX < 0) mouseX = 0;
+                    //if (mouseX > pbPosition.Width) mouseX = pbPosition.Width;
                     if (mouseX > pbPosition.Width - 7) mouseX = pbPosition.Width - 7;
 
                     double trackBarPercent = (((double)pbPosition.Value / (double)pbPosition.Maximum));
@@ -407,15 +498,47 @@ namespace PatkaPlayer
                         if (!play && sendMessages) sendMessagePause();
 
                         playTrack();
-                        
                     }
                 }
             }
+            catch { }
+        }
+
+        private void pbPosition_MouseMove(object sender, MouseEventArgs e)
+        {
+            try
+            {
+                if (waveOutDevice != null)
+                {
+                    if (e.Button == MouseButtons.Left)
+                    {
+                        int mouseX = e.Location.X + 2;
+                        if (mouseX < 0) mouseX = 0;
+                        if (mouseX > pbPosition.Width - 7) mouseX = pbPosition.Width - 7;
+
+                        double trackBarPercent = (((double)pbPosition.Value / (double)pbPosition.Maximum));
+                        double mousePercent = (((double)mouseX / ((double)pbPosition.Width)));
+
+                        pbPosition.Value = (int)(pbPosition.Maximum * mousePercent);
+                        audioFileReader.SetPosition((double)pbPosition.Value / 1000);
+
+                        if (!play)
+                        {
+                            playpressed = true;
+                            if (!play && sendMessages) sendMessagePause();
+
+                            playTrack();
+
+                        }
+                    }
+                }
+            }
+            catch { }
         }
 
         private void comboLatency_SelectedIndexChanged(object sender, EventArgs e)
         {
-            label1.Focus();
+            //label1.Focus();
 
             int comboLatencyInt;
             
@@ -436,15 +559,19 @@ namespace PatkaPlayer
 
         private void timerWriteTime_Tick(object sender, EventArgs e)
         {
-            string originalPath = Application.ExecutablePath;
-            string pathname = Path.GetDirectoryName(originalPath);
-            string customPath = pathname + "\\" + "dummy.log";
-
-            string dummy = DateTime.Now.ToString("dd.MM.yyyy|HH:mm:ss");
-            using (StreamWriter file = new StreamWriter(@customPath, true, System.Text.Encoding.Default))
+            try
             {
-                file.WriteLine(dummy);
+                string originalPath = Application.ExecutablePath;
+                string pathname = Path.GetDirectoryName(originalPath);
+                string customPath = pathname + "\\" + "dummy.log";
+
+                string dummy = DateTime.Now.ToString("dd.MM.yyyy|HH:mm:ss");
+                using (StreamWriter file = new StreamWriter(@customPath, true, System.Text.Encoding.Default))
+                {
+                    file.WriteLine(dummy);
+                }
             }
+            catch { }
 
         }
 

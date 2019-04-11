@@ -51,6 +51,15 @@
             this.btnSetOk = new System.Windows.Forms.Button();
             this.btnSetCancel = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.btnErase15 = new System.Windows.Forms.Button();
+            this.txtSet15 = new System.Windows.Forms.TextBox();
+            this.btnSet15 = new System.Windows.Forms.Button();
+            this.btnErase14 = new System.Windows.Forms.Button();
+            this.txtSet14 = new System.Windows.Forms.TextBox();
+            this.btnSet14 = new System.Windows.Forms.Button();
+            this.btnErase13 = new System.Windows.Forms.Button();
+            this.txtSet13 = new System.Windows.Forms.TextBox();
+            this.btnSet13 = new System.Windows.Forms.Button();
             this.btnErase12 = new System.Windows.Forms.Button();
             this.txtSet12 = new System.Windows.Forms.TextBox();
             this.btnSet12 = new System.Windows.Forms.Button();
@@ -119,17 +128,17 @@
             this.numericMinMin2 = new System.Windows.Forms.NumericUpDown();
             this.label12 = new System.Windows.Forms.Label();
             this.numericMinHour2 = new System.Windows.Forms.NumericUpDown();
-            this.btnApply = new System.Windows.Forms.Button();
             this.tabHotkeys = new System.Windows.Forms.TabPage();
             this.groupHotkeys = new System.Windows.Forms.GroupBox();
-            this.btnEditHotkey = new System.Windows.Forms.Button();
-            this.btnRemoveHotkey = new System.Windows.Forms.Button();
-            this.btnAddHotkey = new System.Windows.Forms.Button();
             this.checkGlobalKeyWarning = new System.Windows.Forms.CheckBox();
             this.lstHotkeys = new PatkaPlayer.VisualStylesListView();
             this.clmAction = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.clmHotkey = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.clmGlobal = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.btnEditHotkey = new System.Windows.Forms.Button();
+            this.btnRemoveHotkey = new System.Windows.Forms.Button();
+            this.btnAddHotkey = new System.Windows.Forms.Button();
+            this.btnApply = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBox4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericMaxSec1)).BeginInit();
@@ -385,7 +394,7 @@
             // btnSetOk
             // 
             this.btnSetOk.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnSetOk.Location = new System.Drawing.Point(363, 503);
+            this.btnSetOk.Location = new System.Drawing.Point(363, 591);
             this.btnSetOk.Name = "btnSetOk";
             this.btnSetOk.Size = new System.Drawing.Size(75, 23);
             this.btnSetOk.TabIndex = 20;
@@ -396,7 +405,7 @@
             // btnSetCancel
             // 
             this.btnSetCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnSetCancel.Location = new System.Drawing.Point(444, 503);
+            this.btnSetCancel.Location = new System.Drawing.Point(444, 591);
             this.btnSetCancel.Name = "btnSetCancel";
             this.btnSetCancel.Size = new System.Drawing.Size(75, 23);
             this.btnSetCancel.TabIndex = 21;
@@ -409,6 +418,15 @@
             this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox1.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.groupBox1.Controls.Add(this.btnErase15);
+            this.groupBox1.Controls.Add(this.txtSet15);
+            this.groupBox1.Controls.Add(this.btnSet15);
+            this.groupBox1.Controls.Add(this.btnErase14);
+            this.groupBox1.Controls.Add(this.txtSet14);
+            this.groupBox1.Controls.Add(this.btnSet14);
+            this.groupBox1.Controls.Add(this.btnErase13);
+            this.groupBox1.Controls.Add(this.txtSet13);
+            this.groupBox1.Controls.Add(this.btnSet13);
             this.groupBox1.Controls.Add(this.btnErase12);
             this.groupBox1.Controls.Add(this.txtSet12);
             this.groupBox1.Controls.Add(this.btnSet12);
@@ -447,10 +465,109 @@
             this.groupBox1.Controls.Add(this.btnSet6);
             this.groupBox1.Location = new System.Drawing.Point(6, 67);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(572, 383);
+            this.groupBox1.Size = new System.Drawing.Size(572, 472);
             this.groupBox1.TabIndex = 22;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Hotkey actions";
+            // 
+            // btnErase15
+            // 
+            this.btnErase15.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnErase15.Location = new System.Drawing.Point(512, 435);
+            this.btnErase15.Name = "btnErase15";
+            this.btnErase15.Size = new System.Drawing.Size(50, 23);
+            this.btnErase15.TabIndex = 44;
+            this.btnErase15.Text = "Erase";
+            this.btnErase15.UseVisualStyleBackColor = true;
+            this.btnErase15.Click += new System.EventHandler(this.btnErase15_Click);
+            // 
+            // txtSet15
+            // 
+            this.txtSet15.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtSet15.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.txtSet15.Location = new System.Drawing.Point(120, 437);
+            this.txtSet15.Name = "txtSet15";
+            this.txtSet15.ReadOnly = true;
+            this.txtSet15.Size = new System.Drawing.Size(384, 20);
+            this.txtSet15.TabIndex = 43;
+            this.txtSet15.TextChanged += new System.EventHandler(this.valueChanged);
+            // 
+            // btnSet15
+            // 
+            this.btnSet15.Location = new System.Drawing.Point(10, 435);
+            this.btnSet15.Name = "btnSet15";
+            this.btnSet15.Size = new System.Drawing.Size(100, 23);
+            this.btnSet15.TabIndex = 42;
+            this.btnSet15.Text = "Select clip 15...";
+            this.btnSet15.UseVisualStyleBackColor = true;
+            this.btnSet15.Click += new System.EventHandler(this.btnSet15_Click);
+            // 
+            // btnErase14
+            // 
+            this.btnErase14.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnErase14.Location = new System.Drawing.Point(512, 406);
+            this.btnErase14.Name = "btnErase14";
+            this.btnErase14.Size = new System.Drawing.Size(50, 23);
+            this.btnErase14.TabIndex = 41;
+            this.btnErase14.Text = "Erase";
+            this.btnErase14.UseVisualStyleBackColor = true;
+            this.btnErase14.Click += new System.EventHandler(this.btnErase14_Click);
+            // 
+            // txtSet14
+            // 
+            this.txtSet14.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtSet14.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.txtSet14.Location = new System.Drawing.Point(120, 408);
+            this.txtSet14.Name = "txtSet14";
+            this.txtSet14.ReadOnly = true;
+            this.txtSet14.Size = new System.Drawing.Size(384, 20);
+            this.txtSet14.TabIndex = 40;
+            this.txtSet14.TextChanged += new System.EventHandler(this.valueChanged);
+            // 
+            // btnSet14
+            // 
+            this.btnSet14.Location = new System.Drawing.Point(10, 406);
+            this.btnSet14.Name = "btnSet14";
+            this.btnSet14.Size = new System.Drawing.Size(100, 23);
+            this.btnSet14.TabIndex = 39;
+            this.btnSet14.Text = "Select clip 14...";
+            this.btnSet14.UseVisualStyleBackColor = true;
+            this.btnSet14.Click += new System.EventHandler(this.btnSet14_Click);
+            // 
+            // btnErase13
+            // 
+            this.btnErase13.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnErase13.Location = new System.Drawing.Point(512, 377);
+            this.btnErase13.Name = "btnErase13";
+            this.btnErase13.Size = new System.Drawing.Size(50, 23);
+            this.btnErase13.TabIndex = 38;
+            this.btnErase13.Text = "Erase";
+            this.btnErase13.UseVisualStyleBackColor = true;
+            this.btnErase13.Click += new System.EventHandler(this.btnErase13_Click);
+            // 
+            // txtSet13
+            // 
+            this.txtSet13.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtSet13.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.txtSet13.Location = new System.Drawing.Point(120, 379);
+            this.txtSet13.Name = "txtSet13";
+            this.txtSet13.ReadOnly = true;
+            this.txtSet13.Size = new System.Drawing.Size(384, 20);
+            this.txtSet13.TabIndex = 37;
+            this.txtSet13.TextChanged += new System.EventHandler(this.valueChanged);
+            // 
+            // btnSet13
+            // 
+            this.btnSet13.Location = new System.Drawing.Point(10, 377);
+            this.btnSet13.Name = "btnSet13";
+            this.btnSet13.Size = new System.Drawing.Size(100, 23);
+            this.btnSet13.TabIndex = 36;
+            this.btnSet13.Text = "Select clip 13...";
+            this.btnSet13.UseVisualStyleBackColor = true;
+            this.btnSet13.Click += new System.EventHandler(this.btnSet13_Click);
             // 
             // btnErase12
             // 
@@ -837,11 +954,11 @@
             this.txtVersion.AutoSize = true;
             this.txtVersion.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtVersion.ForeColor = System.Drawing.SystemColors.ControlDark;
-            this.txtVersion.Location = new System.Drawing.Point(10, 506);
+            this.txtVersion.Location = new System.Drawing.Point(10, 594);
             this.txtVersion.Name = "txtVersion";
             this.txtVersion.Size = new System.Drawing.Size(188, 15);
             this.txtVersion.TabIndex = 24;
-            this.txtVersion.Text = "Pätkä Player © 2017 Ari Kankainen";
+            this.txtVersion.Text = "Pätkä Player © 2018 Ari Kankainen";
             // 
             // tabControl1
             // 
@@ -855,7 +972,7 @@
             this.tabControl1.Location = new System.Drawing.Point(10, 10);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(594, 483);
+            this.tabControl1.Size = new System.Drawing.Size(594, 571);
             this.tabControl1.TabIndex = 25;
             // 
             // tabFolders
@@ -865,7 +982,7 @@
             this.tabFolders.Location = new System.Drawing.Point(4, 22);
             this.tabFolders.Name = "tabFolders";
             this.tabFolders.Padding = new System.Windows.Forms.Padding(3);
-            this.tabFolders.Size = new System.Drawing.Size(586, 457);
+            this.tabFolders.Size = new System.Drawing.Size(586, 545);
             this.tabFolders.TabIndex = 0;
             this.tabFolders.Text = "Folders";
             this.tabFolders.UseVisualStyleBackColor = true;
@@ -880,7 +997,7 @@
             this.tabSettings.Location = new System.Drawing.Point(4, 22);
             this.tabSettings.Name = "tabSettings";
             this.tabSettings.Padding = new System.Windows.Forms.Padding(3);
-            this.tabSettings.Size = new System.Drawing.Size(586, 457);
+            this.tabSettings.Size = new System.Drawing.Size(586, 545);
             this.tabSettings.TabIndex = 2;
             this.tabSettings.Text = "Settings";
             this.tabSettings.UseVisualStyleBackColor = true;
@@ -1094,7 +1211,7 @@
             this.tabTimers.Location = new System.Drawing.Point(4, 22);
             this.tabTimers.Name = "tabTimers";
             this.tabTimers.Padding = new System.Windows.Forms.Padding(3);
-            this.tabTimers.Size = new System.Drawing.Size(586, 457);
+            this.tabTimers.Size = new System.Drawing.Size(586, 545);
             this.tabTimers.TabIndex = 1;
             this.tabTimers.Text = "Timers";
             this.tabTimers.UseVisualStyleBackColor = true;
@@ -1267,25 +1384,13 @@
             this.numericMinHour2.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.numericMinHour2.ValueChanged += new System.EventHandler(this.valueChanged);
             // 
-            // btnApply
-            // 
-            this.btnApply.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnApply.Enabled = false;
-            this.btnApply.Location = new System.Drawing.Point(525, 503);
-            this.btnApply.Name = "btnApply";
-            this.btnApply.Size = new System.Drawing.Size(75, 23);
-            this.btnApply.TabIndex = 26;
-            this.btnApply.Text = "Apply";
-            this.btnApply.UseVisualStyleBackColor = true;
-            this.btnApply.Click += new System.EventHandler(this.btnApply_Click);
-            // 
             // tabHotkeys
             // 
             this.tabHotkeys.Controls.Add(this.groupHotkeys);
             this.tabHotkeys.Location = new System.Drawing.Point(4, 22);
             this.tabHotkeys.Name = "tabHotkeys";
             this.tabHotkeys.Padding = new System.Windows.Forms.Padding(3);
-            this.tabHotkeys.Size = new System.Drawing.Size(586, 457);
+            this.tabHotkeys.Size = new System.Drawing.Size(586, 545);
             this.tabHotkeys.TabIndex = 3;
             this.tabHotkeys.Text = "Hotkeys";
             this.tabHotkeys.UseVisualStyleBackColor = true;
@@ -1301,10 +1406,56 @@
             this.groupHotkeys.Controls.Add(this.btnAddHotkey);
             this.groupHotkeys.Location = new System.Drawing.Point(6, 6);
             this.groupHotkeys.Name = "groupHotkeys";
-            this.groupHotkeys.Size = new System.Drawing.Size(572, 444);
+            this.groupHotkeys.Size = new System.Drawing.Size(572, 533);
             this.groupHotkeys.TabIndex = 0;
             this.groupHotkeys.TabStop = false;
             this.groupHotkeys.Text = "Hotkeys";
+            // 
+            // checkGlobalKeyWarning
+            // 
+            this.checkGlobalKeyWarning.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.checkGlobalKeyWarning.AutoSize = true;
+            this.checkGlobalKeyWarning.Location = new System.Drawing.Point(15, 506);
+            this.checkGlobalKeyWarning.Name = "checkGlobalKeyWarning";
+            this.checkGlobalKeyWarning.Size = new System.Drawing.Size(319, 17);
+            this.checkGlobalKeyWarning.TabIndex = 39;
+            this.checkGlobalKeyWarning.Text = "Show a warning if global hotkey is used by another application";
+            this.checkGlobalKeyWarning.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+            this.checkGlobalKeyWarning.UseVisualStyleBackColor = true;
+            // 
+            // lstHotkeys
+            // 
+            this.lstHotkeys.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.lstHotkeys.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.clmAction,
+            this.clmHotkey,
+            this.clmGlobal});
+            this.lstHotkeys.FullRowSelect = true;
+            this.lstHotkeys.Location = new System.Drawing.Point(10, 54);
+            this.lstHotkeys.Name = "lstHotkeys";
+            this.lstHotkeys.Size = new System.Drawing.Size(552, 440);
+            this.lstHotkeys.TabIndex = 7;
+            this.lstHotkeys.UseCompatibleStateImageBehavior = false;
+            this.lstHotkeys.View = System.Windows.Forms.View.Details;
+            this.lstHotkeys.SelectedIndexChanged += new System.EventHandler(this.lstHotkeys_SelectedIndexChanged);
+            this.lstHotkeys.DoubleClick += new System.EventHandler(this.lstHotkeys_DoubleClick);
+            // 
+            // clmAction
+            // 
+            this.clmAction.Text = "Action";
+            this.clmAction.Width = 206;
+            // 
+            // clmHotkey
+            // 
+            this.clmHotkey.Text = "Hotkey";
+            this.clmHotkey.Width = 232;
+            // 
+            // clmGlobal
+            // 
+            this.clmGlobal.Text = "Global";
+            this.clmGlobal.Width = 110;
             // 
             // btnEditHotkey
             // 
@@ -1339,56 +1490,23 @@
             this.btnAddHotkey.UseVisualStyleBackColor = true;
             this.btnAddHotkey.Click += new System.EventHandler(this.btnAddHotkey_Click);
             // 
-            // checkGlobalKeyWarning
+            // btnApply
             // 
-            this.checkGlobalKeyWarning.AutoSize = true;
-            this.checkGlobalKeyWarning.Location = new System.Drawing.Point(15, 417);
-            this.checkGlobalKeyWarning.Name = "checkGlobalKeyWarning";
-            this.checkGlobalKeyWarning.Size = new System.Drawing.Size(319, 17);
-            this.checkGlobalKeyWarning.TabIndex = 39;
-            this.checkGlobalKeyWarning.Text = "Show a warning if global hotkey is used by another application";
-            this.checkGlobalKeyWarning.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
-            this.checkGlobalKeyWarning.UseVisualStyleBackColor = true;
-            // 
-            // lstHotkeys
-            // 
-            this.lstHotkeys.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.lstHotkeys.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.clmAction,
-            this.clmHotkey,
-            this.clmGlobal});
-            this.lstHotkeys.FullRowSelect = true;
-            this.lstHotkeys.Location = new System.Drawing.Point(10, 54);
-            this.lstHotkeys.Name = "lstHotkeys";
-            this.lstHotkeys.Size = new System.Drawing.Size(552, 351);
-            this.lstHotkeys.TabIndex = 7;
-            this.lstHotkeys.UseCompatibleStateImageBehavior = false;
-            this.lstHotkeys.View = System.Windows.Forms.View.Details;
-            this.lstHotkeys.SelectedIndexChanged += new System.EventHandler(this.lstHotkeys_SelectedIndexChanged);
-            this.lstHotkeys.DoubleClick += new System.EventHandler(this.lstHotkeys_DoubleClick);
-            // 
-            // clmAction
-            // 
-            this.clmAction.Text = "Action";
-            this.clmAction.Width = 206;
-            // 
-            // clmHotkey
-            // 
-            this.clmHotkey.Text = "Hotkey";
-            this.clmHotkey.Width = 232;
-            // 
-            // clmGlobal
-            // 
-            this.clmGlobal.Text = "Global";
-            this.clmGlobal.Width = 110;
+            this.btnApply.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnApply.Enabled = false;
+            this.btnApply.Location = new System.Drawing.Point(525, 591);
+            this.btnApply.Name = "btnApply";
+            this.btnApply.Size = new System.Drawing.Size(75, 23);
+            this.btnApply.TabIndex = 26;
+            this.btnApply.Text = "Apply";
+            this.btnApply.UseVisualStyleBackColor = true;
+            this.btnApply.Click += new System.EventHandler(this.btnApply_Click);
             // 
             // frmSettings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(612, 535);
+            this.ClientSize = new System.Drawing.Size(612, 623);
             this.Controls.Add(this.btnApply);
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.txtVersion);
@@ -1557,5 +1675,14 @@
         private System.Windows.Forms.ColumnHeader clmHotkey;
         private System.Windows.Forms.ColumnHeader clmGlobal;
         private System.Windows.Forms.CheckBox checkGlobalKeyWarning;
+        private System.Windows.Forms.Button btnErase15;
+        private System.Windows.Forms.TextBox txtSet15;
+        private System.Windows.Forms.Button btnSet15;
+        private System.Windows.Forms.Button btnErase14;
+        private System.Windows.Forms.TextBox txtSet14;
+        private System.Windows.Forms.Button btnSet14;
+        private System.Windows.Forms.Button btnErase13;
+        private System.Windows.Forms.TextBox txtSet13;
+        private System.Windows.Forms.Button btnSet13;
     }
 }

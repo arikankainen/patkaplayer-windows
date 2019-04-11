@@ -33,7 +33,7 @@ namespace PatkaPlayer
                     offscreen.FillRectangle(new SolidBrush(SystemColors.ButtonFace), rec.Width - 1, rec.Height - 1, 1, 1);
                     offscreen.FillRectangle(new SolidBrush(SystemColors.ButtonFace), 0, rec.Height - 1, 1, 1);
 
-                    offscreen.FillRectangle(new SolidBrush(Color.FromArgb(255, 200, 200, 200)), 0, 0, rec.Width, rec.Height);
+                    offscreen.FillRectangle(new SolidBrush(Color.FromArgb(255, 174, 174, 174)), 0, 0, rec.Width, rec.Height);
                     offscreen.FillRectangle(new SolidBrush(Color.White), 1, 1, rec.Width - 2, rec.Height - 2);
 
                     if (Value > 0)
@@ -42,7 +42,8 @@ namespace PatkaPlayer
                         rec.Height = rec.Height - 2;
 
                         //offscreen.FillRectangle(new SolidBrush(ColorTranslator.FromHtml("#ccc")), 2, 2, rec.Width - 2, (rec.Height - 2));
-                        offscreen.FillRectangle(new SolidBrush(ColorTranslator.FromHtml("#b1d4f2")), 2, 2, rec.Width - 2, (rec.Height - 2));
+                        //offscreen.FillRectangle(new SolidBrush(ColorTranslator.FromHtml("#b1d4f2")), 2, 2, rec.Width - 2, (rec.Height - 2));
+                        offscreen.FillRectangle(new SolidBrush(ColorTranslator.FromHtml("#b1d4f2")), 1, 1, rec.Width, (rec.Height));
 
                     }
 

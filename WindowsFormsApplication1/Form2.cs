@@ -56,8 +56,8 @@ namespace PatkaPlayer
         private readonly frmPlayer _frmPlayer;
         private string oldMp3Dir;
         private List<string> listMod = new List<string>();
-        private bool txtChanged = false;
-        private string txtOrig = "";
+        //private bool txtChanged = false;
+        //private string txtOrig = "";
         private Settings settings = new Settings();
 
         public frmSettings()
@@ -97,34 +97,36 @@ namespace PatkaPlayer
             txtSet10.Text = settings.LoadSetting("Hotkey10");
             txtSet11.Text = settings.LoadSetting("Hotkey11");
             txtSet12.Text = settings.LoadSetting("Hotkey12");
+            txtSet13.Text = settings.LoadSetting("Hotkey13");
+            txtSet14.Text = settings.LoadSetting("Hotkey14");
+            txtSet15.Text = settings.LoadSetting("Hotkey15");
 
-            numericMinHour1.Value = Convert.ToInt32(settings.LoadSetting("Timer1MinHour"));
-            numericMinMin1.Value = Convert.ToInt32(settings.LoadSetting("Timer1MinMin"));
-            numericMinSec1.Value = Convert.ToInt32(settings.LoadSetting("Timer1MinSec"));
-            numericMaxHour1.Value = Convert.ToInt32(settings.LoadSetting("Timer1MaxHour"));
-            numericMaxMin1.Value = Convert.ToInt32(settings.LoadSetting("Timer1MaxMin"));
-            numericMaxSec1.Value = Convert.ToInt32(settings.LoadSetting("Timer1MaxSec"));
+            numericMinHour1.Value = settings.LoadSetting("Timer1MinHour", "int", "0");
+            numericMinMin1.Value = settings.LoadSetting("Timer1MinMin", "int", "1");
+            numericMinSec1.Value = settings.LoadSetting("Timer1MinSec", "int", "0");
+            numericMaxHour1.Value = settings.LoadSetting("Timer1MaxHour", "int", "0");
+            numericMaxMin1.Value = settings.LoadSetting("Timer1MaxMin", "int", "2");
+            numericMaxSec1.Value = settings.LoadSetting("Timer1MaxSec", "int", "0");
 
-            numericMinHour2.Value = Convert.ToInt32(settings.LoadSetting("Timer2MinHour"));
-            numericMinMin2.Value = Convert.ToInt32(settings.LoadSetting("Timer2MinMin"));
-            numericMinSec2.Value = Convert.ToInt32(settings.LoadSetting("Timer2MinSec"));
-            numericMaxHour2.Value = Convert.ToInt32(settings.LoadSetting("Timer2MaxHour"));
-            numericMaxMin2.Value = Convert.ToInt32(settings.LoadSetting("Timer2MaxMin"));
-            numericMaxSec2.Value = Convert.ToInt32(settings.LoadSetting("Timer2MaxSec"));
+            numericMinHour2.Value = settings.LoadSetting("Timer2MinHour", "int", "0");
+            numericMinMin2.Value = settings.LoadSetting("Timer2MinMin", "int", "1");
+            numericMinSec2.Value = settings.LoadSetting("Timer2MinSec", "int", "0");
+            numericMaxHour2.Value = settings.LoadSetting("Timer2MaxHour", "int", "0");
+            numericMaxMin2.Value = settings.LoadSetting("Timer2MaxMin", "int", "2");
+            numericMaxSec2.Value = settings.LoadSetting("Timer2MaxSec", "int", "0");
 
-            checkLog.Checked = Convert.ToBoolean(settings.LoadSetting("Logging"));
-            checkDaily.Checked = Convert.ToBoolean(settings.LoadSetting("RememberDaily"));
+            checkLog.Checked = settings.LoadSetting("Logging", "bool", "false");
+            checkDaily.Checked = settings.LoadSetting("RememberDaily", "bool", "true");
 
-            checkTrayIcon.Checked = Convert.ToBoolean(settings.LoadSetting("TrayIcon"));
-            checkBalloonPlay.Checked = Convert.ToBoolean(settings.LoadSetting("BalloonPlay"));
-            checkBalloonTimer.Checked = Convert.ToBoolean(settings.LoadSetting("BalloonTimer"));
+            checkTrayIcon.Checked = settings.LoadSetting("TrayIcon", "bool", "false");
+            checkBalloonPlay.Checked = settings.LoadSetting("BalloonPlay", "bool", "false");
+            checkBalloonTimer.Checked = settings.LoadSetting("BalloonTimer", "bool", "false");
             
-            numericTransparency.Value = Convert.ToDecimal(settings.LoadSetting("Transparency") ?? "1");
-            comboLatency.Text = settings.LoadSetting("Latency");
-            if (comboLatency.Text == "") comboLatency.Text = "200";
+            numericTransparency.Value = settings.LoadSetting("Transparency", "dec", "1");
+            comboLatency.Text = settings.LoadSetting("Latency", "string", "100");
 
-            checkScrollLock.Checked = Convert.ToBoolean(settings.LoadSetting("ScrollLock"));
-            checkGlobalKeyWarning.Checked = Convert.ToBoolean(settings.LoadSetting("HotkeyWarning"));
+            checkScrollLock.Checked = settings.LoadSetting("ScrollLock", "bool", "false");
+            checkGlobalKeyWarning.Checked = settings.LoadSetting("HotkeyWarning", "bool", "true");
 
             try
             {
@@ -176,6 +178,9 @@ namespace PatkaPlayer
             settings.SaveSetting("Hotkey10", txtSet10.Text);
             settings.SaveSetting("Hotkey11", txtSet11.Text);
             settings.SaveSetting("Hotkey12", txtSet12.Text);
+            settings.SaveSetting("Hotkey13", txtSet13.Text);
+            settings.SaveSetting("Hotkey14", txtSet14.Text);
+            settings.SaveSetting("Hotkey15", txtSet15.Text);
 
             settings.SaveSetting("Timer1MinHour", numericMinHour1.Value.ToString());
             settings.SaveSetting("Timer1MinMin", numericMinMin1.Value.ToString());
@@ -378,6 +383,24 @@ namespace PatkaPlayer
             if (file != "") txtSet12.Text = file;
         }
 
+        private void btnSet13_Click(object sender, EventArgs e)
+        {
+            string file = setHotkeyFile();
+            if (file != "") txtSet13.Text = file;
+        }
+
+        private void btnSet14_Click(object sender, EventArgs e)
+        {
+            string file = setHotkeyFile();
+            if (file != "") txtSet14.Text = file;
+        }
+
+        private void btnSet15_Click(object sender, EventArgs e)
+        {
+            string file = setHotkeyFile();
+            if (file != "") txtSet15.Text = file;
+        }
+
         private void btnErase1_Click(object sender, EventArgs e)
         {
             txtSet1.Text = "";
@@ -441,6 +464,21 @@ namespace PatkaPlayer
         private void btnErase12_Click(object sender, EventArgs e)
         {
             txtSet12.Text = "";
+        }
+
+        private void btnErase13_Click(object sender, EventArgs e)
+        {
+            txtSet13.Text = "";
+        }
+
+        private void btnErase14_Click(object sender, EventArgs e)
+        {
+            txtSet14.Text = "";
+        }
+
+        private void btnErase15_Click(object sender, EventArgs e)
+        {
+            txtSet15.Text = "";
         }
 
         private void numericLocation_KeyPress(object sender, KeyPressEventArgs e)
@@ -603,5 +641,6 @@ namespace PatkaPlayer
         {
             resizeHotkeyColumns();
         }
+
     }
 }
