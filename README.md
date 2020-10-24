@@ -6,3 +6,4 @@ Artikkeli projektista löytyy:
 https://www.arik.fi/ohjelmat_patka_player.php
 
 <img src="/docs/pp.png">
+<img src="/docs/pp_settings.png">
