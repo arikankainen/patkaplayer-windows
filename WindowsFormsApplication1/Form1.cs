@@ -22,8 +22,6 @@ using System.IO.Ports;
 using NAudio.CoreAudioApi;
 using System.Diagnostics;
 using System.Globalization;
-using Microsoft.Speech.Recognition;
-using Microsoft.Speech.Synthesis;
 
 
 namespace PatkaPlayer
@@ -43,9 +41,6 @@ namespace PatkaPlayer
         private static MMDeviceEnumerator enumer = new MMDeviceEnumerator();
         private MMDevice dev = enumer.GetDefaultAudioEndpoint(DataFlow.Render, Role.Multimedia);
 
-        //private VolumeControl volScreamer = new VolumeControl("screamer");
-        //private VolumeControl volFirefox = new VolumeControl("opera");
-
         private TaskbarManager taskbar = TaskbarManager.Instance;
         private IWavePlayer waveOutDevice;
         private AudioFileReader audioFileReader;
@@ -54,7 +49,7 @@ namespace PatkaPlayer
         private bool playpressed = false;
         private bool pause = false;
         private bool stop = true;
-        private bool spotifyWasPlaying = false;
+        //private bool spotifyWasPlaying = false;
 
         private string mp3Dir, hotkey1, hotkey2, hotkey3, hotkey4, hotkey5, hotkey6, hotkey7, hotkey8, hotkey9, hotkey10, hotkey11, hotkey12, hotkey13, hotkey14, hotkey15;
         private int timer1MinHour, timer1MinMin, timer1MinSec, timer1MaxHour, timer1MaxMin, timer1MaxSec, timer2MinHour, timer2MinMin, timer2MinSec, timer2MaxHour, timer2MaxMin, timer2MaxSec;
@@ -64,11 +59,10 @@ namespace PatkaPlayer
         private bool trayIcon, balloonPlay, balloonTimer;
         private string dailyDate;
         private int dailyCount;
-        //private string sendkeyPlayMod, sendkeyPlayKey, sendkeyStopMod, sendkeyStopKey, sendkeyPlayString, sendkeyStopString;
 
         private bool hotkeyWarning, sendKeystrokes;
         private int latency;
-        private bool scrollLock;
+        //private bool scrollLock;
         private bool keyDown = false;
 
         private bool sendMessages = true;
@@ -237,7 +231,7 @@ namespace PatkaPlayer
         private void playFile(string fileToPlay)
         {
             int comboLatencyInt;
-            if (scrollLock) SetScrollLockKeyAndScreamerRadioMute(false);
+            //if (scrollLock) SetScrollLockKeyAndScreamerRadioMute(false);
 
             try
             {
@@ -263,14 +257,14 @@ namespace PatkaPlayer
             labelLastPlayed.Text = lastPlayed;
 
             playpressed = true;
-            if (!play && sendMessages) sendMessagePause();
+            //if (!play && sendMessages) sendMessagePause();
             closeTrack();
 
             loadTrack(fileToPlay, latency * 2);
             playTrack();
 
-            sendWindowsMessage("<pp_file>" + Path.GetFileNameWithoutExtension(fileToPlay) + "</pp_file>");
-            sendWindowsMessage("<pp_folder>" + Path.GetFileNameWithoutExtension(pathToPlay) + "</pp_folder>");
+            //sendWindowsMessage("<pp_file>" + Path.GetFileNameWithoutExtension(fileToPlay) + "</pp_file>");
+            //sendWindowsMessage("<pp_folder>" + Path.GetFileNameWithoutExtension(pathToPlay) + "</pp_folder>");
 
             if (logging)
             {
@@ -312,9 +306,6 @@ namespace PatkaPlayer
             if (rememberDaily) saveDailyDate();
 
             labelClipsPlayed.Text = "Play count today: " + playCount.ToString() + " / Total: " + totalPlayCount.ToString();
-
-            sendWindowsMessage("<pp_today>Today: " + playCount.ToString() + "</pp_today>");
-            sendWindowsMessage("<pp_total>Total: " + totalPlayCount.ToString() + "</pp_total>");
         }
 
         private void saveDailyDate()
@@ -522,7 +513,7 @@ namespace PatkaPlayer
             transNormal = settings.LoadSetting("Transparency", "dec", "1");
             latency = settings.LoadSetting("Latency", "int", "100");
             comboLatency.Text = latency.ToString();
-            scrollLock = settings.LoadSetting("ScrollLock", "bool", "false");
+            //scrollLock = settings.LoadSetting("ScrollLock", "bool", "false");
 
             hotkeyWarning = settings.LoadSetting("HotkeyWarning", "bool", "true");
 
@@ -533,13 +524,13 @@ namespace PatkaPlayer
             string pathname = Path.GetDirectoryName(originalPath);
             string filename = Path.GetFileNameWithoutExtension(originalPath);
             string customPath = pathname + "\\" + filename + ".log";
-            totalPlayCount = File.ReadLines(customPath).Count();
+            
+            if (File.Exists(customPath)) totalPlayCount = File.ReadLines(customPath).Count();
+            else totalPlayCount = 0;
 
             if (rememberDaily) saveDailyDate();
             labelClipsPlayed.Text = "Play count today: " + playCount.ToString() + " / Total: " + totalPlayCount.ToString();
 
-            sendWindowsMessage("<pp_today>Today: " + playCount.ToString() + "</pp_today>");
-            sendWindowsMessage("<pp_total>Total: " + totalPlayCount.ToString() + "</pp_total>");
             this.Opacity = Convert.ToDouble(transNormal);
             
             readHotkeys();
@@ -581,6 +572,7 @@ namespace PatkaPlayer
             loadButtons();
         }
 
+        /*
         private void sendMessagePause()
         {
             NativeMethods.PostMessage((IntPtr)NativeMethods.HWND_BROADCAST, NativeMethods.WM_AK_PAUSEPLAYER, IntPtr.Zero, IntPtr.Zero);
@@ -623,6 +615,6 @@ namespace PatkaPlayer
 
             return playing;
         }
-
+        */
     }
 }

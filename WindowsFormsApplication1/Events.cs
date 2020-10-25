@@ -12,8 +12,6 @@ using System.IO;
 using System.Configuration;
 using System.Windows;
 using System.Globalization;
-using Microsoft.Speech.Recognition;
-using Microsoft.Speech.Synthesis;
 
 namespace PatkaPlayer
 {
@@ -111,16 +109,16 @@ namespace PatkaPlayer
                     this.Text = "Pätkä Player";
                     taskbar.SetProgressState(Microsoft.WindowsAPICodePack.Taskbar.TaskbarProgressBarState.NoProgress);
                     pbPosition.ProgressText = "";
-                    if (scrollLock) SetScrollLockKeyAndScreamerRadioMute(false);
+                    //if (scrollLock) SetScrollLockKeyAndScreamerRadioMute(false);
                 }
                 else
                 {
                     taskbar.SetProgressState(Microsoft.WindowsAPICodePack.Taskbar.TaskbarProgressBarState.Normal);
                     taskbar.SetProgressValue(Convert.ToInt32(audioFileReader.CurrentTime.TotalMilliseconds), Convert.ToInt32(audioFileReader.TotalTime.TotalMilliseconds));
                     pbPosition.ProgressText = audioFileReader.CurrentTime.ToString(@"mm\:ss\.ff") + " / " + audioFileReader.TotalTime.ToString(@"mm\:ss\.ff");
-                    sendWindowsMessage("<pp_time>" + audioFileReader.CurrentTime.ToString(@"mm\:ss\.f") + "  " + audioFileReader.TotalTime.ToString(@"mm\:ss\.f") + "</pp_time>");
+                    //sendWindowsMessage("<pp_time>" + audioFileReader.CurrentTime.ToString(@"mm\:ss\.f") + "  " + audioFileReader.TotalTime.ToString(@"mm\:ss\.f") + "</pp_time>");
 
-                    if (scrollLock) SetScrollLockKeyAndScreamerRadioMute(true);
+                    //if (scrollLock) SetScrollLockKeyAndScreamerRadioMute(true);
                 }
 
             }
@@ -131,13 +129,13 @@ namespace PatkaPlayer
         {
             if (play)
             {
-                sendWindowsMessage("<pp_pos>" + pos.ToString() + "</pp_pos>");
+                //sendWindowsMessage("<pp_pos>" + pos.ToString() + "</pp_pos>");
                 playOld = true;
             }
 
             else if (playOld)
             {
-                sendWindowsMessage("<pp_pos>0</pp_pos>");
+                //sendWindowsMessage("<pp_pos>0</pp_pos>");
                 playOld = false;
             }
         }
@@ -219,7 +217,7 @@ namespace PatkaPlayer
         {
             //this.WindowState = FormWindowState.Normal;
 
-            if (scrollLock) SetScrollLockKeyAndScreamerRadioMute(false);
+            //if (scrollLock) SetScrollLockKeyAndScreamerRadioMute(false);
 
             settings.SaveSetting("Volume", vol.Value.ToString());
             settings.SaveSetting("Random", randomTarget);
@@ -495,7 +493,7 @@ namespace PatkaPlayer
                     if (!play)
                     {
                         playpressed = true;
-                        if (!play && sendMessages) sendMessagePause();
+                        //if (!play && sendMessages) sendMessagePause();
 
                         playTrack();
                     }
@@ -525,7 +523,7 @@ namespace PatkaPlayer
                         if (!play)
                         {
                             playpressed = true;
-                            if (!play && sendMessages) sendMessagePause();
+                            //if (!play && sendMessages) sendMessagePause();
 
                             playTrack();
 
@@ -556,25 +554,5 @@ namespace PatkaPlayer
             closeTrack();
             if (btnReplay.Tag.ToString() != "") loadTrack(btnReplay.Tag.ToString(), latency * 2);
         }
-
-        private void timerWriteTime_Tick(object sender, EventArgs e)
-        {
-            try
-            {
-                string originalPath = Application.ExecutablePath;
-                string pathname = Path.GetDirectoryName(originalPath);
-                string customPath = pathname + "\\" + "dummy.log";
-
-                string dummy = DateTime.Now.ToString("dd.MM.yyyy|HH:mm:ss");
-                using (StreamWriter file = new StreamWriter(@customPath, true, System.Text.Encoding.Default))
-                {
-                    file.WriteLine(dummy);
-                }
-            }
-            catch { }
-
-        }
-
-
     }
 }

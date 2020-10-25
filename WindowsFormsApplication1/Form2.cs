@@ -125,7 +125,7 @@ namespace PatkaPlayer
             numericTransparency.Value = settings.LoadSetting("Transparency", "dec", "1");
             comboLatency.Text = settings.LoadSetting("Latency", "string", "100");
 
-            checkScrollLock.Checked = settings.LoadSetting("ScrollLock", "bool", "false");
+            //checkScrollLock.Checked = settings.LoadSetting("ScrollLock", "bool", "false");
             checkGlobalKeyWarning.Checked = settings.LoadSetting("HotkeyWarning", "bool", "true");
 
             try
@@ -205,7 +205,7 @@ namespace PatkaPlayer
 
             settings.SaveSetting("Transparency", numericTransparency.Value.ToString());
             settings.SaveSetting("Latency", comboLatency.Text);
-            settings.SaveSetting("ScrollLock", checkScrollLock.Checked.ToString());
+            //settings.SaveSetting("ScrollLock", checkScrollLock.Checked.ToString());
 
             settings.SaveSetting("HotkeyWarning", checkGlobalKeyWarning.Checked.ToString());
 

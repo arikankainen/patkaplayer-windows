@@ -97,8 +97,6 @@
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabFolders = new System.Windows.Forms.TabPage();
             this.tabSettings = new System.Windows.Forms.TabPage();
-            this.groupBox15 = new System.Windows.Forms.GroupBox();
-            this.checkScrollLock = new System.Windows.Forms.CheckBox();
             this.groupBox13 = new System.Windows.Forms.GroupBox();
             this.label18 = new System.Windows.Forms.Label();
             this.comboLatency = new System.Windows.Forms.ComboBox();
@@ -152,7 +150,6 @@
             this.tabControl1.SuspendLayout();
             this.tabFolders.SuspendLayout();
             this.tabSettings.SuspendLayout();
-            this.groupBox15.SuspendLayout();
             this.groupBox13.SuspendLayout();
             this.groupBox14.SuspendLayout();
             this.groupBox12.SuspendLayout();
@@ -956,9 +953,9 @@
             this.txtVersion.ForeColor = System.Drawing.SystemColors.ControlDark;
             this.txtVersion.Location = new System.Drawing.Point(10, 594);
             this.txtVersion.Name = "txtVersion";
-            this.txtVersion.Size = new System.Drawing.Size(188, 15);
+            this.txtVersion.Size = new System.Drawing.Size(137, 15);
             this.txtVersion.TabIndex = 24;
-            this.txtVersion.Text = "Pätkä Player © 2018 Ari Kankainen";
+            this.txtVersion.Text = "Pätkä Player © 2020 AriK";
             // 
             // tabControl1
             // 
@@ -989,7 +986,6 @@
             // 
             // tabSettings
             // 
-            this.tabSettings.Controls.Add(this.groupBox15);
             this.tabSettings.Controls.Add(this.groupBox13);
             this.tabSettings.Controls.Add(this.groupBox14);
             this.tabSettings.Controls.Add(this.groupBox12);
@@ -1001,26 +997,6 @@
             this.tabSettings.TabIndex = 2;
             this.tabSettings.Text = "Settings";
             this.tabSettings.UseVisualStyleBackColor = true;
-            // 
-            // groupBox15
-            // 
-            this.groupBox15.Controls.Add(this.checkScrollLock);
-            this.groupBox15.Location = new System.Drawing.Point(6, 355);
-            this.groupBox15.Name = "groupBox15";
-            this.groupBox15.Size = new System.Drawing.Size(228, 57);
-            this.groupBox15.TabIndex = 35;
-            this.groupBox15.TabStop = false;
-            this.groupBox15.Text = "Scroll lock";
-            // 
-            // checkScrollLock
-            // 
-            this.checkScrollLock.AutoSize = true;
-            this.checkScrollLock.Location = new System.Drawing.Point(15, 25);
-            this.checkScrollLock.Name = "checkScrollLock";
-            this.checkScrollLock.Size = new System.Drawing.Size(197, 17);
-            this.checkScrollLock.TabIndex = 3;
-            this.checkScrollLock.Text = "Turn on scroll lock when playing clip";
-            this.checkScrollLock.UseVisualStyleBackColor = true;
             // 
             // groupBox13
             // 
@@ -1433,6 +1409,7 @@
             this.clmHotkey,
             this.clmGlobal});
             this.lstHotkeys.FullRowSelect = true;
+            this.lstHotkeys.HideSelection = false;
             this.lstHotkeys.Location = new System.Drawing.Point(10, 54);
             this.lstHotkeys.Name = "lstHotkeys";
             this.lstHotkeys.Size = new System.Drawing.Size(552, 440);
@@ -1541,8 +1518,6 @@
             this.tabControl1.ResumeLayout(false);
             this.tabFolders.ResumeLayout(false);
             this.tabSettings.ResumeLayout(false);
-            this.groupBox15.ResumeLayout(false);
-            this.groupBox15.PerformLayout();
             this.groupBox13.ResumeLayout(false);
             this.groupBox13.PerformLayout();
             this.groupBox14.ResumeLayout(false);
@@ -1663,8 +1638,6 @@
         private System.Windows.Forms.GroupBox groupBox13;
         private System.Windows.Forms.Label label18;
         private System.Windows.Forms.ComboBox comboLatency;
-        private System.Windows.Forms.GroupBox groupBox15;
-        private System.Windows.Forms.CheckBox checkScrollLock;
         private System.Windows.Forms.TabPage tabHotkeys;
         private System.Windows.Forms.GroupBox groupHotkeys;
         private System.Windows.Forms.Button btnEditHotkey;

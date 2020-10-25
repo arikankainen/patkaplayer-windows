@@ -69,7 +69,7 @@ namespace PatkaPlayer
         {
             if (waveOutDevice != null)
             {
-                if (playpressed == false && sendMessages && stop == false) sendMessagePlay();
+                //if (playpressed == false && sendMessages && stop == false) sendMessagePlay();
 
                 waveOutDevice.Stop();
                 audioFileReader.SetPosition((double)0);

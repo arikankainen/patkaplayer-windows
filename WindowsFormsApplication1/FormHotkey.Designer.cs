@@ -115,12 +115,7 @@
             "Play clip 12",
             "Play clip 13",
             "Play clip 14",
-            "Play clip 15",
-            "Spotify: Play/Pause",
-            "Spotify: Previous",
-            "Spotify: Next",
-            "Speech: On",
-            "Speech: Off"});
+            "Play clip 15"});
             this.comboAction.Location = new System.Drawing.Point(74, 56);
             this.comboAction.Name = "comboAction";
             this.comboAction.Size = new System.Drawing.Size(183, 21);

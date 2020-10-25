@@ -75,9 +75,6 @@
             this.comboLatency = new System.Windows.Forms.ComboBox();
             this.labelRefreshMs = new System.Windows.Forms.Label();
             this.timerKeyDown = new System.Windows.Forms.Timer(this.components);
-            this.timerArduino = new System.Windows.Forms.Timer(this.components);
-            this.timerArduinoPort = new System.Windows.Forms.Timer(this.components);
-            this.timerWriteTime = new System.Windows.Forms.Timer(this.components);
             this.panelBack = new System.Windows.Forms.Panel();
             this.txtFolderFilter = new System.Windows.Forms.TextBox();
             this.labelFolderFilter = new System.Windows.Forms.Label();
@@ -565,12 +562,6 @@
             // 
             this.timerKeyDown.Interval = 300;
             this.timerKeyDown.Tick += new System.EventHandler(this.timerKeyDown_Tick);
-            // 
-            // timerWriteTime
-            // 
-            this.timerWriteTime.Enabled = true;
-            this.timerWriteTime.Interval = 300000;
-            this.timerWriteTime.Tick += new System.EventHandler(this.timerWriteTime_Tick);
             // 
             // panelBack
             // 
@@ -1266,6 +1257,7 @@
             this.lstFolders.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lstFolders.FullRowSelect = true;
             this.lstFolders.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None;
+            this.lstFolders.HideSelection = false;
             this.lstFolders.Location = new System.Drawing.Point(11, 11);
             this.lstFolders.MultiSelect = false;
             this.lstFolders.Name = "lstFolders";
@@ -1301,6 +1293,7 @@
             this.lstFiles.Font = new System.Drawing.Font("Segoe UI", 9.75F);
             this.lstFiles.FullRowSelect = true;
             this.lstFiles.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None;
+            this.lstFiles.HideSelection = false;
             this.lstFiles.Location = new System.Drawing.Point(392, 11);
             this.lstFiles.Name = "lstFiles";
             this.lstFiles.Size = new System.Drawing.Size(370, 672);
@@ -1340,6 +1333,7 @@
             this.clmPlaylistFile});
             this.lstPlaylist.Font = new System.Drawing.Font("Segoe UI", 9.75F);
             this.lstPlaylist.FullRowSelect = true;
+            this.lstPlaylist.HideSelection = false;
             this.lstPlaylist.Location = new System.Drawing.Point(776, 11);
             this.lstPlaylist.Name = "lstPlaylist";
             this.lstPlaylist.Size = new System.Drawing.Size(370, 642);
@@ -1452,9 +1446,6 @@
         private System.Windows.Forms.ComboBox comboLatency;
         private System.Windows.Forms.Label labelRefreshMs;
         private System.Windows.Forms.Timer timerKeyDown;
-        private System.Windows.Forms.Timer timerArduino;
-        private System.Windows.Forms.Timer timerArduinoPort;
-        private System.Windows.Forms.Timer timerWriteTime;
         private VisualStylesListView lstPlaylist;
         private System.Windows.Forms.ColumnHeader clmPlaylist;
         private VisualStylesListView lstFiles;
